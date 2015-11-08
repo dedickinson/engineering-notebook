@@ -9,3 +9,4 @@
 *.vmdk
 **/packer_cache
 .vagrant
+packer/base-centos/tmp
