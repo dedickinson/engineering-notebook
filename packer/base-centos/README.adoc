@@ -30,7 +30,12 @@ To create the images:
 
     ./build.sh
 
-This will generate the various VirtualBox and Vagrant images.
+This will generate the various VirtualBox and Vagrant images. To try the Vagrant box:
+
+    mkdir tmp
+    cd tmp/
+    vagrant init centos-7-base
+    vagrant up
 
 To clean up:
 

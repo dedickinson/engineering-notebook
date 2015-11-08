@@ -11,7 +11,7 @@
         "iso_checksum_type": "sha256",
         "ssh_username": "vagrant",
         "ssh_password": "vagrant",
-        "disk_size": "20000",
+        "disk_size": "8000",
         "format": "ovf",
         "guest_additions_mode": "disable",
         "headless": "false",
@@ -22,18 +22,7 @@
             "linux ks=http://{{.HTTPIP}}:{{.HTTPPort}}/kickstart<enter>"
         ]
     }],
-    "provisioners": [
-        {
-          "type": "file",
-          "source": "upload/id_rsa",
-          "destination": "/home/vagrant/.ssh/id_rsa"
-        },
-        {
-          "type": "file",
-          "source": "upload/vagrant.pub",
-          "destination": "/home/vagrant/.ssh/authorized_keys"
-        },
-        {
+    "provisioners": [{
         "type": "shell",
         "script": "provision.sh"
     }],
