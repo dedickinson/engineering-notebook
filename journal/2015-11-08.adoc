@@ -1,0 +1,6 @@
+= 2015-11-08 - Creating a base box
+
+I've been working with Packer to create a base CentOS 7 box for use with Vagrant. The goal is to create an end-to-end
+deployment using only automation - essentially allowing everything being rebuildable via source code.
+
+See `/packer/base-centos/`.

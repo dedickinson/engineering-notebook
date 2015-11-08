@@ -1,0 +1,42 @@
+install
+cdrom
+lang en_US.UTF-8
+keyboard us
+network --onboot yes --device eth0 --bootproto dhcp
+firewall --enabled --service=ssh
+selinux --permissive
+timezone Australia/Brisbane
+bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet"
+
+text
+skipx
+zerombr
+
+clearpart --all --initlabel
+autopart
+
+authconfig --useshadow --passalgo=sha512
+rootpw --iscrypted --lock $6$rounds=656000$KeYFoOyYJSbWplpv$ECG816FDMR8nwLlq.P2roD.WUSvqS7ElIL3sZ3D9ryb4IhO.pS2FHNwOnm6/iInP6E1yBf4MMHS5lEpFec/2N/
+user --name=vagrant --password=$6$rounds=656000$ZFikhNPNJUv2abey$Jr/Qr7CVXiat49FmzZiVa3dAxgZSpeNZjruLq.AfgQ2jQGFMj4wus.5BFGhwVk37kEWhACJ3yf8T8Iyu4jOZD. --iscrypted --uid=501 --groups=wheel
+
+firstboot --disabled
+reboot
+
+%packages --ignoremissing --excludedocs
+sudo
+%end
+
+%post
+echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
+chmod 0440 /etc/sudoers.d/vagrant
+/bin/mkdir /home/vagrant/.ssh
+/bin/chmod 700 /home/vagrant/.ssh
+
+/usr/bin/yum -y clean all
+/sbin/swapoff -a
+/sbin/mkswap /dev/mapper/vg_vagrantcentos-lv_swap
+/bin/dd if=/dev/zero of=/boot/EMPTY bs=1M
+/bin/rm -f /boot/EMPTY
+/bin/dd if=/dev/zero of=/EMPTY bs=1M
+/bin/rm -f /EMPTY
+%end

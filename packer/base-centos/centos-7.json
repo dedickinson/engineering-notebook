@@ -1,0 +1,45 @@
+{
+    "_description": "Builds a minimal CentOS 7 image",
+    "builders": [{
+        "type": "virtualbox-iso",
+        "vm_name": "centos-7-base",
+        "communicator": "ssh",
+        "ssh_pty": "true",
+        "guest_os_type": "RedHat_64",
+        "iso_url": "http://mirror.aarnet.edu.au/pub/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+        "iso_checksum": "7cf1ac8da13f54d6be41e3ccf228dc5bb35792f515642755ff4780d5714d4278",
+        "iso_checksum_type": "sha256",
+        "ssh_username": "vagrant",
+        "ssh_password": "vagrant",
+        "disk_size": "20000",
+        "format": "ovf",
+        "guest_additions_mode": "disable",
+        "headless": "false",
+        "shutdown_command": "sudo -S shutdown -P now",
+        "http_directory": "http",
+        "boot_command": [
+            "<wait><esc><esc>",
+            "linux ks=http://{{.HTTPIP}}:{{.HTTPPort}}/kickstart<enter>"
+        ]
+    }],
+    "provisioners": [
+        {
+          "type": "file",
+          "source": "upload/id_rsa",
+          "destination": "/home/vagrant/.ssh/id_rsa"
+        },
+        {
+          "type": "file",
+          "source": "upload/vagrant.pub",
+          "destination": "/home/vagrant/.ssh/authorized_keys"
+        },
+        {
+        "type": "shell",
+        "script": "provision.sh"
+    }],
+    "post-processors": [{
+        "type": "vagrant",
+        "output": "output-vagrant-box/centos-7-base.box",
+        "keep_input_artifact": true
+    }]
+}

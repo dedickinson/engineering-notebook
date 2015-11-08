@@ -1,0 +1,80 @@
+= A base CentOS image
+Duncan Dickinson <duncan@dickinson.name>
+v0.1 2015-11
+
+Generates a base image for CentOS
+
+WARNING: This image does not aim to be secure.
+
+== Backlog
+
+Things left to-do:
+
+* Lock out the `vagrant` user from console
+* Use SCAP to check for any vulnerabilities....?
+
+
+== Pre-requisites
+
+. https://www.python.org/downloads/[Python] 3.5+
+.. `python3 -m pip install passlib` (http://stackoverflow.com/questions/25079290/crypt-does-not-work-in-osx-returns-wrong-value[needed as OS X version of `crypt()` doesn't work for this.])
+. https://www.packer.io[Packer] 0.8+
+. https://www.vagrantup.com[Vagrant] 1.7+
+. https://www.virtualbox.org/[VirtualBox] 5.0+
+
+NOTE: I run on OS X and found I had to install Python 3 in order to generate hashes as I kept getting shortened output.
+
+== Process
+
+To create the images:
+
+    ./build.sh
+
+This will generate the various VirtualBox and Vagrant images.
+
+To clean up:
+
+    ./clean.sh
+
+Note that `packer_cache` is not deleted as otherwise you'd keep downloading the ISO.
+
+=== Packer configuration
+The packer config is found in `centos-7.json`
+
+* I'm using the CentOS ISO at http://mirror.aarnet.edu.au/pub/centos/7/isos/x86_64/
+** This URL also provides the checksum
+* `"keep_input_artifact": true` is configured in the `post-processors` so that I can keep the OVF after packaging
+** This is a VirtualBox appliance and is useful for "debugging" - you can open it in VBox's `File->Import Appliance` menu
+
+=== Kickstart configuration
+
+* `network`:
+** I want to enable IPv6
+* `selinux`:
+** I want to use SELinux but, at an early stage will set this to `permissive`.
+** After some testing I will enforce this using `enforcing`
+* `rootpw`:
+** Uses an encrypted password that was generated using `python3 -c 'from passlib.hash import sha512_crypt; print(sha512_crypt.encrypt("Root Password"))'`
+** This could be changed to be secured to a corporate root password
+* `user`:
+** The vagrant user is created by Kickstart.
+** Uses an encrypted password that was generated using `python3 -c 'from passlib.hash import sha512_crypt; print(sha512_crypt.encrypt("vagrant"))'`
+
+NOTE: The `$6` in the encrypted password indicates that it's SHA512
+
+In terms of baseline packages I really want this to be as minimal as possible. Checking out the http://mirror.aarnet.edu.au/pub/centos/7/os/x86_64/repodata/0e6e90965f55146ba5025ea450f822d1bb0267d0299ef64dd4365825e6bad995-c7-x86_64-comps.xml.gz[comps.xml] for the distro reveals the various environments available. I went with `@base` for minimalism but this isn't needed - it's always used.
+
+== Knowledge-base
+
+* The `packer build` fails with `centos7 error : sudo: sorry, you must have a tty to run sudo`
+** Solution: Use `"ssh_pty": "true"` in `centos-7.json`
+** Ref: https://github.com/mitchellh/packer/issues/1804
+** Ref: https://www.packer.io/docs/templates/communicator.html#ssh_pty
+* The `packer build` takes too long and times out
+** Don't try to `yum update` in the kickstart `%post` section - leave that to provisioning
+
+== References
+
+* https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Installation_Guide/chap-kickstart-installations.html[Red Hat 7 Kickstart guide]
+
+* http://digitalsandwich.com/packer-built-centos-vagrant-base-box-automated-build/[Packer Built CentOS Vagrant Base Box – Automated Build]

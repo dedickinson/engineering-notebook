@@ -1,0 +1,11 @@
+*.iso
+*.ovf
+*.ivo
+*.zip
+*.tar.gz
+*.tgz
+*.box
+*.vdi
+*.vmdk
+**/packer_cache
+.vagrant
