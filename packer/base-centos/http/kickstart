@@ -11,6 +11,7 @@ bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet
 text
 skipx
 zerombr
+unsupported_hardware
 
 clearpart --all --initlabel
 autopart
@@ -24,14 +25,30 @@ reboot
 
 %packages --ignoremissing --excludedocs
 sudo
+
+-aic94xx-firmware
+-atmel-firmware
+-b43-openfwwf
+-bfa-firmware
+-ipw*-firmware
+-irqbalance
+-ivtv-firmware
+-iwl*-firmware
+-libertas-usb8388-firmware
+-ql*-firmware
+-rt61pci-firmware
+-rt73usb-firmware
+-xorg-x11-drv-ati-firmware
+-zd1211-firmware
 %end
 
 %post
+#sudo access for the vagrant user
 echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
 chmod 0440 /etc/sudoers.d/vagrant
-
-/bin/mkdir /home/vagrant/.ssh
 /bin/chmod 0440 /etc/sudoers.d/wheel
+
+#Configure SSH access for Vagrant user
 /bin/mkdir /home/vagrant/.ssh
 /bin/chmod 700 /home/vagrant/.ssh
 /usr/bin/curl -L -o /home/vagrant/.ssh/id_rsa https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant
@@ -39,11 +56,11 @@ chmod 0440 /etc/sudoers.d/vagrant
 /bin/chown -R vagrant:vagrant /home/vagrant/.ssh
 /bin/chmod 0400 /home/vagrant/.ssh/*
 
-/usr/bin/yum -y clean all
-/sbin/swapoff -a
-/sbin/mkswap /dev/mapper/vg_vagrantcentos-lv_swap
-/bin/dd if=/dev/zero of=/boot/EMPTY bs=1M
-/bin/rm -f /boot/EMPTY
-/bin/dd if=/dev/zero of=/EMPTY bs=1M
-/bin/rm -f /EMPTY
+#/usr/bin/yum -y clean all
+#/sbin/swapoff -a
+#/sbin/mkswap /dev/mapper/vg_vagrantcentos-lv_swap
+#/bin/dd if=/dev/zero of=/boot/EMPTY bs=1M
+#/bin/rm -f /boot/EMPTY
+#/bin/dd if=/dev/zero of=/EMPTY bs=1M
+#/bin/rm -f /EMPTY
 %end

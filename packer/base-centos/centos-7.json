@@ -29,6 +29,7 @@
     "post-processors": [{
         "type": "vagrant",
         "output": "output-vagrant-box/centos-7-base.box",
+        "vagrantfile_template": "tpl/Vagrantfile.tpl",
         "keep_input_artifact": true
     }]
 }

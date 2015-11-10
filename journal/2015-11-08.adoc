@@ -3,4 +3,6 @@
 I've been working with Packer to create a base CentOS 7 box for use with Vagrant. The goal is to create an end-to-end
 deployment using only automation - essentially allowing everything being rebuildable via source code.
 
+I'd also like to setup a test suite for the base image using http://serverspec.org/[Serverspec]
+
 See `/packer/base-centos/`.

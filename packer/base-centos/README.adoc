@@ -1,6 +1,7 @@
 = A base CentOS image
 Duncan Dickinson <duncan@dickinson.name>
 v0.1 2015-11
+:keywords: packer, vagrant, virtualbox, centos, kickstart
 
 Generates a base image for CentOS
 
@@ -81,5 +82,5 @@ In terms of baseline packages I really want this to be as minimal as possible. C
 == References
 
 * https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Installation_Guide/chap-kickstart-installations.html[Red Hat 7 Kickstart guide]
-
 * http://digitalsandwich.com/packer-built-centos-vagrant-base-box-automated-build/[Packer Built CentOS Vagrant Base Box – Automated Build]
+* https://github.com/boxcutter/centos
