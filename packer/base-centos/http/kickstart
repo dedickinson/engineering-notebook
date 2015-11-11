@@ -45,7 +45,7 @@ sudo
 %post
 #sudo access for the vagrant user
 echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
-chmod 0440 /etc/sudoers.d/vagrant
+/bin/chmod 0440 /etc/sudoers.d/vagrant
 /bin/chmod 0440 /etc/sudoers.d/wheel
 
 #Configure SSH access for Vagrant user
@@ -56,11 +56,4 @@ chmod 0440 /etc/sudoers.d/vagrant
 /bin/chown -R vagrant:vagrant /home/vagrant/.ssh
 /bin/chmod 0400 /home/vagrant/.ssh/*
 
-#/usr/bin/yum -y clean all
-#/sbin/swapoff -a
-#/sbin/mkswap /dev/mapper/vg_vagrantcentos-lv_swap
-#/bin/dd if=/dev/zero of=/boot/EMPTY bs=1M
-#/bin/rm -f /boot/EMPTY
-#/bin/dd if=/dev/zero of=/EMPTY bs=1M
-#/bin/rm -f /EMPTY
 %end
