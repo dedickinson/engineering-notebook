@@ -1,0 +1,15 @@
+= A base Atomic Centos image
+Duncan Dickinson <duncan@dickinson.name>
+v0.1 2015-11
+:keywords: packer, vagrant, virtualbox, centos, kickstart, atomic
+
+Generates an Atomic Centos image
+
+== Preliminaries
+
+. Installed the vagrant box: `vagrant box add centos/atomic-host`
+
+== References
+
+* http://www.projectatomic.io/
+* https://github.com/CentOS/sig-atomic-buildscripts
