@@ -21,6 +21,8 @@ Things left to-do:
 .. `python3 -m pip install passlib` (http://stackoverflow.com/questions/25079290/crypt-does-not-work-in-osx-returns-wrong-value[needed as OS X version of `crypt()` doesn't work for this.])
 . https://www.packer.io[Packer] 0.8+
 . https://www.vagrantup.com[Vagrant] 1.7+
+.. Install the vagrant-scp plugin: `vagrant plugin install vagrant-scp`
+.. And the Serverspec one: `vagrant plugin install vagrant-serverspec`
 . https://www.virtualbox.org/[VirtualBox] 5.0+
 
 NOTE: I run on OS X and found I had to install Python 3 in order to generate hashes as I kept getting shortened output.
@@ -69,6 +71,25 @@ The packer config is found in `centos-7.json`
 NOTE: The `$6` in the encrypted password indicates that it's SHA512
 
 In terms of baseline packages I really want this to be as minimal as possible. Checking out the http://mirror.aarnet.edu.au/pub/centos/7/os/x86_64/repodata/0e6e90965f55146ba5025ea450f822d1bb0267d0299ef64dd4365825e6bad995-c7-x86_64-comps.xml.gz[comps.xml] for the distro reveals the various environments available. I went with `@base` for minimalism but this isn't needed - it's always used.
+
+=== SCAP
+
+I'll use the general purpose RHEL 7 profile: http://static.open-scap.org/ssg-guides/ssg-rhel7-guide-index.html
+
+To check out an installed guide, use
+
+    mkdir results
+
+    sudo oscap oval eval --results results/scan-oval-results.xml ssg-centos7-cpe-oval.xml
+    oscap oval generate report results/scan-oval-results.xml > results/ssg-scan-oval-report.html
+
+    sudo oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_rht-ccp --results results/scan-xccdf-results.xml ssg-centos7-xccdf.xml
+    oscap xccdf generate report results/scan-xccdf-results.xml > results/scan-xccdf-report.html
+
+To copy the files to your host system (run in a terminal on your host):
+
+    vagrant scp default:/home/vagrant/results/scan-xccdf-report.html ./
+    vagrant scp default:/home/vagrant/results/ssg-scan-oval-report.html ./
 
 == Knowledge-base
 
