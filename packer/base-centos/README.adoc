@@ -1,9 +1,9 @@
 = A base CentOS image
 Duncan Dickinson <duncan@dickinson.name>
 v0.1 2015-11
-:keywords: packer, vagrant, virtualbox, centos, kickstart
+:keywords: packer, vagrant, virtualbox, appcatalyst, centos, kickstart
 
-Generates a base image for CentOS
+Generates a base Vagrant box for CentOS for both VirtualBox 5 and VMWare App Catalyst
 
 WARNING: This image does not aim to be secure.
 
@@ -24,14 +24,31 @@ Things left to-do:
 .. Install the vagrant-scp plugin: `vagrant plugin install vagrant-scp`
 .. And the Serverspec one: `vagrant plugin install vagrant-serverspec`
 . https://www.virtualbox.org/[VirtualBox] 5.0+
+. https://www.vmware.com/cloudnative/appcatalyst-download[VMware AppCatalyst]
 
 NOTE: I run on OS X and found I had to install Python 3 in order to generate hashes as I kept getting shortened output.
+
+=== Generate an SSH key
+
+I don't want to use the default vagrant keys so create my own for use with Vagrant:
+
+    ssh-keygen -t rsa -f ~/.ssh/vagrant
+
+The Packer config (`centos-7.json`) will look for `~/.ssh/vagrant.pub` by default but this can be overridden when calling
+packer by setting the `ssh_key` variable - you can see this being done in `build.sh`.
+
+I'd strongly suggest setting a passphrase on the key - it's just good practice.
+
+WARNING: Don't upload keys to Git or a publicly available system.
+
+See also: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
 
 == Process
 
 To create the images:
 
-    ./build.sh
+    ./build.sh base-build-virtualbox
+    ./build.sh overlay-guest-build-virtualbox
 
 This will generate the various VirtualBox and Vagrant images. To try the Vagrant box:
 
@@ -44,7 +61,15 @@ To clean up:
 
     ./clean.sh
 
-Note that `packer_cache` is not deleted as otherwise you'd keep downloading the ISO.
+Note that `packer_cache` is not deleted as otherwise you'd keep downloading the ISO and guest additions.
+
+=== Incremental builds
+
+It can get very annoying starting from scratch whilst testing. Most Packer builders provide the ability to build off
+an existing image, such as one created when you run `build.sh`. When testing I get that build done and then edit the
+configuration for the incremental builder (e.g. `virtualbox-ovf`) and add extra scripts there.
+
+    packer build -only=virtualbox-ovf centos-7.json
 
 === Packer configuration
 The packer config is found in `centos-7.json`
@@ -68,9 +93,23 @@ The packer config is found in `centos-7.json`
 ** The vagrant user is created by Kickstart.
 ** Uses an encrypted password that was generated using `python3 -c 'from passlib.hash import sha512_crypt; print(sha512_crypt.encrypt("vagrant"))'`
 
+See: https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Installation_Guide/chap-kickstart-installations.html
+
 NOTE: The `$6` in the encrypted password indicates that it's SHA512
 
 In terms of baseline packages I really want this to be as minimal as possible. Checking out the http://mirror.aarnet.edu.au/pub/centos/7/os/x86_64/repodata/0e6e90965f55146ba5025ea450f822d1bb0267d0299ef64dd4365825e6bad995-c7-x86_64-comps.xml.gz[comps.xml] for the distro reveals the various environments available. I went with `@base` for minimalism but this isn't needed - it's always used.
+
+=== SSHD
+
+See `uploads/etc/ssh/sshd_config`
+
+See: http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man5/sshd_config.5?query=sshd_config&sec=5
+
+=== sudoers
+
+See `uploads/etc/sudoers`
+
+See: http://www.sudo.ws/man/1.8.13/sudoers.man.html
 
 === SCAP
 
@@ -94,9 +133,10 @@ To copy the files to your host system (run in a terminal on your host):
 == Knowledge-base
 
 * The `packer build` fails with `centos7 error : sudo: sorry, you must have a tty to run sudo`
-** Solution: Use `"ssh_pty": "true"` in `centos-7.json`
-** Ref: https://github.com/mitchellh/packer/issues/1804
-** Ref: https://www.packer.io/docs/templates/communicator.html#ssh_pty
+** Solution 1: Use `"ssh_pty": "true"` in `centos-7.json`
+*** Ref: https://github.com/mitchellh/packer/issues/1804
+*** Ref: https://www.packer.io/docs/templates/communicator.html#ssh_pty
+** Solution 2 (in-use): Drop `requiretty` in `sudoers`
 * The `packer build` takes too long and times out
 ** Don't try to `yum update` in the kickstart `%post` section - leave that to provisioning
 

@@ -23,8 +23,12 @@ user --name=vagrant --password=$6$rounds=656000$ZFikhNPNJUv2abey$Jr/Qr7CVXiat49F
 firstboot --disabled
 reboot
 
-%packages --ignoremissing --excludedocs
+%packages --ignoremissing --excludedocs --nobase
 sudo
+curl
+deltarpm
+gawk
+firewalld
 
 -aic94xx-firmware
 -atmel-firmware
@@ -43,17 +47,9 @@ sudo
 %end
 
 %post
-#sudo access for the vagrant user
 echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
 /bin/chmod 0440 /etc/sudoers.d/vagrant
-/bin/chmod 0440 /etc/sudoers.d/wheel
 
-#Configure SSH access for Vagrant user
-/bin/mkdir /home/vagrant/.ssh
-/bin/chmod 700 /home/vagrant/.ssh
-/usr/bin/curl -L -o /home/vagrant/.ssh/id_rsa https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant
-/usr/bin/curl -L -o /home/vagrant/.ssh/authorized_keys https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub
-/bin/chown -R vagrant:vagrant /home/vagrant/.ssh
-/bin/chmod 0400 /home/vagrant/.ssh/*
-
+#Prevent user from pressing I to initiate service load
+echo PROMPT=no>>/etc/sysconfig/init
 %end

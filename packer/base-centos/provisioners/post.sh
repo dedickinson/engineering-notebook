@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Apply the most current updates, add some extra packages and clean yum data
-sudo yum -y update
-sudo yum -y install openscap-utils scap-security-guide
+# clean yum data
 sudo yum -y clean all
 
 #Tidy up unused storage
