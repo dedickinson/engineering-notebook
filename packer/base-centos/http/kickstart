@@ -23,12 +23,13 @@ user --name=vagrant --password=$6$rounds=656000$ZFikhNPNJUv2abey$Jr/Qr7CVXiat49F
 firstboot --disabled
 reboot
 
-%packages --ignoremissing --excludedocs --nobase
+%packages --excludedocs
 sudo
 curl
 deltarpm
 gawk
 firewalld
+policycoreutils-python
 
 -aic94xx-firmware
 -atmel-firmware
@@ -52,4 +53,5 @@ echo "vagrant        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/vagrant
 
 #Prevent user from pressing I to initiate service load
 echo PROMPT=no>>/etc/sysconfig/init
+
 %end

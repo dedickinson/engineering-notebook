@@ -12,21 +12,25 @@ WARNING: This image does not aim to be secure.
 Things left to-do:
 
 * Lock out the `vagrant` user from console
+* Don't run as the user named `vagrant`, use `automator`
 * Use SCAP to check for any vulnerabilities....?
-
+* Get build to work with VMware's AppCatalyst
 
 == Pre-requisites
 
 . https://www.python.org/downloads/[Python] 3.5+
-.. `python3 -m pip install passlib` (http://stackoverflow.com/questions/25079290/crypt-does-not-work-in-osx-returns-wrong-value[needed as OS X version of `crypt()` doesn't work for this.])
+.. Install the `passlib` library `python3 -m pip install passlib`
+... http://stackoverflow.com/questions/25079290/crypt-does-not-work-in-osx-returns-wrong-value[needed as OS X version of `crypt()` doesn't work for this.]
 . https://www.packer.io[Packer] 0.8+
 . https://www.vagrantup.com[Vagrant] 1.7+
-.. Install the vagrant-scp plugin: `vagrant plugin install vagrant-scp`
+.. (optional) Install the vagrant-scp plugin: `vagrant plugin install vagrant-scp`
 .. And the Serverspec one: `vagrant plugin install vagrant-serverspec`
+... Used to test the VM
 . https://www.virtualbox.org/[VirtualBox] 5.0+
+.. I'm working with `5.0.10`
 . https://www.vmware.com/cloudnative/appcatalyst-download[VMware AppCatalyst]
 
-NOTE: I run on OS X and found I had to install Python 3 in order to generate hashes as I kept getting shortened output.
+NOTE: I run on OS X and found I had to install Python 3 in order to generate encrypted passwords as I kept getting shortened output. You may not need Python + passlib if you're running on Linux.
 
 === Generate an SSH key
 
@@ -45,10 +49,11 @@ See also: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-
 
 == Process
 
-To create the images:
+To create the images I build them in stages:
 
-    ./build.sh base-build-virtualbox
+    ./build.sh base-virtualbox
     ./build.sh overlay-guest-build-virtualbox
+    ./build.sh overlay-configure-virtualbox
 
 This will generate the various VirtualBox and Vagrant images. To try the Vagrant box:
 
@@ -63,14 +68,6 @@ To clean up:
 
 Note that `packer_cache` is not deleted as otherwise you'd keep downloading the ISO and guest additions.
 
-=== Incremental builds
-
-It can get very annoying starting from scratch whilst testing. Most Packer builders provide the ability to build off
-an existing image, such as one created when you run `build.sh`. When testing I get that build done and then edit the
-configuration for the incremental builder (e.g. `virtualbox-ovf`) and add extra scripts there.
-
-    packer build -only=virtualbox-ovf centos-7.json
-
 === Packer configuration
 The packer config is found in `centos-7.json`
 
@@ -78,6 +75,14 @@ The packer config is found in `centos-7.json`
 ** This URL also provides the checksum
 * `"keep_input_artifact": true` is configured in the `post-processors` so that I can keep the OVF after packaging
 ** This is a VirtualBox appliance and is useful for "debugging" - you can open it in VBox's `File->Import Appliance` menu
+
+==== Incremental builds
+
+It can get very annoying starting from scratch whilst testing. Most Packer builders provide the ability to build off
+an existing image, such as one created when you run `build.sh`. When testing I get that build done and then edit the
+configuration for the incremental builder (e.g. `virtualbox-ovf`) and add extra scripts there.
+
+    packer build -only=<builder> centos-7.json
 
 === Kickstart configuration
 
@@ -134,9 +139,11 @@ To copy the files to your host system (run in a terminal on your host):
 
 * The `packer build` fails with `centos7 error : sudo: sorry, you must have a tty to run sudo`
 ** Solution 1: Use `"ssh_pty": "true"` in `centos-7.json`
+*** Used for packer builds
 *** Ref: https://github.com/mitchellh/packer/issues/1804
 *** Ref: https://www.packer.io/docs/templates/communicator.html#ssh_pty
-** Solution 2 (in-use): Drop `requiretty` in `sudoers`
+** Solution 2: Drop `requiretty` in `sudoers`
+*** Configured during packer builds so that vagrant users don't see the problem or need to enable pty
 * The `packer build` takes too long and times out
 ** Don't try to `yum update` in the kickstart `%post` section - leave that to provisioning
 

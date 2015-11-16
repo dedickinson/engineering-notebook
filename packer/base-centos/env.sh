@@ -1,0 +1,3 @@
+VERSION=$(<VERSION)
+BOX_NAME=centos-7-base-$VERSION
+BUILD_FILE=centos-7.json

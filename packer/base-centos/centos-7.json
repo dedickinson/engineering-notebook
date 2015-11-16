@@ -1,6 +1,6 @@
 {
     "_title": "base-centos-7",
-    "_description": "Builds a minimal CentOS 7 image",
+    "description": "Builds a minimal CentOS 7 image",
     "variables": {
         "vm_name": "centos-7-base",
         "user": "vagrant",
@@ -12,12 +12,13 @@
         "iso_checksum_type": "sha256",
         "vbox_guest_additions_mode": "attach",
         "vbox_guest_additions_url": "http://download.virtualbox.org/virtualbox/5.0.10/VBoxGuestAdditions_5.0.10.iso",
-        "vbox_guest_additions_sha256": "8f7ffee3fac75793e48d1859b65a95879b3ed5bc1c3164c967e85d69244c594b"
+        "vbox_guest_additions_sha256": "8f7ffee3fac75793e48d1859b65a95879b3ed5bc1c3164c967e85d69244c594b",
+        "shutdown_command": "sudo systemctl poweroff"
     },
     "builders": [
         {
             "type": "virtualbox-iso",
-            "name": "base-build-virtualbox",
+            "name": "base-virtualbox",
             "vm_name": "{{user `vm_name`}}",
             "communicator": "ssh",
             "ssh_pty": "true",
@@ -32,7 +33,7 @@
             "disk_size": "10000",
             "format": "ovf",
             "headless": "{{user `headless`}}",
-            "shutdown_command": "sudo systemctl poweroff",
+            "shutdown_command": "{{user `shutdown_command`}}",
             "http_directory": "http",
             "boot_command": [
                 "<wait><esc><esc>",
@@ -42,27 +43,43 @@
         },
         {
             "type": "virtualbox-ovf",
-            "name": "overlay-guest-build-virtualbox",
+            "name": "overlay-guest-virtualbox",
             "vm_name": "{{user `vm_name`}}",
-            "source_path": "output-base-build-virtualbox/{{user `vm_name`}}.ovf",
+            "source_path": "output-base-virtualbox/{{user `vm_name`}}.ovf",
             "headless": "{{user `headless`}}",
             "ssh_username": "{{user `user`}}",
             "ssh_password": "{{user `password`}}",
             "ssh_port": 22,
             "ssh_pty": "true",
+            "shutdown_command": "{{user `shutdown_command`}}",
             "guest_additions_mode": "{{user `vbox_guest_additions_mode`}}",
             "guest_additions_url": "{{user `vbox_guest_additions_url`}}",
             "guest_additions_sha256": "{{user `vbox_guest_additions_sha256`}}"
         },
         {
             "type": "virtualbox-ovf",
-            "name": "overlay-deploy-virtualbox",
+            "name": "overlay-configure-virtualbox",
             "vm_name": "{{user `vm_name`}}",
-            "source_path": "output-overlay-guest-build-virtualbox/{{user `vm_name`}}.ovf",
+            "source_path": "output-base-virtualbox/{{user `vm_name`}}.ovf",
             "headless": "{{user `headless`}}",
             "ssh_username": "{{user `user`}}",
             "ssh_password": "{{user `password`}}",
             "ssh_port": 22,
+            "ssh_pty": "true",
+            "shutdown_command": "{{user `shutdown_command`}}",
+            "guest_additions_mode": "disable"
+        },
+        {
+            "type": "virtualbox-ovf",
+            "name": "deploy-virtualbox",
+            "vm_name": "{{user `vm_name`}}",
+            "source_path": "output-overlay-configure-virtualbox/{{user `vm_name`}}.ovf",
+            "headless": "{{user `headless`}}",
+            "ssh_username": "{{user `user`}}",
+            "ssh_password": "{{user `password`}}",
+            "ssh_port": 22,
+            "ssh_pty": "true",
+            "shutdown_command": "{{user `shutdown_command`}}",
             "guest_additions_mode": "disable"
         }
     ],
@@ -70,7 +87,7 @@
         {
             "type": "shell",
             "only": [
-                "base-build-virtualbox"
+                "base-virtualbox"
             ],
             "scripts": [
                 "provisioners/update.sh"
@@ -79,16 +96,25 @@
         {
             "type": "shell",
             "only": [
-                "overlay-guest-build-virtualbox"
+                "overlay-guest-virtualbox"
             ],
             "scripts": [
                 "provisioners/guest-virtualbox.sh"
             ]
         },
         {
+            "type": "shell",
+            "only": [
+                "overlay-configure-virtualbox"
+            ],
+            "inline": [
+                "echo Starting configuration"
+            ]
+        },
+        {
             "type": "file",
             "only": [
-                "overlay-deploy-virtualbox"
+                "overlay-configure-virtualbox"
             ],
             "source": "uploads",
             "destination": "/home/{{user `user`}}"
@@ -96,7 +122,7 @@
         {
             "type": "shell",
             "only": [
-                "overlay-deploy-virtualbox"
+                "overlay-configure-virtualbox"
             ],
             "scripts": [
                 "provisioners/users.sh",
@@ -107,14 +133,14 @@
         {
             "type": "shell",
             "only": [
-                "overlay-deploy-virtualbox"
+                "overlay-configure-virtualbox"
             ],
             "inline": "echo '{{user `ssh_key_file`}}'>~/.ssh/authorized_keys"
         },
         {
             "type": "shell",
             "only": [
-                "overlay-deploy-virtualbox"
+                "deploy-virtualbox"
             ],
             "scripts": [
                 "provisioners/post.sh"
@@ -124,7 +150,9 @@
     "post-processors": [
         {
             "type": "vagrant",
-            "only": ["overlay-deploy-virtualbox"],
+            "only": [
+                "deploy-virtualbox"
+            ],
             "output": "output-vagrant-box/{{user `vm_name`}}.box",
             "vagrantfile_template": "tpl/Vagrantfile.tpl",
             "keep_input_artifact": true

@@ -10,3 +10,5 @@ sudo mount /dev/sr0 /media/cdrom
 sudo /media/cdrom/VBoxLinuxAdditions.run --nox11
 sudo umount /media/cdrom
 sudo rmdir /media/cdrom
+
+mkdir ~/share

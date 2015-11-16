@@ -1,15 +1,29 @@
 #!/bin/bash
 
+BUILDS=$1
+
+. ./env.sh
+
 set -e
 
-VERSION=$(<VERSION)
-BOX_NAME=centos-7-base-$VERSION
-BUILDS=$1
+if [ "$BUILDS" == "" ]
+    then
+    echo "Please specify a builder: "
+    packer inspect centos-7.json -machine-readable|grep template-builder|cut -d',' -f4
+    exit 1
+fi
 
 echo Building: $BOX_NAME
 echo Builders: $BUILDS
+echo Build file: $BUILD_FILE
 
-packer validate -var 'vm_name'="$BOX_NAME" -only=$BUILDS centos-7.json
+if [ $(VBoxManage list vms|grep "$BOX_NAME"|wc -l) == 1 ]
+    then
+    echo "VirtualBox has a registered VM named $BOX_NAME - please remove this before continuing."
+    exit 1
+fi
+
+packer validate -var 'vm_name'="$BOX_NAME" -only=$BUILDS $BUILD_FILE
 
 packer build \
     -only=$BUILDS \
