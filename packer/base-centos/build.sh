@@ -6,7 +6,19 @@ BUILDS=$1
 
 set -e
 
-if [ "$BUILDS" == "" ]
+if [ "$SSH_PUBLIC_KEY_FILE" != "" ] && [ ! -f "$SSH_PUBLIC_KEY_FILE" ];
+    then
+    echo "The SSH public key ($SSH_PUBLIC_KEY_FILE) wasn't provided"
+    exit 1
+fi
+
+if [ "$BUILD_FILE" != "" ] && [ ! -f "$BUILD_FILE" ]
+    then
+    echo "The build file ($BUILD_FILE) file couldn't be found"
+    exit 1
+fi
+
+if [ "$BUILDS" == "" ];
     then
     echo "Please specify a builder: "
     packer inspect centos-7.json -machine-readable|grep template-builder|cut -d',' -f4
@@ -27,8 +39,6 @@ packer validate -var 'vm_name'="$BOX_NAME" -only=$BUILDS $BUILD_FILE
 
 packer build \
     -only=$BUILDS \
-    -var 'ssh_key="$(<~/.ssh/vagrant.pub)"' \
-    -var 'vm_name'="$BOX_NAME" \
+    -var ssh_public_key_file=$SSH_PUBLIC_KEY_FILE \
+    -var vm_name=$BOX_NAME \
     centos-7.json
-
-#vagrant box add output-vagrant-box/$BOX_NAME.box --name $BOX_NAME-vagrant --force

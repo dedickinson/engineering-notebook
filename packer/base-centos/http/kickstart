@@ -25,11 +25,6 @@ reboot
 
 %packages --excludedocs
 sudo
-curl
-deltarpm
-gawk
-firewalld
-policycoreutils-python
 
 -aic94xx-firmware
 -atmel-firmware

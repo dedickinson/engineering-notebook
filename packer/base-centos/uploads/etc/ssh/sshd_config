@@ -1,5 +1,6 @@
 # START: Specifically set items
-semanage port -a -t ssh_port_t -p tcp 4444
+
+#semanage port -a -t ssh_port_t -p tcp 4444
 
 Port 4444
 
