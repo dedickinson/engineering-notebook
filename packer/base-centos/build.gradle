@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.apache.commons:commons-lang3:3.4'
+        classpath 'commons-codec:commons-codec:1.10'
+        classpath 'org.codehaus.groovy:groovy-all:2.4.4'
+    }
+}
+
+plugins {
+    id 'groovy'
+    id "com.bmuschko.vagrant" version "2.0"
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+}
+
+version = '1.0-SNAPSHOT'
+description 'Builds a minimal CentOS 7 image'
+
+ext {
+    srcDir = 'src/main'
+    templateDir = "$srcDir/templates"
+    boxDefinition = 'box.yaml'
+}
+
+/*
+ * Idea:
+ * Multi-stage build:
+ * 1. Kickstart
+ * 2. Add guest additions using Ansible (https://galaxy.ansible.com/detail#/role/5819)
+ * 3. Configure
+ * 4. Clean up
+ * 5. Box and ship
+ */

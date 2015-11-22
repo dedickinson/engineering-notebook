@@ -1,0 +1,58 @@
+- name: Create a Centos VM from an ISO
+  title: Centos-7
+  version: 1.0-SNAPSHOT
+  osIdentifier: Linux:Centos:7:64
+  iso:
+    - url: http://mirror.aarnet.edu.au/pub/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso
+    - checksum: 7cf1ac8da13f54d6be41e3ccf228dc5bb35792f515642755ff4780d5714d4278
+    - checksum_type: sha256
+  disks:
+    - hda:
+      - disk_size: 10000
+  users:
+    - user:
+      - name: automator
+      - password:
+        - generate: true
+      - ssh_keys:
+        - #{{ lookup('file', "${System.getProperty("user.home")}/.ssh/${packerBuildUser}.pub") }}
+      - uid: 9999
+      - comment: System user created for automation
+      - createhome: yes
+      - groups: [wheel]
+      - locked: true
+  packages:
+    include:
+      - sudo
+      - curl
+      - deltarpm
+      - gawk
+      - firewalld
+      - policycoreutils-python
+    exclude:
+      - aic94xx-firmware
+      - atmel-firmware
+      - b43-openfwwf
+      - bfa-firmware
+      - ipw*-firmware
+      - irqbalance
+      - ivtv-firmware
+      - iwl*-firmware
+      - libertas-usb8388-firmware
+      - ql*-firmware
+      - rt61pci-firmware
+      - rt73usb-firmware
+      - xorg-x11-drv-ati-firmware
+      - zd1211-firmware
+  platforms:
+    - virtualbox:
+      - guest_addition:
+        - install: true
+        - url: http://download.virtualbox.org/virtualbox/5.0.10/VBoxGuestAdditions_5.0.10.iso
+        - checksum: 8f7ffee3fac75793e48d1859b65a95879b3ed5bc1c3164c967e85d69244c594b
+        - checksum_type: sha256
+    - vmware:
+      - guest_addition:
+        - install: true
+  deploy:
+    clean: true

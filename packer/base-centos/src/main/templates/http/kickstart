@@ -1,0 +1,27 @@
+${kickstart.options.join('\n')}
+
+${kickstart.partitioning.join('\n')}
+
+rootpw --iscrypted --lock ${packer.rootPwdCrypt}
+user --iscrypted --lock --name=${packer.user} --password=${packer.userPwdCrypt} --uid=9999 --groups=wheel
+
+%packages --excludedocs
+${kickstart.packages.join('\n')}
+%end
+
+%post
+echo "${packer.user}        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/${packer.user}
+/bin/chmod 0440 /etc/sudoers.d/${packer.user}
+
+mkdir /home/${packer.user}/.ssh
+chmod 700 /home/${packer.user}/.ssh
+sudo chown -R ${packer.user}:${packer.user} /home/${packer.user}/.ssh
+
+#Prevent user from pressing I to initiate service load
+echo PROMPT=no>>/etc/sysconfig/init
+
+yum -y update
+
+yum -y install ${kickstart.postPackages.join(' ')}
+
+%end

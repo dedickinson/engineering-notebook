@@ -7,6 +7,11 @@ Generates a base Vagrant box for CentOS for both VirtualBox 5 and VMWare App Cat
 
 WARNING: This image does not aim to be secure.
 
+
+== PIVOT!
+
+Decided to switch to a more declarative YAML-based config and try to build the smarts as Groovy. Check box.yaml
+
 == Backlog
 
 Things left to-do:
@@ -31,6 +36,10 @@ Things left to-do:
 . https://www.vmware.com/cloudnative/appcatalyst-download[VMware AppCatalyst]
 
 NOTE: I run on OS X and found I had to install Python 3 in order to generate encrypted passwords as I kept getting shortened output. You may not need Python + passlib if you're running on Linux.
+
+=== Generating passwords
+
+    python3 -c 'from passlib import utils; print(utils.generate_password(size=42))'
 
 === Generate an SSH key
 

@@ -10,3 +10,8 @@
 **/packer_cache
 .vagrant
 packer/base-centos/tmp
+packer/base-centos/buildSrc/.gradle
+packer/base-centos/.gradle
+packer/base-centos/build
+packer/base-centos/buildSrc/build
+*.iml
