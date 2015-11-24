@@ -4,7 +4,7 @@
     "variables": {
         "vm_name": "centos-7-base",
         "user": "automator",
-        "password": "",
+        "password": "QP7FqDMF4ETPcbDGuycBqrn4X4QM9W83TQHErVmR9G",
         "ssh_public_key_file": "",
         "headless": "false",
         "iso_url": "http://mirror.aarnet.edu.au/pub/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
@@ -100,7 +100,7 @@
             "scripts": [
                 "provisioners/guest-virtualbox.sh"
             ]
-        }
+        },
         {
             "type": "file",
             "only": [

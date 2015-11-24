@@ -17,8 +17,8 @@ authconfig --useshadow --passalgo=sha512
 clearpart --all --initlabel
 autopart --type=plain --fstype=xfs
 
-rootpw --iscrypted --lock $6$EuAAfm5DEq$pON.NbUPFDPhhFI31ncb74ZSsLrjym5pLiQgmE/WW/DlYD9eR6ZkIVJFinO42SpzkB6pcnmOTnb1a9zgM4Rub0
-user --iscrypted --lock --name=automator --password=$6$OD7sG2K404$2qma7i5wQrzvYg7Rm/vp1LDEwqv4mWHghZW9zfFQCrTMZlcnxyevEhBdpfWKd8hL4KxdCxjWuxsndd45qGdaI1 --uid=9999 --groups=wheel
+rootpw --iscrypted --lock $6$rounds=656000$Y0D5hFZrPaU31VBc$IXs3V1ftn3RLuzg0lAUsv3q8w4PhA2zJs2feWlLjiOGtPGT5U5.1yG5CtKjq12u7y4XI.qvxE/3QYGumEngDz1
+user --iscrypted --lock --name=automator --password=$6$rounds=656000$.mN9G0g5sRU.MWAg$O/wPfDxJG4N6GouT0nFLdH6w2KtVb3zz/.puuPiGdDOVshgMP7inaqfetPkGuQXjDPTkoi8sT7CMXkWvT17lv/ --uid=9999 --groups=wheel
 
 %packages --excludedocs
 sudo

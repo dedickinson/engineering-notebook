@@ -20,8 +20,8 @@ fi
 
 if [ "$BUILDS" == "" ];
     then
-    echo "Please specify a builder: "
-    packer inspect centos-7.json -machine-readable|grep template-builder|cut -d',' -f4
+    echo "Please specify a builder from $BUILD_FILE: "
+    packer inspect $BUILD_FILE -machine-readable|grep template-builder|cut -d',' -f4
     exit 1
 fi
 
@@ -41,4 +41,4 @@ packer build \
     -only=$BUILDS \
     -var ssh_public_key_file=$SSH_PUBLIC_KEY_FILE \
     -var vm_name=$BOX_NAME \
-    centos-7.json
+    $BUILD_FILE

@@ -17,8 +17,6 @@ Decided to switch to a more declarative YAML-based config and try to build the s
 Things left to-do:
 
 * Lock out the `vagrant` user from console
-* Don't run as the user named `vagrant`, use `automator`
-* Use SCAP to check for any vulnerabilities....?
 * Get build to work with VMware's AppCatalyst
 
 == Pre-requisites
@@ -43,13 +41,13 @@ Add the following line to your profile so as to centralise the packer cache
 
 === Generating passwords
 
-    python3 -c 'from passlib import utils; print(utils.generate_password(size=42))'
+    python3 -c 'from passlib import utils; from passlib.hash import sha512_crypt; pwd = utils.generate_password(size=42);print(pwd);print(sha512_crypt.encrypt(pwd))'
 
 === Generate an SSH key
 
 I don't want to use the default vagrant keys so create my own for use with Vagrant:
 
-    ssh-keygen -t rsa -f ~/.ssh/vagrant
+    ssh-keygen -t rsa -f ~/.ssh/automator
 
 The Packer config (`centos-7.json`) will look for `~/.ssh/vagrant.pub` by default but this can be overridden when calling
 packer by setting the `ssh_key` variable - you can see this being done in `build.sh`.
