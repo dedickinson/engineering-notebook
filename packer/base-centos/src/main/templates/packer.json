@@ -1,0 +1,165 @@
+{
+    "_title": "$project.name",
+    "description": "$project.description",
+    "variables": {
+        "vm_name": "$project.name",
+        "user": "$packer.user",
+        "password": "$packer.userPwd",
+        "communicator": "$packer.communicator",
+        "ssh_port": "$packer.sshPort",
+        "ssh_wait_timeout": "$packer.sshWaitTimeout",
+        "ssh_public_key_file": "$packer.SshPublicKeyFile",
+        "headless": "$packer.headless",
+        "iso_url": "$packer.isoUrl",
+        "iso_checksum": "$packer.isoChecksum",
+        "iso_checksum_type": "$packer.isoChecksumType",
+        "vbox_guest_additions_url": "$packer.vboxGuestAdditionsUrl",
+        "vbox_guest_additions_sha256": "$packer.vboxGuestAdditionsSha256",
+        "shutdown_command": "$packer.shutdownCommand",
+        "disk_size": "$packer.diskSize",
+        "http_dir": "$packer.httpDir",
+        "guest_os_type": "$packer.guestOsType"
+    },
+    "builders": [
+
+        <%
+            packer.builders.each {
+
+            }
+        %>
+
+
+        {
+            "type": "virtualbox-iso",
+            "name": "base-virtualbox",
+            "vm_name": "{{user `vm_name`}}",
+            "communicator": "{{user `communicator`}}",
+            "ssh_pty": "true",
+            "guest_os_type": "{{user `guest_os_type`}}",
+            "iso_url": "{{user `iso_url`}}",
+            "iso_checksum": "{{user `iso_checksum`}}",
+            "iso_checksum_type": "{{user `iso_checksum_type`}}",
+            "ssh_username": "{{user `user`}}",
+            "ssh_password": "{{user `password`}}",
+            "ssh_port": "{{user `ssh_port`}}",
+            "ssh_wait_timeout": "{{user `ssh_wait_timeout`}}",
+            "disk_size": "{{user `disk_size`}}",
+            "format": "ovf",
+            "headless": "{{user `headless`}}",
+            "shutdown_command": "{{user `shutdown_command`}}",
+            "http_directory": "{{user `http_dir`}}",
+            "boot_command": [
+                "<wait><esc><esc>",
+                "linux ks=http://{{.HTTPIP}}:{{.HTTPPort}}/kickstart<enter>"
+            ],
+            "guest_additions_mode": "disable"
+        },
+        {
+            "type": "virtualbox-ovf",
+            "name": "overlay-guest-virtualbox",
+            "vm_name": "{{user `vm_name`}}",
+            "source_path": "output-base-virtualbox/{{user `vm_name`}}.ovf",
+            "headless": "{{user `headless`}}",
+            "ssh_username": "{{user `user`}}",
+            "ssh_password": "{{user `password`}}",
+            "ssh_port": 22,
+            "ssh_pty": "true",
+            "shutdown_command": "{{user `shutdown_command`}}",
+            "vbox_guest_additions_mode": "attach",
+            "guest_additions_url": "{{user `vbox_guest_additions_url`}}",
+            "guest_additions_sha256": "{{user `vbox_guest_additions_sha256`}}"
+        },
+        {
+            "type": "virtualbox-ovf",
+            "name": "overlay-configure-virtualbox",
+            "vm_name": "{{user `vm_name`}}",
+            "source_path": "output-overlay-guest-virtualbox/{{user `vm_name`}}.ovf",
+            "headless": "{{user `headless`}}",
+            "ssh_username": "{{user `user`}}",
+            "ssh_password": "{{user `password`}}",
+            "ssh_port": 22,
+            "ssh_pty": "true",
+            "shutdown_command": "{{user `shutdown_command`}}",
+            "guest_additions_mode": "disable"
+        },
+        {
+            "type": "virtualbox-ovf",
+            "name": "deploy-virtualbox",
+            "vm_name": "{{user `vm_name`}}",
+            "source_path": "output-overlay-configure-virtualbox/{{user `vm_name`}}.ovf",
+            "headless": "{{user `headless`}}",
+            "ssh_username": "{{user `user`}}",
+            "ssh_password": "{{user `password`}}",
+            "ssh_port": 4444,
+            "ssh_pty": "false",
+            "shutdown_command": "{{user `shutdown_command`}}",
+            "guest_additions_mode": "disable"
+        }
+    ],
+    "provisioners": [
+
+        {
+            "type": "shell",
+            "only": [
+                "overlay-guest-virtualbox"
+            ],
+            "scripts": [
+                "provisioners/guest-virtualbox.sh"
+            ]
+        },
+        {
+            "type": "shell",
+            "only": [
+                "overlay-configure-virtualbox"
+            ],
+            "inline": [
+                "echo Starting configuration"
+            ]
+        },
+        {
+            "type": "file",
+            "only": [
+                "overlay-configure-virtualbox"
+            ],
+            "source": "uploads",
+            "destination": "/home/{{user `user`}}"
+        },
+        {
+            "type": "shell",
+            "only": [
+                "overlay-configure-virtualbox"
+            ],
+            "scripts": [
+                "provisioners/uploads.sh"
+            ]
+        },
+        {
+            "type": "file",
+            "only": [
+                "overlay-configure-virtualbox"
+            ],
+            "source": "/Users/s2183294/.ssh/vagrant.pub",
+            "destination": "/home/{{user `user`}}/.ssh/authorized_keys"
+        },
+        {
+            "type": "shell",
+            "only": [
+                "overlay-configure-virtualbox"
+            ],
+            "inline": [
+                "chmod 600 /home/{{user `user`}}/.ssh/authorized_keys"
+            ]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "vagrant",
+            "only": [
+                "deploy-virtualbox"
+            ],
+            "output": "output-vagrant-box/{{user `vm_name`}}.box",
+            "vagrantfile_template": "tpl/Vagrantfile.tpl",
+            "keep_input_artifact": true
+        }
+    ]
+}
