@@ -37,6 +37,10 @@ Things left to-do:
 
 NOTE: I run on OS X and found I had to install Python 3 in order to generate encrypted passwords as I kept getting shortened output. You may not need Python + passlib if you're running on Linux.
 
+Add the following line to your profile so as to centralise the packer cache
+
+    export PACKER_CACHE_DIR="~/.packer_cache"
+
 === Generating passwords
 
     python3 -c 'from passlib import utils; print(utils.generate_password(size=42))'
