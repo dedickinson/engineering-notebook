@@ -1,0 +1,7 @@
+= VirtualBox Java JWS tests
+
+1. Download the VirtualBox SDK: https://www.virtualbox.org/wiki/Downloads and extract the archive
+1. Link to `vboxjws.jar`
+
+
+    mvn install:install-file -Dfile=vboxjws.jar -Dsources=vboxjws-src.jar -Djavadoc=vboxjws-doc.jar -DgroupId=org.virtualbox -Dversion=5.0.10 -DartifactId=vboxjws -Dpackaging=jar

@@ -1,0 +1,16 @@
+group 'name.dickinson.duncan'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.5'
+    compile 'org.virtualbox:vboxjws:5.0.10'
+}
+
