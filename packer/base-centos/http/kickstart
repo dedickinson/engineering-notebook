@@ -1,0 +1,48 @@
+install
+cdrom
+lang en_US.UTF-8
+keyboard us
+network --onboot yes --device eth0 --bootproto dhcp
+firewall --enabled --service=ssh
+selinux --permissive
+timezone Australia/Brisbane
+bootloader --location=mbr --driveorder=sda --append="crashkernel=auto rhgb quiet"
+text
+skipx
+zerombr
+unsupported_hardware
+firstboot --disabled
+reboot
+authconfig --useshadow --passalgo=sha512
+clearpart --all --initlabel
+autopart --type=plain --fstype=xfs
+
+rootpw --iscrypted --lock $6$EuAAfm5DEq$pON.NbUPFDPhhFI31ncb74ZSsLrjym5pLiQgmE/WW/DlYD9eR6ZkIVJFinO42SpzkB6pcnmOTnb1a9zgM4Rub0
+user --iscrypted --lock --name=automator --password=$6$OD7sG2K404$2qma7i5wQrzvYg7Rm/vp1LDEwqv4mWHghZW9zfFQCrTMZlcnxyevEhBdpfWKd8hL4KxdCxjWuxsndd45qGdaI1 --uid=9999 --groups=wheel
+
+%packages --excludedocs
+sudo
+-aic94xx-firmware
+-atmel-firmware
+-b43-openfwwf
+-bfa-firmware
+-ipw*-firmware
+-irqbalance
+-ivtv-firmware
+-iwl*-firmware
+-libertas-usb8388-firmware
+-ql*-firmware
+-rt61pci-firmware
+-rt73usb-firmware
+-xorg-x11-drv-ati-firmware
+-zd1211-firmware
+%end
+
+%post
+echo "automator        ALL=(ALL)       NOPASSWD: ALL" >> /etc/sudoers.d/automator
+/bin/chmod 0440 /etc/sudoers.d/automator
+
+#Prevent user from pressing I to initiate service load
+echo PROMPT=no>>/etc/sysconfig/init
+
+%end
