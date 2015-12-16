@@ -1,0 +1,29 @@
+@GrabConfig(systemClassLoader = true)
+import groovy.util.logging.Slf4j
+@Grab('org.apache.camel:camel-core:2.16.0')
+import org.apache.camel.builder.RouteBuilder
+import org.apache.camel.main.Main
+
+@Grab(group = 'ch.qos.logback', module = 'logback-classic', version = '1.1.3')
+
+@Slf4j
+class MainShell extends Main {
+    {
+        enableHangupSupport()
+        addRouteBuilder new RouteBuilder() {
+            void configure() {
+                from 'file:///tmp/in/' to 'file:///tmp/out'
+            }
+        }
+    }
+
+    void afterStart() {
+        log.info 'Started Camel. Use ctrl + c to terminate the JVM.'
+    }
+
+    void beforeStop() {
+        log.info 'Stopping Camel.'
+    }
+}
+
+new MainShell().run()
