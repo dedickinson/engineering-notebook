@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Arithmetic operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="These are one of the 3 R's (Reading, wRiting and aRithmetic) - that's it at the end." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Arithmetic operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/EqualityOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/RelationalOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>These are one of the 3 R's (Reading, wRiting and aRithmetic) - that's it at the end.</aside>
+  <p>The five arithmetic operators (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>) are familiar to most people from their early school days.</p>
+
+<h1>Additive Operators</h1>
+
+<table>
+<caption id="table:theadditiveoperators">Table: The additive operators</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">+</td>
+	<td style="text-align:left;">Plus</td>
+</tr>
+<tr>
+	<td style="text-align:center;">-</td>
+	<td style="text-align:left;">Minus</td>
+</tr>
+</tbody>
+</table>
+
+<p>The additive operators provide for basic addition and subtraction.</p>
+
+<pre><code>assert 1 + 1 == 2
+assert 10 - 9 == 1
+</code></pre>
+
+<p>Additive operators are left-associative - they are assessed from left to right:</p>
+
+<pre><code>assert 1 + 4 - 3 == 2
+</code></pre>
+
+<blockquote>
+<p>The <code>+</code> operator can also be used to concatenate (join) two strings:<br/>
+<code>def mySentence = 'This is a game ' + 'of two halves'</code><br/>
+I&#8217;d suggest that you avoid using this as Groovy has better options that we&#8217;ll look at shortly.</p>
+</blockquote>
+
+<h1>Multiplicative Operators</h1>
+
+<table>
+<caption id="table:themultiplicativeoperators">Table: The multiplicative operators</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">*</td>
+	<td style="text-align:left;">Multiply</td>
+</tr>
+<tr>
+	<td style="text-align:center;">/</td>
+	<td style="text-align:left;">Divide</td>
+</tr>
+<tr>
+	<td style="text-align:center;">%</td>
+	<td style="text-align:left;">Remainder</td>
+</tr>
+</tbody>
+</table>
+
+<p>The remainder operator (<code>%</code>) is also commonly referred to as the <em>modulus</em> operator and returns the remainder of a division: </p>
+
+<pre><code>assert 13 % 2 == 1
+</code></pre>
+
+<p>Multiplicative operators are left-associative:</p>
+
+<pre><code>assert 10 * 6 / 2 == 30
+</code></pre>
+
+<h1>The Power operator</h1>
+
+<table>
+<caption id="table:thepoweroperator">Table: The power operator</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">**</td>
+	<td style="text-align:left;">Power</td>
+</tr>
+</tbody>
+</table>
+
+<p>The power operator (<code>**</code>) is used to raise a number to the power of the second number:</p>
+
+<pre><code class="groovy">assert 5**3 == 125
+</code></pre>
+
+<blockquote>
+<p>This is a handy shortcut to using<br/>
+<code>java.lang.Math.pow(5, 3)</code></p>
+</blockquote>
+
+<h1>Precedence</h1>
+
+<p>Multiplicative operators have precedence over additive operators. </p>
+
+<pre><code class="groovy">assert 10 - 1 * 10 == 0
+</code></pre>
+
+<p>If the result above is surprising and the expected result was 90 then parentheses &#8220;<code>()</code>&#8221; should have been used:</p>
+
+<pre><code class="groovy">assert (10 - 1) * 10 == 90
+</code></pre>
+
+<p>The elements within parentheses have precedence over the rest of the evaluation. This results in <code>(10 - 1)</code> being evaluated first and the result being multiplied by 10.</p>
+
+<p>If we consider Pythagoras&#8217; theorem: (<span class="math">\(a^2 + b^2 = c^2\)</span>) the operator precedence will yield the correct answer without requiring parentheses:</p>
+
+<pre><code class="groovy">assert 3 * 3 + 4 * 4 == 5 * 5
+</code></pre>
+
+<p>However, we could use parentheses purely for the sake of clarity:</p>
+
+<pre><code class="groovy">assert (3 * 3) + (4 * 4) == (5 * 5)
+</code></pre>
+
+<blockquote>
+<p>Naturally, we should have used the power operator for those calculations :
+<code>assert 3**2 + 4**2 == 5**2</code></p>
+</blockquote>
+
+<p>Nested parentheses can be used to further delineate an expression. The innermost parentheses are evaluated first, then moving outwards:</p>
+
+<pre><code class="groovy">assert ((10 - 1) * 10) / 2 == 45
+</code></pre>
+
+<p>In the equation above, <code>(10 - 1)</code> is evaluated first, the result (9) is then multiplied by 10 and that result (90) being divided by 2.</p>
+
+<p>For significantly more complex calculations such as the quadratic equation (below) parentheses are required if the calculation is to be performed in a single expression:</p>
+
+<p><span class="math">\[x = {-b \pm \sqrt{b^2-4ac} \over 2a}\]</span></p>
+
+<pre><code class="groovy">def a = 5
+def b = 6
+def c = 1
+def x
+x = ((-1 * b) + Math.sqrt((b**2) - (4 * a * c))) / (2 * a)
+assert x == -0.2
+</code></pre>
+
+<blockquote>
+<p>Note: The solution given above is not a complete implementation of the equation - it is provided for demonstration purposes only.</p>
+</blockquote>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/EqualityOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/RelationalOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

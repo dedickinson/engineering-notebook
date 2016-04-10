@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - The `for` Loop</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Groovy supports for-in loops, for-each loops and the C-style for loop." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">The `for` Loop</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/04_ControlFlow/Switch.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/04_ControlFlow/While.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Groovy supports for-in loops, for-each loops and the C-style for loop.</aside>
+  <p>The <code>for</code> loop will repeat a block of code whilst its condition is <code>true</code>:</p>
+
+<pre><code class="groovy">for (&lt;condition&gt;) {
+    //statements
+}
+</code></pre>
+
+<h1>The <code>for-in</code> Loop</h1>
+
+<p>The for-each loop basically says &#8220;for each element is this collection, perform the following&#8221;:</p>
+
+<pre><code class="groovy">for (&lt;var&gt; in &lt;iterator&gt;) {
+    //statements
+}
+</code></pre>
+
+<blockquote>
+<p>The <code>for-in</code> loop may also be referred to as the for-each loop but I prefer the former as the <code>in</code> keyword is part of the syntax.</p>
+</blockquote>
+
+<p>In the Groovy for-in loop we have a variable (<code>var</code>) provided as the next item in the <code>iterator</code><a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>. In most cases this is a collection of objects such as a list or map.</p>
+
+<p>You can&#8217;t change the iterator within a loop - it&#8217;d just be too confusing! That means code such as the following causes an exception and won&#8217;t run:</p>
+
+<pre><code class="groovy">def scores = [4, 8, 2]
+
+for (i in scores) {
+    scores &lt;&lt; i**2
+}
+</code></pre>
+
+<h2>Using a range</h2>
+
+<p>Consider a variable called <code>countdown</code> to hold a range:</p>
+
+<pre><code class="groovy">def countdown = (10..0)
+</code></pre>
+
+<p>By itself, <code>countdown</code> probably doesn&#8217;t seem too useful but let&#8217;s look at a <code>for</code> loop:</p>
+
+<pre><code class="groovy">def countdown = (10..0)
+
+for (i in countdown) {
+    println &quot;Launch in T-$i seconds&quot;
+}
+
+println 'Blast off!'
+</code></pre>
+
+<p>So let&#8217;s break down <code>for (i in countdown) {</code>:</p>
+
+<ul>
+<li>The <code>(...)</code> parentheses holds the condition</li>
+<li>The variable <code>i</code> will hold the next element in <code>countdown</code>
+
+<ul>
+<li>You can name this as you would any other variable</li>
+</ul></li>
+<li>The element to the right of the <code>in</code> reserved word is the variable being iterated (looped) over</li>
+<li><code>{</code> starts the loop body
+
+<ul>
+<li>and its matching <code>}</code> closes it</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p><code>i</code> is commonly used to hold the value of each <em><strong>i</strong></em>teration</p>
+</blockquote>
+
+<p>If you run this code in groovyConsole you&#8217;ll see our launch sequence displayed. </p>
+
+<p>To make our code even more compact (yet readable), we can use the literal value for the range (<code>10..0</code>) in our <code>for</code> condition:</p>
+
+<pre><code class="groovy">for (i in 10..0) {
+    println &quot;Launch in T-$i seconds&quot;
+}
+println 'Blast off!'
+</code></pre>
+
+<h2>Lists</h2>
+
+<p>Looping through the items in a list is quite straight forward now you&#8217;ve seen the range example:</p>
+
+<pre><code class="groovy">def planets = [
+    'Mercury',
+    'Venus',
+    'Earth',
+    'Mars'
+]
+
+for (planet in planets) {
+    println planet
+}
+</code></pre>
+
+<blockquote>
+<p>Ranges work like Lists because, under the hood, ranges <em>are</em> Lists! Consider <code>1..3</code> - it&#8217;s actually a list of <code>[1, 2, 3]</code></p>
+</blockquote>
+
+<h2>Maps</h2>
+
+<p>Iterating through maps is much the same as we did for lists but the iteration variable consists of the key and the value for that map item. The next code segment will just display the value of each map item:</p>
+
+<pre><code class="groovy">def domains = [
+    'com': 'Corporate sites',
+    'org': 'Non-commercial sites',
+    'mil': 'Military sites'    
+]
+
+for (site in domains) {
+    println site
+}
+</code></pre>
+
+<p>The code above will display a set of lines such as <code>com=Corporate sites</code> - illustrating that <code>site</code> contains a key/value pair.</p>
+
+<p>Instead of printing out the iteration variable (<code>site</code>) we can be a little smarter and access the key (<code>site.key</code>) and value (<code>site.value</code>) individually:</p>
+
+<pre><code class="groovy">def domains = [
+    'com': 'Corporate sites',
+    'org': 'Non-commercial sites',
+    'mil': 'Military sites'    
+]
+
+for (site in domains) {
+    println site.key &lt;&lt; ': ' &lt;&lt; site.value
+}
+</code></pre>
+
+<h1>The Java for-each</h1>
+
+<p>Groovy supports Java&#8217;s version of a for-each loop:</p>
+
+<pre><code class="groovy">for (&lt;Type&gt; &lt;var&gt;: &lt;iterator&gt;) {
+    //statements
+}
+</code></pre>
+
+<p>Unlike Groovy&#8217;s for-in loop, the Java version:</p>
+
+<ul>
+<li>uses <code>:</code> instead if <code>in</code></li>
+<li>Requires you to declare a data type for the iteration variable
+
+<ul>
+<li>Which makes lists consisting of elements with different data types a little more tricky.</li>
+</ul></li>
+</ul>
+
+<p>Re-writing the previous planets example in the Java for-each style we&#8217;d see the following:</p>
+
+<pre><code class="groovy">def planets = [
+    'Mercury',
+    'Venus',
+    'Earth',
+    'Mars'
+]
+
+for (String planet: planets) {
+    println planet
+}
+</code></pre>
+
+<blockquote>
+<p><code>for (def planet: planets)</code> would also work</p>
+</blockquote>
+
+<p>The Java version has no real benefit over the Groovy approach so I&#8217;d stick with the Groovy <code>for (&lt;var&gt; in &lt;iterator&gt;)</code>. The Groovy approach also makes for easier iteration over maps.</p>
+
+<p>If you really want to set a data type for your iteration variable you can still be Groovy about it:</p>
+
+<pre><code class="groovy">def planets = [
+    'Mercury',
+    'Venus',
+    'Earth',
+    'Mars',
+]
+
+for (String planet in planets) {
+    println planet
+}
+</code></pre>
+
+<h1>A C-style <code>for</code> Loop</h1>
+
+<p>Java (and Groovy) both offer the <code>for</code> loop syntax found in the C programming language:</p>
+
+<pre><code class="groovy">for (&lt;init variable&gt;; &lt;condition&gt;; &lt;update expression&gt;) {
+    //statements
+}
+</code></pre>
+
+<ul>
+<li><code>&lt;init variable&gt;</code> initialises the loop variable before the first iteration</li>
+<li><code>&lt;condition&gt;</code> sets the condition to be met for the iteration to commence</li>
+<li><code>&lt;update expression&gt;</code> is evaluated after each iteration</li>
+</ul>
+
+<p>This next example does the same as <code>for (i in (10..1))</code> but is more verbose:</p>
+
+<pre><code class="groovy">for (i = 10; i &gt;= 0; i--) {
+    println i
+}
+</code></pre>
+
+<p>So what&#8217;s happening in <code>(i = 10; i &gt;= 0; i--)</code>?</p>
+
+<ul>
+<li><code>i = 10</code> initialises the loop variable <code>i</code> to <code>10</code></li>
+<li><code>i &gt;= 0</code> is the conditional that says &#8220;keep looping until <code>i</code> is no longer greater than or equal to 10&#8221;</li>
+<li><code>i--</code> is evaluated after each iteration - <code>i</code> is decremented by 1.</li>
+</ul>
+
+<p>The <code>&lt;update expression&gt;</code> can be a more complex expression:</p>
+
+<pre><code class="groovy">for (i = 0; i &lt;= 20; i += 2) {
+    println i
+}
+</code></pre>
+
+<h2>Infinite loops</h2>
+
+<p>The C-style <code>for</code> loop can let you set up infinite loops:</p>
+
+<pre><code class="groovy">for (;;) {
+
+}
+</code></pre>
+
+<p>These are often used in event-based systems. Essentially, the program will enter a loop and await incoming events such as a mouse-click. It&#8217;s a very interesting aspect to coding but outside the scope of these tutorials.</p>
+
+<blockquote>
+<p>The term &#8216;infinite&#8217; should set off an alarm in your head - be careful as this type of coding can cause your system to stop responding!</p>
+</blockquote>
+
+<p>The C-style loop doesn&#8217;t protect you from altering the thing you&#8217;re working on and, perhaps inadvertently, creating an infinite loop. That means that the code below needs the safety brake provided by (<code>&amp;&amp; i &lt; 20</code>) as the loop keeps altering the size of <code>scores</code>. If you take out <code>&amp;&amp; i &lt; 20</code> and run the code below it won&#8217;t stop unless you interrupt it or you run out of system resources:</p>
+
+<pre><code class="groovy">def scores = [4, 8, 2]
+
+for (i = 0; i &lt; scores.size &amp;&amp; i &lt; 20; i++) {
+    println scores[i]
+    scores &lt;&lt; scores[i]**2   
+}
+</code></pre>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>Many Groovy classes implement a feature (interface) named <code>Iterable</code> and these let you easily iterate over a collection of items. Lists and Maps are both iterable, making it very easy to loop through their contents. <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/04_ControlFlow/Switch.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/04_ControlFlow/While.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Control Flow Statements</a>
+    <ul>
+    
+      <li><a href='Blocks.html'>Blocks</a></li>
+    
+      <li><a href='If.html'>The `if` Statement</a></li>
+    
+      <li><a href='Switch.html'>The `switch` Statement</a></li>
+    
+      <li><a href='For.html'>The `for` Loop</a></li>
+    
+      <li><a href='While.html'>The `while` loop</a></li>
+    
+      <li><a href='Branching.html'>Branching statements</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

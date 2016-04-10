@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Branching statements</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="These statements may let you improve the efficiency of  switches, loops and methods." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Branching statements</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/04_ControlFlow/While.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>These statements may let you improve the efficiency of  switches, loops and methods.</aside>
+  <p>Groovy has three branching statements:</p>
+
+<ul>
+<li><code>break</code></li>
+<li><code>continue</code></li>
+<li><code>return</code></li>
+</ul>
+
+<h1>break</h1>
+
+<p>We first came across the use of <code>break</code> in the <code>switch</code> statement - it&#8217;s used to indicate the end of the set of statements for the <code>case</code> and signals that the <code>switch</code> statement has completed.</p>
+
+<p>The <code>break</code> reserved word is also used to exit out of a loop - even if there are more iterations possible. In the code below I iterate through the list until I reach the value <code>'Earth'</code> and then <code>break</code> out of the loop:</p>
+
+<pre><code class="groovy">def planets = [
+    'Mercury',
+    'Venus',
+    'Earth',
+    'Mars'
+]
+
+for (planet in planets) {
+    println planet
+    if (planet == 'Earth') {
+        break
+    }
+}
+</code></pre>
+
+<p>When we looked at the <code>while</code> loop I gave an example of setting a <code>flag</code> variable and checking that as the loop&#8217;s condition. This could have been refined using <code>break</code> and not using <code>flag</code> at all:</p>
+
+<pre><code class="groovy">def num = 0
+
+while (true) {
+    num++
+    if (num**2 == 64) {
+        break
+    }
+}
+
+println &quot;The square root of 64 is $num&quot;
+</code></pre>
+
+<blockquote>
+<p>Be cautious with this sort of code - it doesn&#8217;t take much to create an infinite loop.</p>
+</blockquote>
+
+<p>I&#8217;ll refine that <code>while</code> loop just a little further:</p>
+
+<pre><code class="groovy">def num = 0
+
+while (++num) {
+    if (num**2 == 64) {
+        break
+    }
+}
+
+println &quot;The square root of 64 is $num&quot;
+</code></pre>
+
+<p>As Groovy resolves a number other than <code>0</code> to be <code>true</code>, <code>++num</code> will allow the loop to commence and we still rely on <code>break</code> to get us out of the loop.</p>
+
+<h1>continue</h1>
+
+<p>The <code>continue</code> reserved word will cause the next iteration of the loop - ignoring anything within the rest of the current iteration. In the loop below I use <code>continue</code> to ignore <code>'Earth'</code>.</p>
+
+<pre><code class="groovy">def planets = [
+    'Mercury',
+    'Venus',
+    'Earth',
+    'Mars'
+]
+
+for (planet in planets) {
+    if (planet == 'Earth') {
+        continue
+    }
+    println planet
+}
+</code></pre>
+
+<h1>Labelled branching</h1>
+
+<p>If you have a secret desire to create spaghetti code that quickly becomes unreadable then labels are for you! </p>
+
+<p>Labels are used when you have nested loops - a loop within a loop. Both <code>break</code> and <code>continue</code> can be given a label that directs the program to another nesting level. In the example below I label the first loop <code>flowerlist</code> and, when I get to the colour <code>'Green'</code> in the inner loop, my <code>continue</code> is directed not at the inner loop but at the outer one labelled <code>flowerlist</code> - this is called a &#8220;labelled continue&#8221;:</p>
+
+<pre><code class="groovy">def colours = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']
+
+def flowers = ['daisy', 'rose', 'tulip']
+
+flowerlist:
+    for (flower in flowers) {
+        for (colour in colours) {
+            if (colour == 'Green') {
+                continue flowerlist
+            }
+            println &quot;$colour $flower&quot;
+        }
+    }
+</code></pre>
+
+<p>As you can see, the label consists of a name, followed by a colon (<code>:</code>) that appears above the loop being labelled. The code above will display the following: </p>
+
+<pre><code class="groovy">Red daisy
+Orange daisy
+Yellow daisy
+Red rose
+Orange rose
+Yellow rose
+Red tulip
+Orange tulip
+Yellow tulip
+</code></pre>
+
+<blockquote>
+<p>Perhaps our business logic dictated that no rainbow colour below &#8216;Yellow&#8217; was to be associated with a flower - it&#8217;s a silly example.</p>
+</blockquote>
+
+<p>A labelled <code>break</code> works much the same way and defers control back to the loop designated by the label.</p>
+
+<p>There are times when labels are useful but really think about what you need to do before resorting to them. For example, using a <code>break</code> in the code above would have done the job:</p>
+
+<pre><code class="groovy">def colours = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']
+
+def flowers = ['daisy', 'rose', 'tulip']
+
+for (flower in flowers) {
+    for (colour in colours) {
+        if (colour == 'Green') {
+            break
+        }
+        println &quot;$colour $flower&quot;
+    }
+}
+</code></pre>
+
+<h1>return</h1>
+
+<p>The <code>return</code> statement is used to hand control back to the caller<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>. In most cases, <code>return</code> is used in a method or closure to return a value. In the most basic usage, the keyword <code>return</code> just appears on a line by itself:</p>
+
+<pre><code class="groovy">//some code
+return
+</code></pre>
+
+<p>Any code that appears below the <code>return</code> is unreachable and is never evaluated:</p>
+
+<pre><code class="groovy">//some code... 
+return
+//unreachable code...
+</code></pre>
+
+<p>Return can be provided a value and this is returned to the caller:</p>
+
+<pre><code class="groovy">//some code
+return 3.14
+</code></pre>
+
+<p>You can use an expression in the <code>return</code> statement and the result is returned:</p>
+
+<pre><code class="groovy">//some code
+return circumference / diameter
+</code></pre>
+
+<p>Using <code>return</code> within the body of a script<a href="#fn:2" id="fnref:2" title="see footnote" class="footnote">[2]</a> will cause it to exit as the command-line/terminal is the caller. When exiting you can choose to return a value - usually <code>0</code> if the script succeeds, or an error number if it fails.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>The caller is the section of code that called the method/closure. <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+<li id="fn:2">
+<p>By body I mean the <code>main</code> part of the script. <a href="#fnref:2" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/04_ControlFlow/While.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Control Flow Statements</a>
+    <ul>
+    
+      <li><a href='Blocks.html'>Blocks</a></li>
+    
+      <li><a href='If.html'>The `if` Statement</a></li>
+    
+      <li><a href='Switch.html'>The `switch` Statement</a></li>
+    
+      <li><a href='For.html'>The `for` Loop</a></li>
+    
+      <li><a href='While.html'>The `while` loop</a></li>
+    
+      <li><a href='Branching.html'>Branching statements</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

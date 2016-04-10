@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.w3.org/1999/xhtml ../schema/htmlbook.xsd" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>${book.title}</title>
+<meta name="${book.title}" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	
+</script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body data-type="book" class="book" id="htmlbook">
+  <!-- Front matter -->
+  <figure data-type="cover">
+    <img src="cover.png" />
+  </figure>
+  <section data-type="titlepage" class="titlepage">
+    <header>
+      <h1>${book.title}</h1>
+      <p data-type="subtitle"></p>
+      <p data-type="author"></p>
+    </header>
+  </section>
+  <section data-type="copyright-page">
+    <header>
+      <h1></h1>
+    </header>
+  </section>
+  <section data-type="dedication" class="dedication"></section>
+  <nav data-type="toc" class="toc" id="toc">
+    <h1>Table of Contents</h1>
+  </nav>
+  <!-- End of Front matter -->
+  <div data-type="part">
+    <header>
+      <h1>Part N:</h1>
+      <p>Part Introduction...</p>
+      <header>
+        <section data-type="chapter">
+          <header>
+            <h1>Part One: Introduction to Backbone.js</h1>
+            <p>Part Introduction...</p>
+            <header>
+        </section>
+  </div>
+  <!-- Back matter -->
+</body>
+</html>

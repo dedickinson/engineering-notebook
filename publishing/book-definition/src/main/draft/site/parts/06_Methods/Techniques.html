@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Techniques</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Various ideas to help your method writing but not your method acting." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Techniques</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/MethodDoc.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/07_Closures/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Various ideas to help your method writing but not your method acting.</aside>
+  <p>I&#8217;d like to tell you that your programming career will be all about writing perfect code that never has problems but I&#8217;d just be lying. Here are some techniques to help make sure your methods are more robust and helpful to other programmers.</p>
+
+<h1>Valid parameters</h1>
+
+<p>We understand that the method <code>determineAverage(...values)</code> is expecting a list of numbers and have used a reasonably clear naming strategy (<code>determineAverage</code>) to display that the method is number-oriented <em>but</em> what happens when our colleague gives us something like:</p>
+
+<pre><code>determineAverage(5, 5, 8, 'kitten')
+</code></pre>
+
+<p>Clearly, <em>kittens</em> aren&#8217;t something that the <em>average</em> calculation can understand<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>. If you try to run that code you&#8217;ll get a nasty error that basically says your code has failed. Don&#8217;t be too hard on your colleague though - perhaps they&#8217;ve loaded data from a file that&#8217;s become corrupted by felines.</p>
+
+<h2>Comment your method</h2>
+
+<p>Firstly, make sure that <code>determineAverage</code> has some useful documentation such as: </p>
+
+<pre><code class="groovy">/**
+ * Returns the average of the parameters
+ *
+ * @param values  a series of numerical values
+ * @throws IllegalArgumentException if a parameter is a String
+ * @returns The average of the values
+ */
+def determineAverage(...values) 
+    return values.sum() / values.size()
+}
+</code></pre>
+
+<p>In the example above I&#8217;ve just added a GroovyDoc comment block that describes what the method does, its parameter and what it will return. At the very least, other developers will see how they <em>should</em> be using my method.</p>
+
+<h2>Check the parameters</h2>
+
+<p>Next, I can be more defensive in my coding and make sure that the method has a prerequisite that needs to be met before it attempts to run.</p>
+
+<pre><code>/**
+ * Returns the average of the parameters
+ *
+ * @param values  a series of numerical values
+ * @throws IllegalArgumentException if a parameter is a String
+ * @returns The average of the values
+ */
+def determineAverage(...values) 
+  throws IllegalArgumentException {
+    for (item in values) {
+        if (item instanceof String) {
+            throw new IllegalArgumentException()
+        }
+    }
+    return values.sum() / values.size()
+}
+
+//This works:
+assert determineAverage(12, 18) == 15
+
+//This does not work - we get an exception
+determineAverage(5, 5, 8, 'kitten')
+</code></pre>
+
+<p>The approach above checks to make sure that no parameter is a <code>String</code> - if you pass one to the method you&#8217;ll get an exception thrown back at you. In reality I should make sure that only numbers can be passed in and my check won&#8217;t pick up a <code>Boolean</code> value - more on this in a moment.</p>
+
+<p>What do you think would happen if I called the method with no parameters - <code>determineAverage()</code>? </p>
+
+<p>(pause)</p>
+
+<p>Well, the division would attempt to divide by zero and that&#8217;s a fail so I need to also check that <code>values</code> isn&#8217;t empty (I&#8217;ll leave out the comments for brevity):</p>
+
+<pre><code class="groovy">def determineAverage(...values) 
+  throws IllegalArgumentException {
+    for (item in values) {
+        if (item instanceof String) {
+            throw new IllegalArgumentException()
+        }
+    }
+    
+    if (!values) {
+        return 0
+    }
+    
+    return values.sum() / values.size()
+}
+</code></pre>
+
+<p>Note that if no parameters are passed, I return <code>0</code>. I really don&#8217;t like returning <code>null</code> from methods as it makes other developers then have to check for <code>null</code>. I also don&#8217;t want to raise an exception - I&#8217;m happy enough to say that the average of no values is <code>0</code>.</p>
+
+<h2>Get really typed</h2>
+
+<p>If I really want to get specific with the data types I&#8217;ll take as parameters and return from the method then I can switch to static typing. I can make sure that all my parameters are of type <code>Number</code> (or one of its subtypes) and that I will return a value of type <code>Number</code>. The code below really gets specific about data types:</p>
+
+<pre><code class="groovy">/**
+ * Returns the average of the parameters
+ *
+ * @param values  a series of numerical values
+ * @throws IllegalArgumentException if a parameter is a String
+ * @returns The average of the values
+ */
+Number determineAverage(Number...values) {
+    
+    if (!values) {
+        return 0 as Number
+    }
+    
+    Integer sum = values.sum() as Integer
+    Integer n = values.length
+    Number average = (sum / n) as Number
+    return  average 
+}
+</code></pre>
+
+<p>The following two calls to the method would work:</p>
+
+<pre><code class="groovy">assert determineAverage(2, 7, 4, 4) == 4.25
+assert determineAverage() == 0
+</code></pre>
+
+<p>&#8230;but the following two calls won&#8217;t work:</p>
+
+<pre><code class="groovy">determineAverage(2, 7, 4, 4, 'kitten')
+determineAverage(2, 7, 4, 4, true)
+</code></pre>
+
+<p>If you are writing a method that needs to be very specific about data types for parameters and/or return values then this is the way to go.</p>
+
+<h1>Testing</h1>
+
+<p>I&#8217;d get into a lot of trouble from experienced developers if I just left this chapter without mentioning testing. I&#8217;m hoping that one day there&#8217;ll be a Testing tutorial added to this book but, until then, check out <a href="http://groovy-lang.org/testing.html">Unit Tests section</a> on the Groovy website.</p>
+
+<p>Oh ok, here&#8217;s a little example using <a href="http://docs.spockframework.org/en/latest/">Spock</a>! </p>
+
+<p>Firstly, this won&#8217;t run in your groovyConsole. You need to copy the code into the online <a href="http://meetspock.appspot.com">Spock web console</a><a href="#fn:2" id="fnref:2" title="see footnote" class="footnote">[2]</a> and then click on &#8220;Run Script&#8221;:</p>
+
+<pre><code class="groovy">import spock.lang.Specification
+
+class MathDemo {
+    /**
+     * Returns the average of the parameters
+     *
+     * @param values  a series of numerical values
+     * @throws IllegalArgumentException if a parameter is a String
+     * @returns The average of the values
+     */
+    static determineAverage(...values) 
+      throws IllegalArgumentException {
+        for (item in values) {
+            if (! (item instanceof Number)) {
+                throw new IllegalArgumentException()
+            }
+        }
+        
+        if (!values) {
+            return 0
+        }
+        
+        return values.sum() / values.size()
+    }
+}
+
+class AvgSpec extends Specification {
+
+    @Unroll
+    def &quot;average of #values gives #result&quot;(values, result){
+        expect:
+            MathDemo.determineAverage(*values) == result
+        
+        where:
+            values       || result
+            [1,2,3]      || 2
+            [2, 7, 4, 4] || 4.25
+            []           || 0
+    }
+    
+    @Unroll
+    def &quot;determineAverage called with #values throws #exception&quot;(values, exception){
+        setup:
+           def e = getException(MathDemo.&amp;determineAverage, *values)
+
+        expect:
+            exception == e?.class
+        
+        where:
+            values       || exception
+            ['kitten', 1]|| java.lang.IllegalArgumentException
+            [99, true]   || java.lang.IllegalArgumentException
+            [1,2,3]      || null
+    }
+    
+    Exception getException(closure, ...args){
+        try{
+            closure.call(args)
+            return null
+        } catch(any) {
+            return any
+        }
+    }
+}
+</code></pre>
+
+<p>When you run this in the Spock web console you should get:</p>
+
+<pre><code>AvgSpec
+ - average of [1, 2, 3] gives 2
+ - average of [2, 7, 4, 4] gives 4.25
+ - average of [] gives 0
+ - determineAverage called with [kitten, 1] throws class java.lang.IllegalArgumentException
+ - determineAverage called with [99, true] throws class java.lang.IllegalArgumentException
+ - determineAverage called with [1, 2, 3] throws null
+</code></pre>
+
+<p>So there&#8217;s a lot going on here that we haven&#8217;t covered in the tutorials so far but let&#8217;s try to break it down:</p>
+
+<ol>
+<li>I wrapped the <code>determineAverage()</code> method in a class named <code>MathDemo</code> and made it a <code>static</code> method
+
+<ul>
+<li>I won&#8217;t explain this here - just trust me that you can call <code>MathDemo.determineAverage()</code></li>
+<li>But do note that I&#8217;ve changed <code>determineAverage()</code> to better check that the parameters are numbers.</li>
+</ul></li>
+<li>I then created a spock test <code>Specification</code> subclass called <code>AvgSpec</code>
+
+<ol>
+<li>The first test is <code>def &quot;average of #values gives #result&quot;(values, result)</code>
+
+<ol>
+<li>This runs a series of tests using the data table in the <code>where:</code> block</li>
+<li>Yes, that&#8217;s right, Groovy will let you use a string as the name of the method - that&#8217;s v.cool but you can&#8217;t use interpolation (<code>${}</code>).</li>
+</ol></li>
+<li>The second test is <code>def &quot;determineAverage called with #values throws #exception&quot;(values, exception)</code>
+
+<ol>
+<li>This checks to make sure that the <code>IllegalArgumentException</code> is thrown for incorrect parameters</li>
+</ol></li>
+</ol></li>
+</ol>
+
+<p>As I say, there are a number of topics such as classes and closures that I haven&#8217;t covered - this example was just a quick one and should make sense as you learn about those additional concepts.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>Pun intended <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+<li id="fn:2">
+<p>I&#8217;ve <a href="http://meetspock.appspot.com/script/5713144022302720">published the code</a> to make it easy for you but can&#8217;t promise that this link will always work. <a href="#fnref:2" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/MethodDoc.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/07_Closures/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Methods</a>
+    <ul>
+    
+      <li><a href='Methods.html'>The Basics</a></li>
+    
+      <li><a href='Parameters.html'>Parameters</a></li>
+    
+      <li><a href='DefaultValues.html'>Default Values for Parameters</a></li>
+    
+      <li><a href='NamedArguments.html'>Named Arguments</a></li>
+    
+      <li><a href='VarArgs.html'>Variable Arguments (Varargs)</a></li>
+    
+      <li><a href='Return.html'>Return value</a></li>
+    
+      <li><a href='MethodThrows.html'>Throwing an exception</a></li>
+    
+      <li><a href='MethodDoc.html'>Documenting a method</a></li>
+    
+      <li><a href='Techniques.html'>Techniques</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<nav class='article-nav'>
+  <header>
+  <% if (title) { %>
+  <h1>$title</h1>
+  <% } %>
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>${part.title}</a>
+    <ul>
+    <% for (item in toc) { %>
+      <li><a href='${item.href}'>${item.title}</a></li>
+    <% } %>
+    </ul></li>
+  </ul>
+</nav>

@@ -1,0 +1,220 @@
+@CHARSET "UTF-8";
+
+body {
+	margin: 0 auto;
+	padding: 0;
+	border: 0;
+	/* This removes the border around the viewport in old versions of IE */
+	width: 100%;
+	background: #fff;
+	max-width: 1200px;
+	min-width: 1200px
+}
+/* column container */
+.content {
+	position: relative;
+	/* This fixes the IE7 overflow hidden bug and stops the layout jumping out of place */
+	clear: both;
+	float: left;
+	width: 100%; /* width of whole page */
+	overflow: hidden; /* This chops off any overhanging divs */
+}
+/* 2 column left menu settings */
+.leftmenu {
+	background: #fff;
+}
+
+.leftmenu .colright {
+	float: left;
+	width: 200%;
+	position: relative;
+	left: 250px;
+	background: #fff;
+}
+
+.leftmenu .col-article-wrap {
+	float: right;
+	width: 50%;
+	position: relative;
+	right: 200px;
+	padding-bottom: 1em;
+}
+
+.leftmenu .col-article {
+	margin: 0 15px 0 215px;
+	position: relative;
+	right: 100%;
+	overflow: hidden;
+}
+
+.leftmenu .col-nav {
+	float: left;
+	width: 230px;
+	position: relative;
+	right: 250px;
+	min-height: 600px;
+}
+
+body {
+	font-family: 'Oxygen', Helvetica, Verdana, sans-serif;
+}
+
+pre, code {
+	font-family: 'Oxygen Mono', courier, sans-serif;
+}
+
+code {
+	border: 1px solid #eaeaea;
+	background-color: #f8f8f8;
+	padding: 0 5px;
+	border-radius: 3px;
+}
+
+p, blockquote, table, pre {
+	margin: 15px 0;
+}
+
+img {
+	margin: 10px 0 5px;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	font: inherit;
+	font-size: 100%;
+}
+
+table th {
+	border: 1px solid #ccc;
+	font-weight: 700;
+	padding: 6px 13px;
+}
+
+table td {
+	border: 1px solid #ccc;
+	padding: 6px 13px;
+}
+
+table tr {
+	background-color: #fff;
+	border-top: 1px solid #ccc;
+}
+
+table tr:nth-child(2n) {
+	background-color: #f8f8f8;
+}
+
+table caption {
+	font-size: smaller;
+	white-space: nowrap;
+}
+
+img.book-cover-logo {
+	height: 200px;
+}
+
+.book-cover {
+	text-align: center;
+	padding-top: 5em;
+}
+
+.book-cover-author {
+	
+}
+
+.book-cover-author ul {
+	list-style-type: none;
+	display: inline;
+}
+
+nav {
+	font-size: smaller;
+	line-height: 2em
+}
+
+nav ul {
+	list-style-type: none;
+	padding-left: 1em;
+}
+
+nav.part-nav {
+	text-align: right;
+	font-size: small;
+}
+
+header {
+	clear: both;
+	height: 75px;
+	width: 100%;
+	float: left;
+	border-bottom: thin solid black;
+}
+
+header h1 {
+	padding: .4em 15px 0 15px;
+	margin: 0;
+}
+
+footer {
+  clear: both;
+  float: left;
+  width: 100%;
+  border-top: 1px solid #000;
+  font-size: small;
+  text-align: center;
+}
+
+footer p {
+  padding: 10px;
+  margin: 0;
+}
+
+dt {
+	padding-top: 1em;
+	font-weight: bold;
+	font-style: italic;
+}
+
+dd {
+	padding-top: 0.5em;
+}
+
+article {
+	min-width: 600px;
+	max-width: 850px;
+	min-height: 600px;
+	text-align: justify;
+	line-height: 1.4em;
+}
+
+article div.article-content {
+	min-height: 500px;
+}
+
+article header {
+	clear: both;
+	height: auto;
+	width: 100%;
+	float: left;
+	vertical-align: middle;
+	border-bottom: 1px dotted black;
+	margin-bottom: 1em;
+}
+
+article header h1 {
+	padding: 0.5em 0 0.5em 0;
+	margin: 0;
+	float: left;
+}
+
+article footer {
+  clear: both;
+  height: auto;
+  width: 100%;
+  float: left;
+  vertical-align: middle;
+  border-top: 1px dotted black;
+  margin-bottom: 1em;
+}
+

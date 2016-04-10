@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Parameters</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Parameters are method inputs that are used by the method to produce a result." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Parameters</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/Methods.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/06_Methods/DefaultValues.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Parameters are method inputs that are used by the method to produce a result.</aside>
+  <p>Let&#8217;s look at the last example from the previous chapter:</p>
+
+<pre><code class="groovy">def scores = [2, 7, 4, 3]
+def result = determineAverage(scores)
+println result
+
+def determineAverage(list) {
+    return list.sum() / list.size()
+}
+</code></pre>
+
+<p>You might be wondering what happened to the <code>scores</code> variable once it was passed to <code>determineAverage</code> as a parameter. Basically, Groovy gave it another name (<code>list</code>) for use within the method. Inside the method, <code>list</code> is just another variable. This means that if <code>determineAverage</code> changes <code>list</code> in some way, this is reflected in the <code>scores</code> variable used in the main script:</p>
+
+<pre><code class="groovy">def scores = [2, 7, 4, 3]
+def result = determineAverage(scores)
+println result
+println scores
+
+def determineAverage(list) {
+    list &lt;&lt; 9
+    return list.sum() / list.size()
+}
+</code></pre>
+
+<p>The code above is very poorly behaved - it modifies <code>list</code> by adding a new item. Unless you provided documentation that explicitly states that you will change a parameter, most developers will assume that their parameters will be safely untouched by your method.</p>
+
+<blockquote>
+<p>Deep down in the system, <code>scores</code> and <code>list</code> are names that point to the same piece of memory. Understanding how programming languages handle memory is an extremely important part of programming. I don&#8217;t really cover it in this tutorial but start by looking up <a href="https://en.wikipedia.org/wiki/Memory_management">&#8220;memory management&#8221; in Wikipedia</a>.</p>
+</blockquote>
+
+<h1>Declaring data types for parameters</h1>
+
+<p>Groovy lets you designate a data type for your parameters:</p>
+
+<pre><code class="groovy">def determineAverage(ArrayList list) {
+    return list.sum() / list.size()
+}
+</code></pre>
+
+<p>As you start to develop classes and larger programs, methods create your Application Programming Interface (API). Such methods can be called by other people&#8217;s code and they could be using another JVM language (such as Java). It can make their life a little easier if you indicate the data types you&#8217;re expecting for your parameters. Alternatively, you can stay true to dynamic typing and let people know through your documentation.</p>
+
+<h1>Multiple parameters</h1>
+
+<p>Let&#8217;s look at another method - one that needs several parameters:</p>
+
+<pre><code class="groovy">def callFriend(name, phone, message) {
+    println &quot;Dialling $name on $phone&quot;
+    println &quot;Hi, $name - $message&quot;
+}
+</code></pre>
+
+<p>Either of these calls would work:</p>
+
+<pre><code class="groovy">callFriend('Barry', '0400 123 456', 'Did you see that local sporting team?')
+
+callFriend 'Alex', '07 3344 0000', 'Could you please check on my pets whilst I\'m away?'
+</code></pre>
+
+<p>Each parameter may be typed if needed: </p>
+
+<pre><code class="groovy">def callFriend(String name, String phone, String message) {..}
+</code></pre>
+
+<p>You can provide a mix of typed and untyped parameters but this is a little messy and I think it&#8217;s bad form so I can&#8217;t be bothered encouraging such an action by providing an example.</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/Methods.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/06_Methods/DefaultValues.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Methods</a>
+    <ul>
+    
+      <li><a href='Methods.html'>The Basics</a></li>
+    
+      <li><a href='Parameters.html'>Parameters</a></li>
+    
+      <li><a href='DefaultValues.html'>Default Values for Parameters</a></li>
+    
+      <li><a href='NamedArguments.html'>Named Arguments</a></li>
+    
+      <li><a href='VarArgs.html'>Variable Arguments (Varargs)</a></li>
+    
+      <li><a href='Return.html'>Return value</a></li>
+    
+      <li><a href='MethodThrows.html'>Throwing an exception</a></li>
+    
+      <li><a href='MethodDoc.html'>Documenting a method</a></li>
+    
+      <li><a href='Techniques.html'>Techniques</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

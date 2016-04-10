@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Operator Overloading</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Groovy provides a mechanism for classes to define how they respond to the various operators." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Operator Overloading</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/index.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/NumericOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Groovy provides a mechanism for classes to define how they respond to the various operators.</aside>
+  <p>Groovy supports something called &#8220;operator overloading&#8221; and it&#8217;s possible for classes to determine how they want operators to behave. Throughout this tutorial I&#8217;ll provide some examples of overloading but before we go too far, let&#8217;s take a look at what &#8220;operator overloading&#8221; actually means.</p>
+
+<p>The C++ language provides a mechanism for programmers to customise how operators such as <code>+</code> (plus) and <code>-</code> (minus) work. This functionality isn&#8217;t provided in Java but is available to Groovy programmers. Essentially, a class can include certain methods that replace (overload) the default implementation - as such methods are tied to specific operators.</p>
+
+<p>Consider the <code>+</code> operator, as seen in many great additions. You can use the operator in a statement such as <code>10 + 2</code> but you can also use the <code>plus</code> method instead: <code>10.plus(2)</code>. I&#8217;d argue (strongly) that using the <code>plus</code> method in your code will be far less readable. However, you should be able to see that using the <code>+</code> operator actually results in the <code>plus</code> method being called.</p>
+
+<p>This this means that you can use operator overloading for evil - say, by creating a numerical class that ignores all mathematical sense. Aside from developer practical jokes you&#8217;ll probably only use operator overloading every now and then. Where it does become extremely useful is in the core Groovy classes and the Groovy extensions to the JDK. </p>
+
+<p>In the coming chapters you&#8217;ll see a range of operator usage that isn&#8217;t available to the Java developer but made available through Groovy&#8217;s extensions to the JDK and through the GAPI.</p>
+
+<p>To highlight all of this, operator overloading can be used in classes via the methods associated in the following table:</p>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Method</th>
+	<th style="text-align:center;">Operator</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">plus</td>
+	<td style="text-align:center;"><code>+</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">minus</td>
+	<td style="text-align:center;"><code>-</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">div</td>
+	<td style="text-align:center;"><code>/</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">mod</td>
+	<td style="text-align:center;"><code>%</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">multiply</td>
+	<td style="text-align:center;"><code>*</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">power</td>
+	<td style="text-align:center;"><code>**</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">equals</td>
+	<td style="text-align:center;"><code>==</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">compareTo</td>
+	<td style="text-align:center;"><code>&lt;=&gt;</code>, <code>&gt;</code>, <code>&lt;</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">rightShift</td>
+	<td style="text-align:center;"><code>&gt;&gt;</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">leftShift</td>
+	<td style="text-align:center;"><code>&lt;&lt;</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">next</td>
+	<td style="text-align:center;"><code>++</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">previous</td>
+	<td style="text-align:center;"><code>--</code></td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>This list doesn&#8217;t include all possible operators, just the main ones</p>
+</blockquote>
+
+<p>Throughout this tutorial on operators I&#8217;ll provide information as to how certain functionality is obtained through operator overloading. Feel free to glaze past these sections - they&#8217;re mainly there to explain why/how stuff is happening.</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/index.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/NumericOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

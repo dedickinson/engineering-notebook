@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - How Much Should We try?</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Just a small chapter on technique" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">How Much Should We try?</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/TryCatch.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/Throw.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Just a small chapter on technique</aside>
+  <p>Whilst you could wrap an entire script/method/closure in a huge <code>try</code> statement this will quickly get confusing - imagine how many <code>catch</code> blocks you&#8217;ll need at the end of a 150-line script! Yes, you can <code>catch (any)</code> but you&#8217;d really have no clue what caused the exception.</p>
+
+<p>Take the following example:</p>
+
+<pre><code class="groovy">try {
+    methodOne()
+    methodTwo()
+    //148 more lines of code :)
+} catch (MethodOneException e) {
+
+} catch (MethodTwoException e) {
+
+}
+</code></pre>
+
+<p>I tend to &#8220;localise&#8221; my <code>try</code> blocks so that they deal more specifically with the exception arising from a specific method call:</p>
+
+<pre><code class="groovy">try {
+    methodOne()
+} catch (MethodOneException e) {
+
+}
+
+try {
+    methodTwo()
+} catch (MethodTwoException e) {
+
+}
+</code></pre>
+
+<p>Although that last example results in more code I suggest it&#8217;s more useful as it helps localise the exception. In the first example I could end up catching a <code>MethodTwoException</code> from my call to <code>methodOne</code> - probably not what I really intended. If both methods throw the same exception type then localising really helps as I&#8217;ll know which method threw the exception.</p>
+
+<p>Additionally, if you go with the rule that you&#8217;re only catching exceptions you&#8217;re prepared to actually do something with, a lot of your code may not be wrapped with a <code>try</code> statement at all!</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/TryCatch.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/Throw.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Exceptions</a>
+    <ul>
+    
+      <li><a href='ThrowableFamily.html'>The Throwable Family</a></li>
+    
+      <li><a href='CommonExceptions.html'>Common Exceptions</a></li>
+    
+      <li><a href='Anatomy.html'>Anatomy of an Exception</a></li>
+    
+      <li><a href='TryCatch.html'>Try-Catch-Finally</a></li>
+    
+      <li><a href='HowMuch.html'>How Much Should We try?</a></li>
+    
+      <li><a href='Throw.html'>Causing an Exception</a></li>
+    
+      <li><a href='CatchingErrors.html'>Catching Errors</a></li>
+    
+      <li><a href='MethodsExceptions.html'>Methods and Exceptions</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

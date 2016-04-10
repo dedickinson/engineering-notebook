@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Parameters</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Closures can take parameters - just like methods." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Parameters</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/07_Closures/Overview.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/07_Closures/Return.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Closures can take parameters - just like methods.</aside>
+  <p>We just saw that closures have an in-built <code>it</code> parameter but we can specify a parameter when we declare the closure:</p>
+
+<pre><code class="groovy">def cls = { name -&gt; println &quot;Hello, $name&quot; }
+cls('Jerry')
+</code></pre>
+
+<p>In the example above I declare the <code>name</code> parameter and this replaces <code>it</code> - in fact, if I called <code>it</code> within the closure I&#8217;d get an exception. </p>
+
+<p>The syntax of closures is starting to become evident:</p>
+
+<ol>
+<li>Start the closure with <code>{</code></li>
+<li>List parameters, followed by <code>-&gt;</code></li>
+<li>Write a set of statements for the closure body</li>
+<li>End the closure with <code>}</code></li>
+</ol>
+
+<p>Each parameter is separated using a comma (<code>,</code>):</p>
+
+<pre><code class="groovy">def cls = { name, pet -&gt; println &quot;Hello, $name. How is your $pet?&quot; }
+
+cls('Jerry', 'cat')
+</code></pre>
+
+<p>As the closure gets more complicated I like to break it up over a number of lines. I start the closure and declare the parameters on the first line. The body of the closure then follows much the same as a method body and a final line closes off the closure:</p>
+
+<pre><code class="groovy">def cls = { name, pet -&gt; 
+    println &quot;Hello, $name. How is your $pet?&quot;
+}
+</code></pre>
+
+<p>Closure parameters let me do the same things I can do with method parameters:</p>
+
+<ol>
+<li>Use data types for parameters</li>
+<li>Provide default values</li>
+<li>Varargs</li>
+<li>Named parameters</li>
+</ol>
+
+<p>Parameter data types:</p>
+
+<pre><code class="groovy">def cls = { String name, String pet -&gt; 
+    println &quot;Hello, $name. How is your $pet?&quot;
+}
+</code></pre>
+
+<p>Default values:</p>
+
+<pre><code class="groovy">def cls = { name, pet = 'dog' -&gt; 
+    println &quot;Hello, $name. How is your $pet?&quot;
+}
+</code></pre>
+
+<p>Varargs:</p>
+
+<pre><code class="groovy">def cls = { name, ...pets -&gt; 
+    println &quot;Hello, $name. How are your $pets?&quot;
+}
+
+cls('Herman', 'cat', 'dog', 'spider')
+</code></pre>
+
+<p>Named parameters:</p>
+
+<pre><code class="groovy">def cls = { grades, name -&gt; 
+    println &quot;This year $name received the following grades: $grades&quot;
+}
+
+cls(maths: 'D', science: 'C', art: 'A', 'Albert')
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/07_Closures/Overview.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/07_Closures/Return.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Closures</a>
+    <ul>
+    
+      <li><a href='Overview.html'>Closures</a></li>
+    
+      <li><a href='Parameters.html'>Parameters</a></li>
+    
+      <li><a href='Return.html'>Returning Values</a></li>
+    
+      <li><a href='MethodParameters.html'>Closures as Method Parameters</a></li>
+    
+      <li><a href='ClosureLoop.html'>Loops and closures</a></li>
+    
+      <li><a href='OtherUsefulMethods.html'>Useful Methods That Use Closures</a></li>
+    
+      <li><a href='ClosureScope.html'>Closure scope</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

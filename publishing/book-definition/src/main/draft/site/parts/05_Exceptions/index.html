@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Exceptions</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Knowing how to handle exceptions is an essential aspect to Groovy programming." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Exceptions</h1>
+    <nav class='part-nav'>
+      <a href='../../parts/04_ControlFlow/Branching.html'>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/ThrowableFamily.html'>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+    <aside>Knowing how to handle exceptions is an essential aspect to Groovy programming.</aside>
+    <p>In this tutorial we&#8217;ll look at exceptions and errors, how to handle them and how to throw them<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>Because you gotta know when to throw them, know when to etc <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+    <nav class='part-nav-toc'>
+      <header>
+        <h1>In this tutorial:</h1>
+      </header>
+      <dl>
+        
+        <dt>
+          <a href='ThrowableFamily.html'>The Throwable Family</a>
+        </dt>
+        <dd>Exceptions and Errors are just objects that can bring your program to a rapid halt.</dd>
+        
+        <dt>
+          <a href='CommonExceptions.html'>Common Exceptions</a>
+        </dt>
+        <dd>Take a look at some exceptions you're likely to see through the day.</dd>
+        
+        <dt>
+          <a href='Anatomy.html'>Anatomy of an Exception</a>
+        </dt>
+        <dd>Before we handle the exception let's see what it looks like.</dd>
+        
+        <dt>
+          <a href='TryCatch.html'>Try-Catch-Finally</a>
+        </dt>
+        <dd>The try-catch-finally statement is used for catching and handling exceptions and errors.</dd>
+        
+        <dt>
+          <a href='HowMuch.html'>How Much Should We try?</a>
+        </dt>
+        <dd>Just a small chapter on technique</dd>
+        
+        <dt>
+          <a href='Throw.html'>Causing an Exception</a>
+        </dt>
+        <dd>The `throw` keyword is used to intentionally cause an exception</dd>
+        
+        <dt>
+          <a href='CatchingErrors.html'>Catching Errors</a>
+        </dt>
+        <dd>You can catch an error but you probably shouldn't.</dd>
+        
+        <dt>
+          <a href='MethodsExceptions.html'>Methods and Exceptions</a>
+        </dt>
+        <dd>Another small chapter on technique</dd>
+        
+      </dl>
+    </nav>
+  </div>
+  <footer>
+    <nav class='part-nav'>
+      <a href='../../parts/04_ControlFlow/Branching.html'>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/ThrowableFamily.html'>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Exceptions</a>
+    <ul>
+    
+      <li><a href='ThrowableFamily.html'>The Throwable Family</a></li>
+    
+      <li><a href='CommonExceptions.html'>Common Exceptions</a></li>
+    
+      <li><a href='Anatomy.html'>Anatomy of an Exception</a></li>
+    
+      <li><a href='TryCatch.html'>Try-Catch-Finally</a></li>
+    
+      <li><a href='HowMuch.html'>How Much Should We try?</a></li>
+    
+      <li><a href='Throw.html'>Causing an Exception</a></li>
+    
+      <li><a href='CatchingErrors.html'>Catching Errors</a></li>
+    
+      <li><a href='MethodsExceptions.html'>Methods and Exceptions</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

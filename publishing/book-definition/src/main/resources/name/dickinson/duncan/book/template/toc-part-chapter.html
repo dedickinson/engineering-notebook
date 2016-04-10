@@ -1,0 +1,10 @@
+<nav class='cover-nav'>
+  <header>
+    <h1>In this tutorial</h1>
+  </header>
+  <ul>
+    <% for (chapter in part.chapters) { %>
+    <li><a href='${chapter.htmlFile}'>${chapter.title}</a>:
+      ${chapter.description}</li> <% } %>
+  </ul>
+</nav>

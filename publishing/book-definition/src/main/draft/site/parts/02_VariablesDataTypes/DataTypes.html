@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Data types</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Groovy does a good job of working out what sort of variable you're using (numbers, strings, booleans etc) but let's look at what's going on under the hood." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Data types</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/RegularExpressions.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Groovy does a good job of working out what sort of variable you're using (numbers, strings, booleans etc) but let's look at what's going on under the hood.</aside>
+  <p>Groovy does not preclude the programmer from explicitly declaring a data type, particularly when it would be pertinent to constrain the values being managed. Furthermore, knowledge of data types is very useful for a number of reasons:</p>
+
+<ol>
+<li>Use of JVM-compatible libraries may require knowledge of the data types required by method calls.
+
+<ul>
+<li>Important if you want to mine the rich collection of existing Java libraries</li>
+</ul></li>
+<li>Conversion between different data types (such as decimal numbers to whole numbers) can cause truncation and other (perhaps unexpected) results.
+
+<ul>
+<li>Essential knowledge if your program relies on calculations</li>
+</ul></li>
+</ol>
+
+<p>Most of Java&#8217;s &#8220;core&#8221; classes (types) are defined in the <code>java.lang</code> package. Groovy enhances some of these in the GDK to give you extra flexibility.</p>
+
+<h1>Groovy&#8217;s use of types</h1>
+
+<p>The table below illustrates Groovy&#8217;s selection of a data type based on a literal value:</p>
+
+<table>
+<caption id="table:groovysuseoftypes">Table: Groovy&#8217;s use of types</caption>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Value</th>
+	<th style="text-align:left;">Assigned Type</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;"><code>true</code></td>
+	<td style="text-align:left;">java.lang.Boolean</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>'a'</code></td>
+	<td style="text-align:left;">java.lang.String</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>&quot;This is a String&quot;</code></td>
+	<td style="text-align:left;">java.lang.String</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>&quot;Hello ${Larry}&quot;</code></td>
+	<td style="text-align:left;">org.codehaus.groovy.runtime.GStringImpl</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>127</code></td>
+	<td style="text-align:left;">java.lang.Integer</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>32767</code></td>
+	<td style="text-align:left;">java.lang.Integer</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>2147483647</code></td>
+	<td style="text-align:left;">java.lang.Integer</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>9223372036854775807</code></td>
+	<td style="text-align:left;">java.lang.Long</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>92233720368547758070</code></td>
+	<td style="text-align:left;">java.math.BigInteger</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>3.14</code></td>
+	<td style="text-align:left;">java.math.BigDecimal</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>3.4028235E+38</code></td>
+	<td style="text-align:left;">java.math.BigDecimal</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>1.7976931348623157E+308</code></td>
+	<td style="text-align:left;">java.math.BigDecimal</td>
+</tr>
+</tbody>
+</table>
+
+<p>It is important to note that the type is selected at each assignment - a variable that is assigned a string such as <code>&quot;Hello&quot;</code> is typed as <code>java.lang.String</code> but changes to <code>java.lang.Integer</code> when later assigned the value <code>101</code>. </p>
+
+<h1>Using a specific type</h1>
+
+<p>A variable can be declared as being of a specific data type. When using a type, drop the <code>def</code> keyword: </p>
+
+<pre><code class="groovy">Integer myNum = 1
+String myName = &quot;Fred nurk&quot;
+</code></pre>
+
+<p>Suffixes can also be used if you want to be really specific about the data type Groovy is to use for a number. When using suffixes you use the def keyword to define the variable: <code>def dozen = 12i</code></p>
+
+<table>
+<caption id="table:typesuffixessupportedbygroovy">Table: Type suffixes supported by Groovy</caption>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Suffix</th>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Example</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;"><code>I</code> or <code>i</code></td>
+	<td style="text-align:left;">Integer</td>
+	<td style="text-align:left;"><code>12i</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>L</code> or <code>l</code></td>
+	<td style="text-align:left;">Long</td>
+	<td style="text-align:left;"><code>23423l</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>G</code> or <code>g</code></td>
+	<td style="text-align:left;">BigInteger</td>
+	<td style="text-align:left;"><code>1_000_000g</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>F</code> or <code>f</code></td>
+	<td style="text-align:left;">Float</td>
+	<td style="text-align:left;"><code>3.1415f</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>D</code> or <code>d</code></td>
+	<td style="text-align:left;">Double</td>
+	<td style="text-align:left;"><code>3.1415d</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>G</code> or <code>g</code></td>
+	<td style="text-align:left;">BigDecimal</td>
+	<td style="text-align:left;"><code>3.1415g</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>You may have noticed that BigInteger and BigDecimal have the same suffix - this isn&#8217;t a typo - Groovy works out which one you need simply by determining if the number is a whole number (BigInteger) or a decimal (BigDecimal).</p>
+
+<p>If you&#8217;re going to use explicit types then you need to know limitations of that type. For example, the following code will fail:</p>
+
+<pre><code class="groovy">assert 3.1415926535f == 3.1415926535d
+</code></pre>
+
+<p>This failure occurs because Float will shorten (narrow) the value to <code>3.1415927</code> - not a mistake you&#8217;d want to make when measuring optics for your space telescope! You can see which type Groovy will use automatically by running this snippet of code:</p>
+
+<pre><code class="groovy">println 3.1415926535.class.name
+</code></pre>
+
+<h1>The <code>null</code> Value</h1>
+
+<p>Variables that are not assigned a value at declaration are provided a <code>null</code> value by default. This is a special reference that indicates the variable is devoid of a value.</p>
+
+<p>Variables can be explicitly assigned <code>null</code>:</p>
+
+<pre><code>def id = null
+</code></pre>
+
+<h1>Available data types</h1>
+
+<p>As Groovy imports the <code>java.lang</code> package as well as the <code>java.math.BigDecimal</code> and <code>java.math.BigInteger</code> classes by default, a range of data types are available for immediate use:</p>
+
+<ul>
+<li><code>Boolean</code>: to store a logical value of <code>true</code> or <code>false</code></li>
+<li>Numbers (based on <code>java.lang.Number</code>):
+
+<ul>
+<li><code>Byte</code></li>
+<li><code>Short</code></li>
+<li><code>Integer</code></li>
+<li><code>Long</code></li>
+<li><code>Float</code></li>
+<li><code>Double</code></li>
+<li><code>BigDecimal</code></li>
+<li><code>BigInteger</code></li>
+</ul></li>
+<li><code>Character</code>: A single character such as a letter or non-printing character</li>
+<li><code>String</code>: A regular Java-esque piece of text</li>
+<li><code>GString</code>: A Groovy string that allows for interpolation</li>
+<li><code>Object</code>: This is the base class for all other classes</li>
+<li><code>Closure</code>: The class that holds closure values</li>
+</ul>
+
+<p>The types listed above are often referred to as <em>reference types</em>, indicating that they relate to a class definition. Groovy also provides a set of <em>primitive types</em> that are more closely aligned to the C programming language than an object-oriented language such as Java and Groovy. In most cases, use of a reference type should be preferred and Groovy&#8217;s dynamic typing uses <em>reference types</em>. </p>
+
+<h2>Primitive types</h2>
+
+<p>The table below maps the types defined in <code>java.lang</code> against their equivalent primitive types:</p>
+
+<table>
+<caption id="table:theprimitivetypes">Table: the primitive types</caption>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Primitive type</th>
+	<th style="text-align:left;">Value range</th>
+	<th style="text-align:center;">Size (bits)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">Boolean</td>
+	<td style="text-align:left;"><code>boolean</code></td>
+	<td style="text-align:left;"><code>true</code> or <code>false</code></td>
+	<td style="text-align:center;">-</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Byte</td>
+	<td style="text-align:left;"><code>byte</code></td>
+	<td style="text-align:left;">&#8211;128 to 127, inclusive</td>
+	<td style="text-align:center;">8</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Short</td>
+	<td style="text-align:left;"><code>short</code></td>
+	<td style="text-align:left;">&#8211;32768 to 32767, inclusive</td>
+	<td style="text-align:center;">16</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Character</td>
+	<td style="text-align:left;"><code>char</code></td>
+	<td style="text-align:left;">&#8216;\u0000&#8217; to &#8216;\uffff&#8217; inclusive</td>
+	<td style="text-align:center;">16</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Integer</td>
+	<td style="text-align:left;"><code>int</code></td>
+	<td style="text-align:left;">&#8211;2147483648 to 2147483647, inclusive</td>
+	<td style="text-align:center;">32</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Long</td>
+	<td style="text-align:left;"><code>long</code></td>
+	<td style="text-align:left;">&#8211;9223372036854775808 to 9223372036854775807, inclusive</td>
+	<td style="text-align:center;">64</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Float</td>
+	<td style="text-align:left;"><code>float</code></td>
+	<td style="text-align:left;">32-bit IEEE 754 floating-point numbers</td>
+	<td style="text-align:center;">32</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Double</td>
+	<td style="text-align:left;"><code>double</code></td>
+	<td style="text-align:left;">64-bit IEEE 754 floating-point numbers</td>
+	<td style="text-align:center;">64</td>
+</tr>
+</tbody>
+</table>
+
+<p>You can check those value ranges by using the <code>MIN_VALUE</code> and <code>MAX_VALUE</code> constants available on the various classes representing numbers:</p>
+
+<pre><code class="groovy">println Integer.MIN_VALUE
+println Integer.MAX_VALUE
+println Float.MIN_VALUE
+println Float.MAX_VALUE
+</code></pre>
+
+<p>As an object-oriented language Groovy also provides a mechanism for declaring new data types (objects) that extend and encapsulate information to meet a range of requirements. These implicitly extend the <code>java.lag.Object</code> class.</p>
+
+<h3>Autoboxing</h3>
+
+<p><em>Autoboxing</em> refers to the automatic conversion of a primitive type to a reference type. <em>Unboxing</em> is the reverse of _Autoboxing.</p>
+
+<h1>Type Conversions</h1>
+
+<p>Groovy will convert values assigned to variables into the variable&#8217;s declared data type. For example, the code below declares a variable of type &#8220;String&#8221; and then assigns it 3.14 (a number). The assertion that the variable remains of type &#8220;String&#8221; will succeed, indicating that <code>3.14</code> was converted to a String value by Groovy before being assigned to the <code>myName</code> variable.</p>
+
+<pre><code class="groovy">def String myName = &quot;Fred nurk&quot;
+myName = 3.14
+assert myName.class == java.lang.String
+</code></pre>
+
+<p>Care must be taken to not rely totally on this automatic conversion. In the example below the assertion will fail as the <code>myPi</code> variable is declared as an <code>Integer</code> and the assignment drops the fractional component of <code>3.14</code>:</p>
+
+<pre><code class="groovy">def pi = 3.14
+Integer myPi = pi
+assert myPi == pi
+</code></pre>
+
+<h2>Casting</h2>
+
+<p>The <code>as</code> operator can be used to cast (change) a value to another class. </p>
+
+<pre><code class="groovy">def pi = 3.1415926535 as Integer
+assert 3 == pi
+</code></pre>
+
+<blockquote>
+<p>You&#8217;ve seen this before&#8230; <code>def myGroceries = ['milk', 'honey'] as Set</code> - this is actually just casting the list to the <code>Set</code> data type.</p>
+</blockquote>
+
+<p>This will be discussed further in the Operators tutorial.</p>
+
+<h2>Converting Numbers</h2>
+
+<p><code>java.lang.Number</code> provides a number of methods for converting numbers between the various numerical data types:</p>
+
+<ul>
+<li><code>byteValue()</code></li>
+<li><code>doubleValue()</code>
+
+<ul>
+<li>also <code>toDouble()</code></li>
+</ul></li>
+<li><code>floatValue()</code>
+
+<ul>
+<li>also <code>toFloat()</code></li>
+</ul></li>
+<li><code>intValue()</code>
+
+<ul>
+<li>also <code>toInteger()</code></li>
+</ul></li>
+<li><code>longValue()</code>
+
+<ul>
+<li>also <code>toLong()</code></li>
+</ul></li>
+<li><code>shortValue()</code></li>
+<li><code>toBigInteger()</code></li>
+<li><code>toBigDecimal()</code></li>
+</ul>
+
+<p>Here&#8217;s a small example of grabbing the whole (integer) component from a number:</p>
+
+<pre><code class="groovy">def pi = 3.1415926535
+assert 3 == pi.intValue()
+assert 3 == pi.toInteger()
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/RegularExpressions.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Variables</a>
+    <ul>
+    
+      <li><a href='Variables.html'>Declaring Variables</a></li>
+    
+      <li><a href='Objects.html'>Objects</a></li>
+    
+      <li><a href='Booleans.html'>Booleans</a></li>
+    
+      <li><a href='Numbers.html'>Numbers</a></li>
+    
+      <li><a href='Strings.html'>Strings</a></li>
+    
+      <li><a href='Collections.html'>Collections</a></li>
+    
+      <li><a href='Arrays.html'>Arrays</a></li>
+    
+      <li><a href='Ranges.html'>Ranges</a></li>
+    
+      <li><a href='RegularExpressions.html'>Regular Expressions</a></li>
+    
+      <li><a href='DataTypes.html'>Data types</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Increment and Decrement Operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Number goes up. Number goes down." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Increment and Decrement Operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/RelationalOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/ConditionalOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Number goes up. Number goes down.</aside>
+  <p>The increment operator increments a value to its next value. When you increment or decrement a variable using <code>++</code> or <code>--</code> the variable is modified to the new value.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">++</td>
+	<td style="text-align:left;">Increment</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&#8211;</td>
+	<td style="text-align:left;">Decrement</td>
+</tr>
+</tbody>
+</table>
+
+<p>The increment and decrement operators come in two flavours, prefix and postfix:</p>
+
+<ul>
+<li>Prefixes are assessed <em>before</em> the statement is evaluated
+
+<ul>
+<li><code>assert ++5 == 6</code></li>
+</ul></li>
+<li>Postfixes are assessed <em>after</em> the statement is evaluated
+
+<ul>
+<li><code>assert 5++ == 5</code></li>
+</ul></li>
+</ul>
+
+<pre><code class="groovy">assert 10++ == 10
+assert ++10 == 11
+assert --10 == 9
+assert 10-- == 10
+</code></pre>
+
+<p>The increment and decrement behaves differently depending on the type of value being used:</p>
+
+<dl>
+<dt>Booleans</dt>
+<dd>These don&#8217;t increment/decrement</dd>
+
+<dt>Numbers</dt>
+<dd>
+<p>Numbers increment/decrement by 1:</p>
+
+<pre><code class="groovy">def num = 10
+num++
+assert num == 11
+</code></pre></dd>
+
+<dt>Characters</dt>
+<dd>
+<p>Characters move to the previous (<code>--</code>) or next (<code>++</code>) character:</p>
+
+<pre><code class="groovy">def ch = 'c'
+ch--
+assert ch == 'b'
+</code></pre></dd>
+
+<dt>Strings</dt>
+<dd>
+<p>Strings are a little odd and it is the last character in the string that is affected:</p>
+
+<pre><code class="groovy">def str = 'hello'
+str++
+assert str == 'hellp'
+</code></pre></dd>
+
+<dt>Enums</dt>
+<dd>
+<p>Enums will cycle through the enum values:</p>
+
+<pre><code class="groovy">enum Priority {
+    LOW, MEDIUM, HIGH
+}
+def task = Priority.LOW
+task++ 
+assert task == Priority.MEDIUM
+</code></pre></dd>
+
+<dd>
+<p><strong>BUT</strong> be aware that you&#8217;ll cycle back to the beginning of the value list. The following example is a good example of where you can easily get caught out:</p>
+
+<pre><code class="groovy">def task = Priority.LOW
+task-- 
+assert task == Priority.HIGH
+</code></pre></dd>
+
+<dd>
+<p>We&#8217;ll get to Enums much later. </p></dd>
+</dl>
+
+<h1>Overloading the Increment and Decrement Operators</h1>
+
+<p>By overloading <code>next</code> and <code>previous</code> methods, a custom class can support the increment and decrement operators.</p>
+
+<p>The example below demonstrates a class that only allows numbers to increment/decrement to even numbers:</p>
+
+<pre><code class="groovy">class Evens extends Object {
+    def value
+    
+    Evens(val) {
+        this.value = val
+    }
+    
+    public setValue(val) {
+        if (val % 2 == 0) {
+            this.value=val
+        }
+    }
+    
+    def next() {
+        value += 2
+        return this
+    }
+    
+    def previous() {
+        value -= 2
+        return this
+    }
+    
+    String toString(){
+        return &quot;I have a value of ${this.value}&quot;
+    }
+}
+
+def two = new Evens(2)
+println two
+two++
+println two
+two--
+println two
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/RelationalOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/ConditionalOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

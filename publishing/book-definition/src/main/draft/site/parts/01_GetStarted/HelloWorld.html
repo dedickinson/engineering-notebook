@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Your first lines of Groovy</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="It has become a tradition (maybe an unwritten law) that the first lines of code that you write in a new language are to output the line `hello, world`. So let's start up the Groovy Console and get going." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Your first lines of Groovy</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/Installing.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/Comments.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>It has become a tradition (maybe an unwritten law) that the first lines of code that you write in a new language are to output the line `hello, world`. So let's start up the Groovy Console and get going.</aside>
+  <p>The Groovy Console provides a handy environment for preparing and testing basic Groovy scripts. In order to open the console you need to start a command line (or terminal) session and enter the following command:</p>
+
+<pre><code class="bash">groovyConsole &amp;
+</code></pre>
+
+<p><em>Note: Windows users may also find a link to <code>Groovy Console</code> in their Start menu.</em></p>
+
+<p>The Groovy Console should look something like the following screen grab:</p>
+
+<figure>
+<img src="resources/images/GroovyConsole.png" alt="Screen shot of the Groovy Console application window" id="groovyconsole" title="Screen shot of the Groovy Console application window" style="height:400px;" />
+<figcaption>Screen shot of the Groovy Console application window</figcaption>
+</figure>
+
+<p>The main parts of the console are:</p>
+
+<ol>
+<li>The top half is the editor area for adding your Groovy script</li>
+<li>The bottom half is the output area that displays the results of your script</li>
+<li>The menu provides the standard tools for opening and saving files (<code>File</code>) and cut/copy/paste (<code>Edit</code>)</li>
+<li>The <code>Script</code> menu gives you a number of functions you&#8217;ll use as you work through this book:
+
+<ol>
+<li><code>Run</code> will run the script</li>
+<li><code>Run Selection</code> allows you to select (highlight) part of your script and run only that section</li>
+</ol></li>
+<li>The <code>View</code> menu lets you reset the output area (<code>Clear Output</code>)
+
+<ol>
+<li>I&#8217;d suggest that you select <code>Auto Clear Output on Run</code> as this helps reduce confusion</li>
+</ol></li>
+</ol>
+
+<p>Once you have the Groovy Console open, enter the following line in the editor area:</p>
+
+<pre><code class="groovy">print 'hello, world'
+</code></pre>
+
+<blockquote>
+<p>Don&#8217;t forget that you can also try out the <a href="http://groovyconsole.appspot.com">Groovy web console</a> - it&#8217;ll run this code just fine.</p>
+</blockquote>
+
+<p>Once that&#8217;s ready, go to the menu and select <code>Script -&gt; Run</code> and you should see your output in the bottom half of the window something like the image below:</p>
+
+<figure>
+<img src="resources/images/GroovyConsoleOutput.png" alt="Screen shot of the Groovy Console application window with the hello, world script" id="groovyconsolehw" title="Screen shot of the Groovy Console application window with the `hello, world` script" style="height:400px;" />
+<figcaption>Screen shot of the Groovy Console application window with the hello, world script</figcaption>
+</figure>
+
+<p>If you see the output <code>hello, world</code> then congratulations - you&#8217;ve taken your first step into a larger world.</p>
+
+<h1>Examining the script</h1>
+
+<p>Our first Groovy script is very simple: it uses the <code>print</code> method (function) to output the string <code>hello world</code> to the console.</p>
+
+<p>For those that have come from languages such as C++ and Java the script <code>print &quot;hello, world&quot;</code> probably appears to be missing items such as imported libraries for output and &#8220;container&#8221; or &#8220;boilerplate&#8221; code that sets up the context of the code. In fact, if we were to write this code in Java it would look something like:</p>
+
+<pre><code class="java">class Hello {
+    public static void main(String[] args) {
+       System.out.print(&quot;hello, world&quot;);
+    }
+}
+ 
+Hello.main();
+</code></pre>
+
+<p>When I look at the code above I see why Groovy is so appealing to me:</p>
+
+<ol>
+<li>Groovy lets me focus on solving the problem and not working through so much decoration code.
+
+<ul>
+<li>Groovy doesn&#8217;t need semi-colons at the end of each statement</li>
+<li>Groovy essentially builds the <code>Hello</code> class around the script</li>
+</ul></li>
+<li>The Groovy code is much more readable and this <em>should</em> help reduce bugs (or at least make finding them easier)</li>
+<li>Most Java code is valid Groovy code - you can copy that Java code into the Groovy Console and run it - it will work</li>
+<li>Groovy lets you use the comprehensive standard Java libraries and the extensive third-party libraries written by the Java developer community.
+
+<ol>
+<li>But also extends these standard libraries with some great timesavers.</li>
+</ol></li>
+</ol>
+
+<p>Groovy gives us the brevity and flexibility of a scripting language (such as Python, Ruby and Perl) whilst letting us tap into the galaxy of existing Java libraries.</p>
+
+<h1>Going a little further</h1>
+
+<p>Now that we can output something to the screen, let&#8217;s try and make our example a little more personal. Clear the Groovy Console editor and enter the following:</p>
+
+<pre><code class="groovy">println &quot;hello, ${args[0]}&quot;
+</code></pre>
+
+<p>Before we try to run this, let&#8217;s look at what&#8217;s in the code:</p>
+
+<ol>
+<li><code>print</code> has become <code>println</code> - this does the same thing as our previous use of <code>print</code> but adds a new line at the end of the output.
+
+<ul>
+<li>This makes the output easier to read when we&#8217;re running on the command line</li>
+</ul></li>
+<li>Instead of the text <code>world</code> we&#8217;re now using <code>${args[0]}</code>:
+
+<ul>
+<li><code>args</code> is a variable (an array<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>) that holds any command-line arguments we pass to the script
+
+<ul>
+<li>You may have noticed <code>String[] args</code> in the Java version of <code>hello, world</code> - essentially Groovy is writing that segment of code for you.</li>
+<li><code>args[0]</code> is the first element in the <code>args</code> array - this is the first parameter (command-line argument) passed to the script</li>
+</ul></li>
+<li>The <code>${...}</code> notation tells Groovy that the contents need to the resolved into a value - in this case Groovy needs to determine the value of <code>args[0]</code> before displaying the output</li>
+</ul></li>
+</ol>
+
+<p>Don&#8217;t worry if this appears to be a big jump from our <code>hello, world</code> - there&#8217;s a range of concepts being introduced and we&#8217;ll work through them in this tutorial section. For now, put the code into your Groovy Console and know that, when run, your script will say hello to a specified person.</p>
+
+<p>You now need to save your script so go to the <code>File</code> menu and select <code>Save</code>. When prompted, name the file <code>Hello.groovy</code> and save it into a directory you can access. </p>
+
+<p>Unfortunately we can&#8217;t run this script in the Groovy Console as it doesn&#8217;t provide an option for passing in a command-line parameter. Follow this process to run the script:</p>
+
+<ol>
+<li>Open a command prompt (terminal) and change to the directory (<code>cd</code>) into which you saved <code>Hello.groovy</code>.</li>
+<li>Type the command <code>groovy Hello.groovy Newman</code> and press the <code>return</code> key</li>
+</ol>
+
+<p>You should see the following output:</p>
+
+<pre><code>hello, Newman
+</code></pre>
+
+<p>Of course you can change &#8220;Newman&#8221; to be any name so feel free to try out your name, the dog&#8217;s name etc. However, make sure you add a name - your script needs that parameter or you&#8217;ll see a disconcerting error.</p>
+
+<h1>Compiling Groovy</h1>
+
+<p>You can compile a Groovy script into a <code>class</code> file - the same type of file that Java developers compile their code into. The resulting <code>class</code> file is in bytecode format that can be read by the Java Virtual Machine (JVM). Once compiled to bytecode, Groovy code can work on the same JVM that runs existing Java systems - this is extremely handy if you work in a Java-centric organisation but want to use Groovy.</p>
+
+<p>In order to compile <code>Hello.groovy</code> we will use the <code>groovyc</code> command in the command-prompt as follows:</p>
+
+<pre><code>groovyc hello.groovy
+</code></pre>
+
+<p>When you look at the directory contents you should now see a file named <code>Hello.class</code>. Don&#8217;t try to read the contents of the file - it&#8217;s now in bytecode.</p>
+
+<p>In order to run your new application you enter the following command:</p>
+
+<pre><code>groovy --classpath=. Hello Jerry
+</code></pre>
+
+<p>You should see the output <code>hello, Jerry</code>.</p>
+
+<p>This uses the <code>groovy</code> command to run your compiled script but how?</p>
+
+<ol>
+<li>The <code>--classpath=.</code> parameter tells <code>groovy</code> to look for <code>.class</code> files in the current directory (denoted as <code>.</code>)</li>
+<li>&#8216;Hello&#8217; is a little confusing until we remember that we named our script file <code>Hello.groovy</code>
+
+<ul>
+<li>When <code>groovyc</code> compiled our script it generated a class named <code>Hello</code> with a <code>main</code> method around our single line so that, behind the scenes, the code turned into something like the Java version discussed earlier</li>
+</ul></li>
+<li>And <code>Jerry</code> is the name of the person we&#8217;re greeting</li>
+</ol>
+
+<p>The call to <code>groovy</code> basically says &#8220;Run the main method in the Hello class and pass it Jerry as the parameter&#8221;.</p>
+
+<h1>Moving on</h1>
+
+<p>At this point we&#8217;ve done a few things:</p>
+
+<ol>
+<li>Opened the Groovy Console, written a very basic script and run it in the Groovy Console</li>
+<li>Personalised the script and run it on the command prompt, passing it a parameter</li>
+<li>Compiled the Groovy file into a bytecode <code>.class</code> file and run it</li>
+</ol>
+
+<p>Let&#8217;s move onto writing some more useful Groovy.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>More about arrays in a little bit <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/Installing.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/Comments.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Getting started</a>
+    <ul>
+    
+      <li><a href='Installing.html'>Installing Groovy</a></li>
+    
+      <li><a href='HelloWorld.html'>Your first lines of Groovy</a></li>
+    
+      <li><a href='Comments.html'>Comments</a></li>
+    
+      <li><a href='Statements.html'>Statements</a></li>
+    
+      <li><a href='Assert.html'>The `assert` statement</a></li>
+    
+      <li><a href='ReservedWords.html'>Reserved Words</a></li>
+    
+      <li><a href='PackagesLibraries.html'>Packages</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

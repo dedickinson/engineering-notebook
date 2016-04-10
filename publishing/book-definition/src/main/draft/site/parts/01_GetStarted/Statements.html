@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Statements</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="A Groovy program is made up from lots of statements, each telling the computer to do something." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Statements</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/Comments.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/Assert.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>A Groovy program is made up from lots of statements, each telling the computer to do something.</aside>
+  <p>A Groovy statement is generally completed by an end-of-line (EOL) character such as a carriage return:</p>
+
+<pre><code class="groovy">def num = 21
+println num
+</code></pre>
+
+<p>A semicolon (<code>;</code>) can be used to explicitly mark the end of a statement however this is deemed to be redundant in most cases and spoils readability:</p>
+
+<pre><code class="groovy">def num = 21;
+println num;
+</code></pre>
+
+<p>The backslash (<code>\</code>) is used indicates that a statement continues on the next line. The example below uses continuation to break up a long statement:</p>
+
+<pre><code class="groovy">def solution =  1 * 2 * 3 \
+                * 4 * 5 * 6
+</code></pre>
+
+<p>Without the backslash the code above would cause an error but a minor rewrite will work:</p>
+
+<pre><code class="groovy">def solution =  1 * 2 * 3 *
+                4 * 5 * 6
+</code></pre>
+
+<p>I would suggest the first version is easier to read and explicitly indicates that you intend to carry into the next line. However, statements can span multiple lines without a backslash provided Groovy can determine that the lines make up a single statement. This feature should be utilised if it aids in improved readability - this is often referred to as <em>line-wrapping</em>. For example, an array declaration that provides a number of entries may be written as:</p>
+
+<pre><code class="groovy">def myArray = ['Tasmania', 'Victoria', 'New South Wales', 'Queensland', 'Western Australia', 'South Australia']
+</code></pre>
+
+<p>The judicious use of line-wrapping may improve readability: </p>
+
+<pre><code class="groovy">def myArray = ['Tasmania', 
+               'Victoria',
+               'New South Wales',
+               'Queensland',
+               'Western Australia',
+               'South Australia']
+</code></pre>
+
+<p>It is difficult to provide specific metrics regarding readability in these cases and the programmer is left to determine the best use of white space and placement.</p>
+
+<h1>Usage to avoid</h1>
+
+<p>A semicolon can be used to separate two statements appearing on the same line:</p>
+
+<pre><code class="groovy">def num = 1 + 1; println num
+</code></pre>
+
+<p>The presentation of multiple statements in a single line should be avoided - it&#8217;s not easy to read and is likely to trip you up at some point.</p>
+
+<p>Groovy is very forgiving of statements spread over more than one line but usage such as the one below should be avoided as it reduces readability. For example, the following code will actually work but it looks odd and isn&#8217;t worth the hassle:</p>
+
+<pre><code class="groovy">def num = 1 +
+1
+println num
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/Comments.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/Assert.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Getting started</a>
+    <ul>
+    
+      <li><a href='Installing.html'>Installing Groovy</a></li>
+    
+      <li><a href='HelloWorld.html'>Your first lines of Groovy</a></li>
+    
+      <li><a href='Comments.html'>Comments</a></li>
+    
+      <li><a href='Statements.html'>Statements</a></li>
+    
+      <li><a href='Assert.html'>The `assert` statement</a></li>
+    
+      <li><a href='ReservedWords.html'>Reserved Words</a></li>
+    
+      <li><a href='PackagesLibraries.html'>Packages</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

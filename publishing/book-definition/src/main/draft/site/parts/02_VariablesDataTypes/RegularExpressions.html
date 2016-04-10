@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Regular Expressions</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Regular expressions give us a powerful (and confusing) way of sifting through text." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Regular Expressions</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/Ranges.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/DataTypes.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Regular expressions give us a powerful (and confusing) way of sifting through text.</aside>
+  <p>Regular expressions (RegEx&#8217;s) get entire books devoted to them and you&#8217;ll find some developers are RegEx ninjas and others (like myself) are RegEx numpties. This chapter will introduce the basics but the <a href="http://docs.oracle.com/javase/tutorial/essential/regex/">Java Tutorial&#8217;s Regular Expression trail</a> is a useful reference as is <a href="https://en.wikipedia.org/wiki/Regular_expression">Wikipedia</a> for those seeking RegEx glory. There are also a number of online tools such as <a href="http://www.regexr.com">RegExr</a> that come in very handy when trying to debug that elusive RegEx pattern.</p>
+
+<p>To define the regular expression pattern we use the <code>~/ /</code> syntax:</p>
+
+<pre><code class="groovy">def regex = ~/\n/
+</code></pre>
+
+<p>Once stored as a variable, this regular expression can be used in a variety of ways. The example below sets up three string variables and tests them against the <code>regex</code> pattern by using the <code>matches</code> method - which returns <code>true</code> if the string matches the pattern: </p>
+
+<pre><code class="groovy">def regex = ~/https?:\/\/.*/
+
+def httpUrl = 'http://www.example.com/'
+def httpsUrl = 'https://secure.example.com/'
+def ftpUrl = 'ftp://ftp.example.com/'
+
+assert httpUrl.matches(regex)
+assert httpsUrl.matches(regex)
+assert ! ftpUrl.matches(regex)
+</code></pre>
+
+<p>In the code above, <code>~/https?:\/\/.*/</code> is the regular expression pattern that&#8217;s essentially looking for any string starting with <code>http</code> or <code>https</code>. The <code>s?</code> will match 0 or 1 occurrence of <code>s</code> in the pattern. You&#8217;ll notice the odd-looking <code>\/\/</code> - I need to escape the forward slashes in <code>http://</code> so that Groovy doesn&#8217;t confuse them with the slashes used to define the regular expression pattern (<code>~/../</code>).</p>
+
+<p>We&#8217;ll also look at the special operators for regular expressions in the next tutorial: Operators.</p>
+
+<p>Underpinning Groovy&#8217;s regular expression functionality is the Java class <a href="http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html"><code>java.util.regex.Pattern</code></a>. Groovy handles the compiling of the pattern and this helps you focus on the struggle of getting the regular expression correct :)</p>
+
+<h1>Regular Expression Syntax</h1>
+
+<p>Regular expressions use a number of syntactic elements to define a pattern of text. We&#8217;ll take a brief look at them here.</p>
+
+<h2>Characters</h2>
+
+<p>These elements are used to match specific literal characters.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Element</th>
+	<th style="text-align:left;">Matches</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>g</code></td>
+	<td style="text-align:left;">The character <code>g</code></td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\\</code></td>
+	<td style="text-align:left;">The backslash character</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\t</code></td>
+	<td style="text-align:left;">Tab character</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\n</code></td>
+	<td style="text-align:left;">Newline character</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\f</code></td>
+	<td style="text-align:left;">Formfeed character</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\r</code></td>
+	<td style="text-align:left;">Carriage-return character</td>
+</tr>
+</tbody>
+</table>
+
+<p>In the example below I take a section of a poem and use the <code>split</code> method to get a list whose elements contain a single line from the poem.</p>
+
+<pre><code class="groovy">// The Ballad of the Drover by Henry Lawson
+def poem = '''\
+ Across the stony ridges,
+  Across the rolling plain,
+ Young Harry Dale, the drover,
+  Comes riding home again.
+ And well his stock-horse bears him,
+  And light of heart is he,
+ And stoutly his old pack-horse
+  Is trotting by his knee.'''
+
+def regex = ~/\n/
+
+def lines = regex.split(poem)
+
+def i = 1
+for (line in lines) {
+    println &quot;Line $i: $line&quot;
+    i++
+}
+</code></pre>
+
+<h2>Character Classes</h2>
+
+<p>Character classes are used to define character sets and sequences.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Element</th>
+	<th style="text-align:left;">Matches</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>[xyz]</code></td>
+	<td style="text-align:left;"><code>x</code>, <code>y</code> or <code>z</code></td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>[^xyz]</code></td>
+	<td style="text-align:left;">Not <code>x</code>, <code>y</code> or <code>z</code></td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>[a-zA-Z]</code></td>
+	<td style="text-align:left;">Range of characters (all letters)</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>[0-9]</code></td>
+	<td style="text-align:left;">Range of characters (all numbers)</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>[a-zA-Z_0-9]</code></td>
+	<td style="text-align:left;">Range of characters</td>
+</tr>
+</tbody>
+</table>
+
+<h3>Predefined Character Classes</h3>
+
+<p>The predefined character classes save you from having to define the class specifically and are handy for seeking out words and whitespace.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Element</th>
+	<th style="text-align:left;">Matches</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>.</code></td>
+	<td style="text-align:left;">Any character</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\d</code></td>
+	<td style="text-align:left;">Digits <code>[0-9]</code></td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\D</code></td>
+	<td style="text-align:left;">Non-digits</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\s</code></td>
+	<td style="text-align:left;">Whitespace</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\S</code></td>
+	<td style="text-align:left;">Not whitespace</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\w</code></td>
+	<td style="text-align:left;">Word character <code>[a-zA-Z_0-9]</code></td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\W</code></td>
+	<td style="text-align:left;">Not a word character</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Boundaries</h2>
+
+<p>Boundaries, to state the obvious, mark the edge of something - specifically a line or a word.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Element</th>
+	<th style="text-align:left;">Matches</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>^</code></td>
+	<td style="text-align:left;">Start of a line</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>$</code></td>
+	<td style="text-align:left;">End of a line</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\b</code></td>
+	<td style="text-align:left;">Word boundary</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>\B</code></td>
+	<td style="text-align:left;">Non-word boundary</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Quantifiers</h2>
+
+<p>These determine how many matches are acceptable. For example <code>s?</code> matches the character <code>s</code> zero or one time - meaning that I expect that character to be an <code>s</code> or, if it&#8217;s not, move to the next part of the pattern. <code>s+</code> means that I really want at least one <code>s</code> at that point.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Element</th>
+	<th style="text-align:left;">Matches</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>?</code></td>
+	<td style="text-align:left;">Single match</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>*</code></td>
+	<td style="text-align:left;">Zero or more matches</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>+</code></td>
+	<td style="text-align:left;">One or more matches</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>{n}?</code></td>
+	<td style="text-align:left;">Exactly <em>n</em> matches</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>{n, }?</code></td>
+	<td style="text-align:left;">At least <em>n</em> matches</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>{n,m}?</code></td>
+	<td style="text-align:left;">At least <em>n</em> but not more that <em>m</em> matches</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Useful Methods</h1>
+
+<p>A number of String methods can accept a regular expression and these are my preferred approach to checking text against regular expressions. Most of them take the pattern as the first parameter.</p>
+
+<p>We saw the <code>matches()</code> method at the beginning of the chapter:</p>
+
+<pre><code class="groovy">def regex = ~/https?:\/\/.*/
+def httpUrl = 'http://www.example.com/'
+
+assert httpUrl.matches(regex)
+</code></pre>
+
+<p>The <code>find()</code> method returns the first match against the pattern within the string. In the example below the <code>find()</code> will return the match against the port number in the URL:</p>
+
+<pre><code class="groovy">def regex = ~/:[0-9]+/
+def httpUrl = 'http://www.example.com:8080/'
+
+println httpUrl.find(regex)
+</code></pre>
+
+<p>The <code>findAll()</code> method returns a list of matches for the pattern. In the example below I am returned all words in <code>speech</code> that start with <code>like</code>:</p>
+
+<pre><code class="groovy">def speech = '''This like guy like I know but like don\'t really like 
+ was like so mean but likely to be nice when you know him better.'''
+
+println speech.findAll(~/\blike\w*\b/)
+</code></pre>
+
+<blockquote>
+<p>Like, wow!</p>
+</blockquote>
+
+<p>The example below provides a very basic word counter by seeking out the <code>\b\w+\b</code> pattern and displaying the size of the list returned by <code>findAll</code>:</p>
+
+<pre><code class="groovy">def poem = '''\
+ Across the stony ridges,
+  Across the rolling plain,
+ Young Harry Dale, the drover,
+  Comes riding home again.'''
+  
+def regex = ~/\b\w+\b/
+
+println poem.findAll(regex).size()
+</code></pre>
+
+<p>The <code>replaceFirst()</code> and <code>replaceAll()</code> methods seek out matches and replace them in a manner that their names implies:</p>
+
+<pre><code class="groovy">def speech = '''This like guy like I know but like don\'t really like 
+ was like so mean but likely to be a nice guy when you know him better.'''
+
+println speech.replaceAll(~/\blike\b/, 'um')
+println speech.replaceFirst(~/\bguy\b/, 'marmoset')
+</code></pre>
+
+<p>The <code>splitEachLine()</code> method is very handy when handling structured files such as comma-separated files. You can see in the example below that the first parameter is the pattern that will match commas (<code>~/,/</code>) and the second parameter is a closure that will do something for each line. Within the closure, the <code>it</code> variable is a list with each element being the delimited segment of the text with the line:</p>
+
+<pre><code class="groovy">def csv = '''\
+Bill,555-1234,cats
+Jane,555-7485,dogs
+Indira,555-0021,birds'''
+
+csv.splitEachLine(~/,/) {
+    println &quot;Name: ${it[0]}&quot;
+}
+</code></pre>
+
+<h2>Pattern Methods</h2>
+
+<p>The <code>java.util.regex.Pattern</code> class provides a number of useful methods. I prefer to use the String methods but maybe I&#8217;m just lazy.</p>
+
+<p>The static <code>matches</code> method is called against <code>Pattern</code> to evaluate a pattern against a piece of text. You&#8217;ll note that the first parameter is the pattern but represented as a string so you drop the <code>~/../</code> notation:</p>
+
+<pre><code class="groovy">//Note the import
+import java.util.regex.Pattern
+assert Pattern.matches('https?://.*/', 'http://www.example.com/') == true
+</code></pre>
+
+<p>The <code>matcher()</code> method is called against a regular expression pattern and is passed the text that is to be checked. A <a href="http://docs.oracle.com/javase/8/docs/api/java/util/regex/Matcher.html"><code>Matcher</code></a> variable is returned and these give you a whole heap of regular expression functionality. In my example I just check for the match by calling <code>matches()</code>:</p>
+
+<pre><code class="groovy">def regex = ~/https?:\/\/.*/
+def httpUrl = 'http://www.example.com/'
+def matcher = regex.matcher(httpUrl)
+assert matcher.matches() == true
+</code></pre>
+
+<p>The <code>split()</code> method uses a pattern as a delimiter and returns the elements of the parameter broken up by the delimiter. In my example below I split the domain up based on the period (<code>.</code>) delimiter:</p>
+
+<pre><code class="groovy">def regex = ~/\./
+def domain = 'www.example.com'
+
+println regex.split(domain)
+</code></pre>
+
+<blockquote>
+<p>That last example is simple but you can use some pretty funky patterns to split up a string. </p>
+</blockquote>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/Ranges.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/DataTypes.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Variables</a>
+    <ul>
+    
+      <li><a href='Variables.html'>Declaring Variables</a></li>
+    
+      <li><a href='Objects.html'>Objects</a></li>
+    
+      <li><a href='Booleans.html'>Booleans</a></li>
+    
+      <li><a href='Numbers.html'>Numbers</a></li>
+    
+      <li><a href='Strings.html'>Strings</a></li>
+    
+      <li><a href='Collections.html'>Collections</a></li>
+    
+      <li><a href='Arrays.html'>Arrays</a></li>
+    
+      <li><a href='Ranges.html'>Ranges</a></li>
+    
+      <li><a href='RegularExpressions.html'>Regular Expressions</a></li>
+    
+      <li><a href='DataTypes.html'>Data types</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

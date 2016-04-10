@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Conditional (Branching) Statements</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="An introductory text for budding Groovy developers" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Conditional (Branching) Statements</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/99_LanguageQuickRef/loops.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../Colophon.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside></aside>
+  <h1>if-else</h1>
+
+<h2>if</h2>
+
+<pre><code class="groovy hljs xml">
+if (<i>expression</i>) {
+    <i>statement(s)</i>
+}
+</code></pre>
+
+<p>Single-line version:
+<pre><code class="groovy hljs xml">
+if (<i>expression</i>) <i>statement</i>
+</code></pre></p>
+
+<h2>else</h2>
+
+<pre><code class="groovy hljs xml">
+if (<i>expression</i>) {
+    <i>statement(s)</i>
+} else {
+    <i>statement(s)</i>
+}
+</code></pre>
+
+<p>Single-line version:
+<pre><code class="groovy hljs xml">
+if (<i>expression</i>) <i>statement</i> else <i>statement</i>
+</code></pre></p>
+
+<h2>if-else-if</h2>
+
+<pre><code class="groovy hljs xml">
+if (<i>expression</i>) {
+    <i>statement(s)</i>
+} else if (<i>expression</i>) {
+    <i>statement(s)</i>
+} else {
+    <i>statement(s)</i>
+}
+</code></pre>
+
+<h1>switch</h1>
+
+<pre><code class="groovy hljs xml">
+switch(<i>expression</i>) {
+    case <i>expression</i>:
+    <i>statement(s)</i>
+        break
+    //
+    default:
+        <i>statement(s)</i>
+}
+</code></pre>
+
+<ul>
+<li>0 to <em>n</em> <code>case</code> blocks can be used</li>
+<li><code>break</code> is optional - its absence will cause fall-through to next case</li>
+<li><code>default:</code> section is optional</li>
+</ul>
+
+<h1>try-catch-finally</h1>
+
+<h2>try-catch</h2>
+
+<p>To catch any exception raised in a <code>try</code> block:</p>
+
+<pre><code class="groovy hljs xml">
+try {
+    <i>statement(s)</i>
+} catch(any) {
+    <i>statement(s)</i>
+}
+</code></pre>
+
+<p>To catch a specific exception use the specific exception type:</p>
+
+<pre><code class="groovy hljs xml">
+try {
+    <i>statement(s)</i>
+} catch(<i>Exception</i> e) {
+    <i>statement(s)</i>
+} 
+</code></pre>
+
+<p>Provide multiple <code>catch</code> blocks to handle different exceptions:</p>
+
+<pre><code class="groovy hljs xml">
+try {
+    <i>statement(s)</i>
+} catch(<i>Exception</i> e) {
+    <i>statement(s)</i>
+} catch(<i>Exception</i> e) {
+    <i>statement(s)</i>
+}
+</code></pre>
+
+<p>Provide a &#8220;catch-all&#8221; for unexpected exceptions:</p>
+
+<pre><code class="groovy hljs xml">
+try {
+    <i>statement(s)</i>
+} catch(<i>Exception</i> e) {
+    <i>statement(s)</i>
+} catch(<i>Exception</i> e) {
+    <i>statement(s)</i>
+} catch(any) {
+    <i>statement(s)</i>
+}
+</code></pre>
+
+<h2>finally</h2>
+
+<pre><code class="groovy hljs xml">
+try {
+    <i>statement(s)</i>
+} catch(any) {
+    <i>statement(s)</i>
+} finally {
+    <i>statement(s)</i>
+}
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/99_LanguageQuickRef/loops.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../Colophon.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Quick reference guide</a>
+    <ul>
+    
+      <li><a href='reserved.html'>Reserved Words</a></li>
+    
+      <li><a href='imports.html'>Default Imports</a></li>
+    
+      <li><a href='comments.html'>Comments</a></li>
+    
+      <li><a href='variables.html'>Variables</a></li>
+    
+      <li><a href='operators.html'>Operators</a></li>
+    
+      <li><a href='loops.html'>Loops</a></li>
+    
+      <li><a href='control.html'>Conditional (Branching) Statements</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<!-- You can't use 'lang' as an attribute name-->
+<polymer-element name="code-snippet" attributes="language href">
+    <template>
+        <figure class="code-snippet">
+            <content select="figcaption"></content>
+            <pre><code style="{{language}}">
+                <content></content>
+            </code></pre>
+        </figure>
+    </template>
+    <script>
+        Polymer({
+            language: 'java'
+        });
+    </script>
+</polymer-element>

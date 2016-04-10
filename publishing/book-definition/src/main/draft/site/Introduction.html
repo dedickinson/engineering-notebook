@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Introduction</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="An introductory text for budding Groovy developers" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="resources/images/gico.png">
+<link rel="license" href="Licence.html">
+
+<script type="text/javascript" src="resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Introduction</h1>
+    <nav class='part-nav'>
+        <a href='LegalNotice.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='parts/01_GetStarted/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside></aside>
+  <p>I like Groovy.</p>
+
+<p>I like the way it lets me use the Java skills I&#8217;ve built up over the years but it makes it easier to code solutions to problems. I like the way it doesn&#8217;t, well, get in the way. With Groovy I can:</p>
+
+<ul>
+<li>Easily code small scripts to perform command-line tasks</li>
+<li>Tie together existing systems and libraries - leveraging the breadth and depth of existing Java-based projects</li>
+<li>Write entire applications that can be deployed onto any system running the Java Virtual Machine (JVM) - without having to tell people the code isn&#8217;t in Java.</li>
+</ul>
+
+<p>Groovy programs run on the Java Virtual Machine (JVM) and the JVM is installed across a huge spectrum of systems: desktops, servers, mobiles and the Internet of Things. Importantly, the Java world has been going through a great renewal phase. Where once the JVM and the Java programming language were almost synonyms, a range of JVM-based languages have appeared: Groovy, <a href="http://www.scala-lang.org/">Scala</a>, <a href="http://clojure.org/">Clojure</a>, <a href="http://www.jython.org/">Jython</a>. These aren&#8217;t languages that run within a Java program (though many can do just that), these are languages that compile down to JVM bytecode and run in a way that means you don&#8217;t even need to tell your SysAdmin that you didn&#8217;t write it in Java. What&#8217;s more, we&#8217;re not at the &#8220;cutting edge&#8221; of this approach - it&#8217;s been going for long enough that you can expect a level of stability that supports the use of these languages in real application development.</p>
+
+<p>In the following tutorials I aim to guide you through the basics of Groovy. I haven&#8217;t really focussed on writing a &#8220;How to program&#8221; guide nor do I expend a lot of words comparing Groovy with Java. You may also notice that I haven&#8217;t included the output of most of the code examples - this is to save some clutter in the text and encourage you pop open a groovyConsole and try the code for yourself. Go on, you know you&#8217;ll love it.</p>
+
+<p>I really hope that this tutorial gives you a basis in understanding the Groovy language and I hope that you start to see why I like Groovy so much.</p>
+
+<h2>Something Wrong?</h2>
+
+<p>If you find something wrong I&#8217;d really appreciate you letting me know:</p>
+
+<ul>
+<li>Check out the <a href="https://bitbucket.org/groovytutorial/groovy-tutorial/issues?status=new&amp;status=open">issue tracker</a> and see if it&#8217;s already been reported
+
+<ul>
+<li>If not then please create a new issue</li>
+</ul></li>
+<li>The <a href="https://bitbucket.org/groovytutorial/groovy-tutorial/">source text</a> is written in <a href="http://fletcherpenney.net/multimarkdown/">MultiMarkdown</a>. If you feel confident in doing so, why not put together a correction and <a href="https://confluence.atlassian.com/display/BITBUCKET/Fork+a+Repo,+Compare+Code,+and+Create+a+Pull+Request">create a pull request</a></li>
+</ul>
+
+<p>Please remember that I&#8217;m not a big corporation or an automaton - I can&#8217;t respond immediately to queries and I am an assemblage of emotions that respond well to positive encouragement a lot better than negativity.</p>
+
+<h2>Bookmarks</h2>
+
+<p>Between Groovy and Java there&#8217;s a lot of useful websites - this is a few key ones you&#8217;ll want to have in your browser. </p>
+
+<p>Core resources to have at-hand:</p>
+
+<ul>
+<li><a href="http://www.groovy-lang.org/">The Groovy homepage</a> is a great starting point.</li>
+<li>The latest Groovy API documents are available at:
+
+<ul>
+<li><a href="http://groovy-lang.org/api.html">The Groovy API</a>
+
+<ul>
+<li>aka the GAPI</li>
+</ul></li>
+<li><a href="http://groovy-lang.org/gdk.html">The Groovy extensions to the JDK</a>
+
+<ul>
+<li>aka the GDK</li>
+</ul></li>
+</ul></li>
+<li>The <a href="http://docs.oracle.com/javase/7/docs/api/">Java API</a> always comes in handy
+
+<ul>
+<li>So do <a href="http://docs.oracle.com/javase/tutorial/">The Java Tutorials</a></li>
+</ul></li>
+<li>Whilst not a perfect fit for Groovy, I tend to use the <a href="http://google-styleguide.googlecode.com/svn/trunk/javaguide.html">Google Java Style</a> as my stern mentor.</li>
+</ul>
+
+<p>Great blogs and sites that provide Groovy coding examples:</p>
+
+<ul>
+<li><a href="http://mrhaki.blogspot.com.au/search/label/Groovy">Mr Haki</a> - A really useful site containing heaps of Groovy code examples.</li>
+<li><a href="http://www.dzone.com/links/tag/groovy.html">DZone</a> - Features a number of Groovy articles.</li>
+<li><a href="http://www.infoq.com/groovy">InfoQ</a> - Another useful site for Groovy articles.</li>
+<li>My own <a href="http://workbench.duncan.dickinson.name">Workbench</a> blog is very young but has a few Groovy samples.</li>
+</ul>
+
+<p>The book <a href="http://www.manning.com/koenig2/">Groovy in Action (2nd Edition)</a> will help you go further with your Groovy programming.</p>
+
+<p>If you find yourself stuck and needing some help, the following channels are worth tuning into:</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/tagged/groovy">StackOverflow&#8217;s Groovy tag</a> is really useful
+
+<ul>
+<li>search for an answer before posting a question</li>
+<li>Check out their article &#8220;<a href="http://stackoverflow.com/help/how-to-ask">How do I ask a good question?</a>&#8221; - it&#8217;s an excellent outline for asking in a way people may answer</li>
+</ul></li>
+<li>The <a href="http://groovy-lang.org/mailing-lists.html">Groovy Mailing lists</a> are also worth joining and searching</li>
+</ul>
+
+<p>I suggest to anyone within the orbit of Java that &#8220;Effective Java (2nd edition)&#8221; by Joshua Bloch should not only be read (repeatedly) but always at-hand.</p>
+
+<h3>Groovy Projects</h3>
+
+<p>There are several high-quality projects that use Groovy, it&#8217;s worth checking them out:</p>
+
+<ul>
+<li><a href="https://grails.org/">Grails</a> - a full-stack web application framework for the Java Virtual Machine
+
+<ul>
+<li>That means it&#8217;s a great tool-set for building web applications</li>
+</ul></li>
+<li><a href="http://new.griffon-framework.org/">Griffon</a> - a desktop application toolkit</li>
+<li><a href="https://www.gradle.org/">Gradle</a> - a build automation tool that should be your go-to when building non-trivial programs</li>
+<li><a href="https://code.google.com/p/spock/">Spock</a> - a testing framework</li>
+<li><a href="http://codenarc.sourceforge.net/">CodeNarc</a> - a code analysis tool for Groovy</li>
+</ul>
+
+<p>Whilst it&#8217;s not written in Groovy, the <a href="http://projects.spring.io/spring-boot/">Spring Boot</a> project is worth a look as you can use Groovy to quickly write some nifty applications using the Spring framework.</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='LegalNotice.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='parts/01_GetStarted/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul>
+    <li><a href='index.html'>Home</a></li>
+    
+      <li><a href='Dedication.html'>Dedication</a></li>
+    
+      <li><a href='Preface.html'>Preface</a></li>
+    
+      <li><a href='Licence.html'>Licence</a></li>
+    
+      <li><a href='LegalNotice.html'>Legal Notices</a></li>
+    
+      <li><a href='Introduction.html'>Introduction</a></li>
+    
+      <li><a href='parts/01_GetStarted/index.html'>Getting started</a></li>
+    
+      <li><a href='parts/02_VariablesDataTypes/index.html'>Variables</a></li>
+    
+      <li><a href='parts/03_Operators/index.html'>Operators</a></li>
+    
+      <li><a href='parts/04_ControlFlow/index.html'>Control Flow Statements</a></li>
+    
+      <li><a href='parts/05_Exceptions/index.html'>Exceptions</a></li>
+    
+      <li><a href='parts/06_Methods/index.html'>Methods</a></li>
+    
+      <li><a href='parts/07_Closures/index.html'>Closures</a></li>
+    
+      <li><a href='parts/99_LanguageQuickRef/index.html'>Quick reference guide</a></li>
+    
+      <li><a href='Colophon.html'>Colophon</a></li>
+    
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

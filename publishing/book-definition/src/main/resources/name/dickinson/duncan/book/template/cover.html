@@ -1,0 +1,29 @@
+<%
+import static name.dickinson.duncan.book.MetadataField.*
+%>
+<div class='book-cover'>
+	<img src='resources/images/logo.svg' class='book-cover-logo' />
+
+	<div class='book-cover-author'>
+	   <h1>${book.title}</h1> 
+     <p>${book.edition}</p>
+		<!-- Author<% if (book.authorgroup.size() > 1) print 's' %>:  -->
+		<ul class='authorgroup'>
+			<% for (author in book.authorgroup) { %>
+			<li>${author.firstname} ${author.surname}</li> <% } %>
+		</ul>
+    
+    <nav class='cover-nav'>
+    <header>
+    <h1>Tutorials</h1>
+    </header>
+    <dl>
+    <% for (part in book.parts) { %>
+        <dt><a href='${part.introduction.href}'>${part.title}</a></dt>
+        <dd>${part.introduction.description}</dd>
+    <% } %>
+    </dl>
+    </nav>
+		
+	</div>
+</div>

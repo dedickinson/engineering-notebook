@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Object Operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="These operators help you check classes and instances." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Object Operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/CollectionOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/04_ControlFlow/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>These operators help you check classes and instances.</aside>
+  <p>It could be argued that all operators are object operators as nearly every variable or value in Groovy is an object. However, these operators are all about working with and checking on the object&#8217;s structure.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator(s)</th>
+	<th style="text-align:left;">Type</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>?.</code></td>
+	<td style="text-align:left;">Safe Navigation Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>as</code></td>
+	<td style="text-align:left;">Casting Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>is</code></td>
+	<td style="text-align:left;">Identity Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>instanceof</code></td>
+	<td style="text-align:left;">Type Comparison</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>.@</code></td>
+	<td style="text-align:left;">Field Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>.&amp;</code></td>
+	<td style="text-align:left;">Method Reference</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Safe Navigation Operator</h1>
+
+<p>The Safe Navigation operator (<code>?.</code>) checks to make sure that a variable isn&#8217;t <code>null</code> before calling the requested method. Consider the following code:</p>
+
+<pre><code class="groovy">class Person{
+    def name
+}
+
+def fred = new Person(name: 'Fred')
+
+//various statements
+fred = null
+//various statements
+
+println fred.name
+</code></pre>
+
+<p>As <code>fred</code> somehow became <code>null</code> at some point in the code, that call to <code>fred.name</code> causes a nasty <code>java.lang.NullPointerException</code> (aka the NPE). This happens a lot as variable (in this case <code>fred</code>) can end up being <code>null</code> for a number of reasons, including:</p>
+
+<ul>
+<li>The variable never gets set in the first place - perhaps the initialisation failed but we didn&#8217;t catch it properly</li>
+<li>A method returns <code>null</code> instead of an object instance</li>
+<li>We get passed a parameter that has <code>null</code> value.</li>
+</ul>
+
+<p>In order to stop the NPE you&#8217;ll normally see developers using an <code>if</code> statement to check that the variable isn&#8217;t <code>null</code> before trying to call a method:</p>
+
+<pre><code class="groovy">class Person{
+    def name
+}
+
+def fred = new Person(name: 'Fred')
+
+//various statements
+fred = null
+//various statements
+
+if (fred) {
+    println fred.name
+}
+</code></pre>
+
+<blockquote>
+<p>In the code above, <code>if (fred)</code> equates to true if <code>fred</code> isn&#8217;t null - it&#8217;s a handy bit of Groovy syntax we&#8217;ll cover when we get to the <code>if</code> statement in the next tutorial.</p>
+</blockquote>
+
+<p>Groovy&#8217;s Safe Navigation operator saves some time and code. In the code below, Groovy checks that the <code>fred</code> variable isn&#8217;t <code>null</code> before trying to access the <code>name</code> property - giving us a compact piece of code: <code>fred?.name</code>.</p>
+
+<pre><code class="groovy">class Person{
+    def name
+}
+
+def fred = new Person(name: 'Fred')
+
+//various statements
+fred = null
+//various statements
+
+println fred?.name
+</code></pre>
+
+<p>You&#8217;ll see that &#8220;null&#8221; is displayed - this is because <code>fred</code> is <code>null</code>. Groovy doesn&#8217;t even try to access the <code>name</code> property.</p>
+
+<h1>Casting Operator</h1>
+
+<p>The Casting operator (<code>as</code>) changes the data type of a value or variable to the specified class. This is sometimes called &#8220;casting&#8221;, &#8220;type conversion&#8221; or &#8220;coercing&#8221;. You&#8217;ll have seen this in action when we created a Set:</p>
+
+<pre><code class="groovy">def nums = [1, 6, 3, 9, 3] as Set
+</code></pre>
+
+<blockquote>
+<p>For those that like to know the secret sauce, this actually casts <code>num</code> to be a <code>java.util.LinkedHashSet</code>. I know this because <code>nums.class.name</code> knows this.</p>
+</blockquote>
+
+<p>The <code>as</code> tells Groovy that you want to convert the item to be of the specified data type (class) - in the example above I use <code>Set</code>. The code below demonstrates a few more conversions:</p>
+
+<pre><code class="groovy">assert 3.14 as Integer == 3
+assert 101 as String == '101'
+assert true as String == 'true'
+assert '987' as Integer == 987
+</code></pre>
+
+<p>You&#8217;ll note that the cast can be lossy - <code>3.14 as Integer</code> caused the value to be truncated to <code>3</code>. Not all values can be cast to all types and code such as <code>'hello, world' as Integer</code> causes an exception.</p>
+
+<h1>Identity Operator</h1>
+
+<p>The Identity operator (<code>is</code>) determines if two variables are referencing the same object instance. This &#8220;operator&#8221; is really a method that you call by using <code>obj1.is(obj2)</code> to check if <code>obj1</code> and <code>obj2</code> reference the same instance.</p>
+
+<p>As we saw in the chapters on Equality Operators and Relational Operators, Groovy uses the <code>==</code> operator to determine if two objects are equivalent based on their state. Using <code>==</code> for this purpose is really useful and improves code readability <em>but</em> it means that the traditional Java use of <code>==</code> to determine if two objects reference the same instance needs a replacement in Groovy. The <code>is</code> method is that replacement.</p>
+
+<p>In the code below I describe a <code>Person</code> class and use a very helpful annotation (<code>@groovy.transform.EqualsAndHashCode</code>) so that Groovy sets up the approach to determining if two instances of <code>Person</code> are the same - such that <code>==</code> returns <code>true</code>. I&#8217;ve decided that all people will have a unique identifier and, provided two instances have the same identifier, they&#8217;re the same person. This means that all three variations (<code>fred</code>, <code>freddie</code>, <code>frederick</code>) of the person with the ID <code>345</code> are equal (<code>==</code>) to each other. However, by using <code>is</code> I can see that, whilst <code>fred</code> and <code>freddie</code> point to the same instance of Person, <code>frederick</code> points to a different instance.</p>
+
+<pre><code class="groovy">@groovy.transform.EqualsAndHashCode(includes=&quot;id&quot;)
+class Person{
+    def id
+    def name
+}
+
+def fred = new Person(id: 345, name: 'Fred')
+def freddie = fred
+def frederick = new Person(id: 345, name: 'Frederick')
+
+//Check that they're all the same person
+assert fred == freddie
+assert fred == frederick
+assert freddie == frederick
+
+//Check which variable points to the same instance
+assert fred.is(freddie)
+assert ! fred.is(frederick)
+</code></pre>
+
+<h1>Type Comparison</h1>
+
+<p>The Type Comparison operator (<code>instanceof</code>) is used to determine if a variable is an instance of the specified class.</p>
+
+<p>In this next example I check to make sure that <code>fred</code> is a <code>Person</code>:</p>
+
+<pre><code class="groovy">class Person{
+    def name
+}
+
+def fred = new Person(name: 'Fred')
+
+assert fred instanceof Person
+</code></pre>
+
+<p>Checking the variable&#8217;s type can be useful in dynamically typed languages such as Groovy as it lets us check before we call a property or method that may not be there:</p>
+
+<pre><code class="groovy">class Person{
+    def name
+}
+
+def fred = new Person(name: 'Fred')
+
+if (fred instanceof Person) {
+    println fred?.name
+}
+</code></pre>
+
+<p>In my <code>Person</code> example I&#8217;m not really using the full benefits of object-oriented programming that we can leverage in Groovy - primarily because we&#8217;re yet to get up to that. However, trust me when I say that class hierarchies and interfaces give us a handy way to build up a family tree of classes and that we can use <code>instanceof</code> to check if the object instance has a legacy that helps us achieve an outcome. For example, the <code>Integer</code> and <code>Float</code> classes are a subclass (child) of the <code>Number</code> class.</p>
+
+<blockquote>
+<p>It&#8217;s a bit like the <a href="http://en.wikipedia.org/wiki/Linnaean_taxonomy">Linnaean taxonomy</a>: <code>assert octopus instanceof Mollusc</code> and <code>slug instanceof Mollusc</code>. Check out the <a href="http://eol.org/pages/2195/overview">Encyclopedia of Life</a> to learn more about molluscs - those little guys are really cool.</p>
+</blockquote>
+
+<p>In the example below I set up an <code>add</code> method that adds two numbers (handy!). Before I try to add those two numbers I use <code>instanceof</code> to make sure they&#8217;re actually Numbers. If they aren&#8217;t, I throw an exception at you.</p>
+
+<pre><code class="Groovy">def add(num1, num2) {
+    if (num1 instanceof Number &amp;&amp; num2 instanceof Number) {
+        return num1 + num2
+    }
+    throw new IllegalArgumentException('Parameters must be Numbers')
+}
+
+assert add(1, 6) == 7
+assert add(3.14, 9.2) == 12.34
+
+add('Rabbit', 'Flower')
+</code></pre>
+
+<blockquote>
+<p>Granted, I could have declared <code>def add(Number num1, Number num2)</code> but that wouldn&#8217;t be very dynamic of me.</p>
+</blockquote>
+
+<h1>Field Operator and Method Reference</h1>
+
+<blockquote>
+<p>I won&#8217;t discuss these two operators to any depth at this point. </p>
+</blockquote>
+
+<p>The Field operator (<code>.@</code>) provides direct access to an object&#8217;s property (field) rather than using a getter/setter. <em>Use with a lot of caution or, even better, don&#8217;t use it at all.</em></p>
+
+<p>The Method Reference operator (<code>.&amp;</code>) returns a reference to an object method. This can be handy when you&#8217;d like to use the method as a closure. This is a very useful feature so use it at will!</p>
+
+<p>In the example below I describe the <code>Person</code> class. When I then create an instance called <code>example</code> you&#8217;ll notice that:</p>
+
+<ul>
+<li><code>example.name = 'Fred'</code> causes <code>setName()</code> to be called</li>
+<li><code>println example.name</code> causes <code>getName()</code> to be called</li>
+<li><code>example.@name = 'Jane'</code> and <code>println example.@name</code> both access the <code>name</code> property directly.</li>
+<li><code>def intro = example.&amp;introduceSelf</code> sets <code>intro</code> as a pointer (closure) to the <code>introduceSelf</code> method.
+
+<ul>
+<li>Which is then called using <code>intro()</code></li>
+</ul></li>
+</ul>
+
+<pre><code class="groovy">class Person {
+    def name
+    
+    def setName(name) {
+        println 'You called setName()'
+        this.name = name
+    }
+    
+    def getName() {
+        println 'You called getName()'
+        return this.name
+    }
+    
+    def introduceSelf() {
+        println &quot;Hi, my name is ${this.name}&quot;
+    }
+}
+
+def example = new Person()
+
+//example.name actually calls the getter or setter
+example.name = 'Fred'
+println example.name
+
+//example.@name directly access the field
+example.@name = 'Jane'
+println example.@name
+
+//intro holds the reference to the introduceSelf method
+def intro = example.&amp;introduceSelf
+
+//This next line calls introduceSelf()
+intro()
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/CollectionOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/04_ControlFlow/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

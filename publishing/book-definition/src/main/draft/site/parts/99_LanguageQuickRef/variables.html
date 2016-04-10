@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Variables</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="An introductory text for budding Groovy developers" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Variables</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/99_LanguageQuickRef/comments.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/99_LanguageQuickRef/operators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside></aside>
+  <table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Examples</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">Boolean</td>
+	<td style="text-align:left;"><code>true</code>, <code>false</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">Number</td>
+	<td style="text-align:left;"><code>1</code>, <code>3.14</code>, <code>1.67e-27</code>, <code>0xff</code> (hex), <code>071</code> (oct)</td>
+</tr>
+<tr>
+	<td style="text-align:left;">String</td>
+	<td style="text-align:left;"><code>'Hello, world'</code>, <code>&quot;Hello, world&quot;</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">List</td>
+	<td style="text-align:left;"><code>[]</code>, <code>[4, 'cat', myObject]</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">Set</td>
+	<td style="text-align:left;"><code>[4, 8, 2, 19] as Set</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">Map</td>
+	<td style="text-align:left;"><code>[:]</code>, <code>['h': 'hydrogen', 'he': 'helium']</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">Range</td>
+	<td style="text-align:left;"><code>1..10</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;">Regular expression</td>
+	<td style="text-align:left;"><code>~/&lt;expression&gt;/</code></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>Collection types (List, Set, Map) can use the <code>asImmutable()</code> method to make the collection immutable (<em>i.e. you can&#8217;t change its contents</em>)
+
+<ul>
+<li>e.g. <code>def myList = [1, 2, 3].asImmutable()</code></li>
+</ul></li>
+</ul>
+
+<h1>Type Suffixes</h1>
+
+<table>
+<caption id="table:typesuffixessupportedbygroovy">Table: Type suffixes supported by Groovy</caption>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Suffix</th>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Example</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;"><code>I</code> or <code>i</code></td>
+	<td style="text-align:left;">Integer</td>
+	<td style="text-align:left;"><code>12i</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>L</code> or <code>l</code></td>
+	<td style="text-align:left;">Long</td>
+	<td style="text-align:left;"><code>23423l</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>G</code> or <code>g</code></td>
+	<td style="text-align:left;">BigInteger</td>
+	<td style="text-align:left;"><code>1_000_000g</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>F</code> or <code>f</code></td>
+	<td style="text-align:left;">Float</td>
+	<td style="text-align:left;"><code>3.1415f</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>D</code> or <code>d</code></td>
+	<td style="text-align:left;">Double</td>
+	<td style="text-align:left;"><code>3.1415d</code></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><code>G</code> or <code>g</code></td>
+	<td style="text-align:left;">BigDecimal</td>
+	<td style="text-align:left;"><code>3.1415g</code></td>
+</tr>
+</tbody>
+</table>
+
+<h1>Number Systems</h1>
+
+<ul>
+<li>Binary (base&#8211;2): prefix <code>0b</code></li>
+<li>Octal (base&#8211;8) prefix <code>0</code></li>
+<li>Hexadecimal (base&#8211;16) prefix <code>0x</code></li>
+</ul>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/99_LanguageQuickRef/comments.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/99_LanguageQuickRef/operators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Quick reference guide</a>
+    <ul>
+    
+      <li><a href='reserved.html'>Reserved Words</a></li>
+    
+      <li><a href='imports.html'>Default Imports</a></li>
+    
+      <li><a href='comments.html'>Comments</a></li>
+    
+      <li><a href='variables.html'>Variables</a></li>
+    
+      <li><a href='operators.html'>Operators</a></li>
+    
+      <li><a href='loops.html'>Loops</a></li>
+    
+      <li><a href='control.html'>Conditional (Branching) Statements</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

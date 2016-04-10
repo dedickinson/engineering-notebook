@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - The `if` Statement</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Like a Choose Your Own Adventure, the if statement lets you select what you want to have happen." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">The `if` Statement</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/04_ControlFlow/Blocks.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/04_ControlFlow/Switch.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Like a Choose Your Own Adventure, the if statement lets you select what you want to have happen.</aside>
+  <p>Few programs consist of a set of statements read one after another from top-to-bottom. At various points we need the code to evaluate one set of statements rather than another - depending on the current context in which the program is running. The <code>if</code> statement is key to directing which route to take.</p>
+
+<p>As an example, let&#8217;s say we have some code that displays the result of a division. It&#8217;s very important that we don&#8217;t try to divide a number by 0 as this causes an error. In the code below we use the <code>if</code> statement to check if the denominator is <code>0</code> before we perform the division:</p>
+
+<pre><code class="groovy">def numerator = 0
+def denominator = 0
+
+// ... various statements
+
+if (denominator != 0) {
+    println numerator / denominator
+}
+</code></pre>
+
+<p><code>if</code> evaluates the conditional expression between the parentheses - <code>(..)</code> - and will only process the statement block if the conditional result is <code>true</code>.</p>
+
+<h2><code>if</code> - <code>else</code></h2>
+
+<p>An <code>else</code> section can be provided where you want to process statements when the conditional result is <code>false</code>.</p>
+
+<pre><code class="groovy">def numerator = 0
+def denominator = 0
+
+// ... various statements
+
+if (denominator != 0) {
+    println numerator / denominator
+} else {
+    println 'I refuse to divide by zero'
+}
+</code></pre>
+
+<h2><code>if</code> - <code>else if</code> - <code>else</code></h2>
+
+<p><code>if</code> and <code>else</code> let you deal with situations where you have two possible outcomes but sometimes you might have a few conditions that you want to check for: </p>
+
+<pre><code class="groovy">def game = 'tennis'
+
+if (game == 'chess') {
+    println 'I like to play chess'
+} else {
+    if (game == 'tennis') {
+       println 'I can play tennis if you want'
+    } else {
+        println &quot;Sorry, I don't know how to play $game&quot;
+    }
+}
+</code></pre>
+
+<p>The code above places another <code>if</code> check within the <code>else</code> block and checks if the player is asking for a different game (&#8220;tennis&#8221;). This looks (sort of) clean but start to picture a larger set of checks and the code gets confusing. Instead of nesting the second <code>if</code> within the <code>else</code> block, Groovy lets you use <code>else if</code>:</p>
+
+<pre><code class="groovy">def game = 'tennis'
+
+if (game == 'chess') {
+    println 'I like to play chess'
+} else if (game == 'tennis') {
+    println 'I can play tennis if you want - just let me warm up'
+} else if (game == 'golf') {
+    println 'I can play golf if you want but I get very angry'
+} else {
+    println &quot;Sorry, I don't know how to play $game&quot;
+}
+</code></pre>
+
+<p>The code above tidies up the nesting by allowing the second <code>if</code> to be part of the <code>else</code> block. Essentially you can provide a long series of checks in a single <code>if-else if</code> set and Groovy will evaluate each until one resolves to true. You can optionally provide an <code>else</code> block at the end to ensure that can all other outcomes (defined or otherwise) be dealt with.</p>
+
+<blockquote>
+<p>When your <code>if-else</code> chain gets a little long, look to <code>switch</code></p>
+</blockquote>
+
+<p>It&#8217;s important to note that once an <code>if</code> evaluates to <code>true</code>, no other <code>if</code> expressions are evaluated. It&#8217;s a case of the first positive match wins. In the code below, the conditional <code>(game=='chess' || game == 'tennis')</code> is redundant because an earlier condition would have returned <code>true</code> (<code>(game == 'chess')</code>)</p>
+
+<pre><code class="groovy">if (game == 'chess') {
+    println 'I like to play chess'
+} else if (game == 'tennis') {
+    println 'I can play tennis if you want'
+} else if (game=='chess' || game == 'tennis') {
+    println 'Can you really play both of these at once?'
+} else {
+    println &quot;Sorry, I don't know how to play $game&quot;
+}
+</code></pre>
+
+<p>That last point is also important as Groovy will also not evaluate any expressions used in further <code>if</code> expressions. In the example below, <code>--i</code> is never evaluated as the first <code>if</code> expression resolves to true:</p>
+
+<pre><code class="groovy">def i = 10
+
+if (++i &gt; 10) {
+    //do something
+} else if (--i &lt; 10) {
+    //do something
+}
+
+assert i == 11
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/04_ControlFlow/Blocks.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/04_ControlFlow/Switch.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Control Flow Statements</a>
+    <ul>
+    
+      <li><a href='Blocks.html'>Blocks</a></li>
+    
+      <li><a href='If.html'>The `if` Statement</a></li>
+    
+      <li><a href='Switch.html'>The `switch` Statement</a></li>
+    
+      <li><a href='For.html'>The `for` Loop</a></li>
+    
+      <li><a href='While.html'>The `while` loop</a></li>
+    
+      <li><a href='Branching.html'>Branching statements</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

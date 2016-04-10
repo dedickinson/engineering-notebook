@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Ranges</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Ranges describe a range of numbers." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Ranges</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/Arrays.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/RegularExpressions.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Ranges describe a range of numbers.</aside>
+  <p>Ranges define a starting point and an end point. Let&#8217;s look at a well-known type of range:</p>
+
+<pre><code class="groovy">def countdown = 10..0
+
+println countdown.getFrom()
+println countdown.getTo()
+</code></pre>
+
+<p>The <code>countdown</code> range starts at 10 and goes down to 0. The notation should be easy to decipher: <code>&lt;start&gt;..&lt;end&gt;</code>.</p>
+
+<p>Printing out a range variable will display that a range is rather like a list of values - in the case of <code>countdown</code> they&#8217;re numbers:</p>
+
+<pre><code class="groovy">def countdown = 10..0
+println countdown
+</code></pre>
+
+<p>Whilst my examples so far all go down, you can just as easily have a range that goes up:</p>
+
+<pre><code class="groovy">def floors = 1..10
+println floors
+</code></pre>
+
+<p>You can also use decimals but note that it is only the integer (whole-number) component that is stepped through:</p>
+
+<pre><code class="groovy">def countdown = 10.1..1.1
+println countdown
+</code></pre>
+
+<h2>Half-Open Ranges</h2>
+
+<p>Ranges aren&#8217;t just limited to inclusive ranges such as <code>1..10</code>. You can also declare a <em>half-open range</em> using <code>..&lt;</code> - that&#8217;s two periods and a less-than. This denotes that the range ends prior to the number to the right. In the example below I setup a grading criteria that avoids an overlap between the grades:</p>
+
+<pre><code class="groovy">def gradeA = 90..100
+def gradeB = 80..&lt;90
+def gradeC = 65..&lt;80
+def gradeD = 50..&lt;65
+def gradeF = 0..&lt;50
+</code></pre>
+
+<p>I could tweak the above code if I want to get fancy:</p>
+
+<pre><code class="groovy">def gradeA = 90..100
+def gradeB = 80..&lt;gradeA.getFrom()
+def gradeC = 65..&lt;gradeB.getFrom()
+def gradeD = 50..&lt;gradeC.getFrom()
+def gradeF = 0..&lt;gradeD.getFrom()
+</code></pre>
+
+<h2>Ranges of Objects</h2>
+
+<p>Ranges are primarily used with numbers but they can be of any object type that can be iterated through. This basically means that Groovy needs to know what object comes next in the range - these objects provide a <code>next</code> and <code>previous</code> method to determine this sequence. Over time you&#8217;ll discover various options for use in ranges but numbers really are the main type. </p>
+
+<p>Apart from numbers, individual characters (letters) can be used in ranges. In the example below I create a range of lower-case letters:</p>
+
+<pre><code class="groovy">def alphabet = 'a'..'z'
+println alphabet
+</code></pre>
+
+<h3>Ranges and Enums</h3>
+
+<blockquote>
+<p>We&#8217;ll look into Enums when we start looking at creating objects in a later tutorial</p>
+</blockquote>
+
+<p>Ranges can be handy when dealing with <code>enums</code> as they give us the ability to set a subset of enum values. In the example below I create a handy helpdesk tool:</p>
+
+<ol>
+<li>Setup an <code>enum</code> listing the possible ticket priorities</li>
+<li>Create a new <code>class</code> to describe helpdesk tickets</li>
+<li>Setup a <code>helpdeskQueue</code> containing a list of tickets</li>
+<li>Set the <code>focus</code> variable as a range of <code>Priority</code> values</li>
+<li>Go through the list of tickets and pick up any that are set to the <code>priority</code> I care about.</li>
+</ol>
+
+<pre><code class="groovy">enum Priority {
+    LOW,MEDIUM,HIGH,URGENT
+}
+
+class Ticket {
+    def priority
+    def title
+}
+
+def helpdeskQueue = [
+    new Ticket(priority: Priority.HIGH, title: 'My laptop is on fire'),
+    new Ticket(priority: Priority.LOW, title: 'Where is the any key'),
+    new Ticket(priority: Priority.URGENT, title: 'I am the CEO and I need a coffee'),
+    new Ticket(priority: Priority.MEDIUM, title: 'I forgot my password')
+]
+
+def focus = Priority.HIGH..Priority.URGENT
+
+for (ticket in helpdeskQueue) {
+    if (ticket.priority in focus) {
+        println &quot;You need to see to: ${ticket.title}&quot;
+    }
+}
+</code></pre>
+
+<p>Try the example above out with various settings for the <code>focus</code> variable:</p>
+
+<ul>
+<li><code>def focus = Priority.MEDIUM..Priority.URGENT</code>
+
+<ul>
+<li>Gives us more tickets to see to :(</li>
+</ul></li>
+<li><code>def focus = Priority.HIGH..Priority.LOW</code>
+
+<ul>
+<li>Is actually similar to <code>4..1</code> and leaves out the tickets marked <code>URGENT</code></li>
+</ul></li>
+</ul>
+
+<h2>Ranges and List Indexes</h2>
+
+<p>You can access a subset of a list using a range subscript. In the example below I use the subscript <code>[1..3]</code> to grab a new list containing elements 1 through 3 of the <code>temperatures</code> list. </p>
+
+<blockquote>
+<p>Remember that lists are zero-based so <code>5</code> is element number 1</p>
+</blockquote>
+
+<pre><code class="groovy">def temperatures = [10, 5, 8, 3, 6]
+def subTemp = temperatures[1..3]
+assert subTemp == [5, 8, 3]
+</code></pre>
+
+<h2>Ranges and Loops</h2>
+
+<p>Ranges are most often see when we&#8217;re using loops - we&#8217;ll get to them in a later tutorial but here&#8217;s an example of a launch sequence:</p>
+
+<pre><code class="groovy">def countdown = 10..0
+
+for (i in countdown) {
+    println &quot;T minus $i and counting&quot;
+}
+</code></pre>
+
+<p>In the above example I store the range in the <code>countdown</code> variable in case I need it again later. If I don&#8217;t really need to re-use the range I can put the range&#8217;s literal value directly into the loop:</p>
+
+<pre><code class="groovy">for (i in 10..1) {
+    println &quot;T minus $i and counting&quot;
+}
+</code></pre>
+
+<h1>Useful Methods</h1>
+
+<p>We can use the <code>size()</code> method to find out how many elements are in the range:</p>
+
+<pre><code class="groovy">def dalmations = 1..101
+println dalmations.size()
+</code></pre>
+
+<p>As seen earlier, the <code>getFrom()</code> and <code>getTo()</code> methods return the start and final values respectively:</p>
+
+<pre><code class="groovy">def intRange = 1..10
+println intRange.getFrom()
+println intRange.getTo()
+</code></pre>
+
+<p>The <code>isReverse()</code> method returns <code>true</code> if a range iterates downwards (backwards):</p>
+
+<pre><code class="groovy">def countdown = 10..0
+assert countdown.isReverse() == true
+</code></pre>
+
+<p>You can can use the <code>reverse()</code> method to flip the range:</p>
+
+<pre><code class="groovy">def floors = 1..10
+println floors.reverse()
+</code></pre>
+
+<p>In order to check if a value is contained within a range we use the <code>containsWithinBounds</code> method and pass it the value we&#8217;re checking on:</p>
+
+<pre><code class="groovy">def countdown = 10..0
+assert countdown.containsWithinBounds(5) == true
+</code></pre>
+
+<p>The <code>step</code> method returns a list based going through the range via the specified increment (step). In the example below I step through the range one at a time (<code>step(1)</code>) and then two at a time (<code>step(2)</code>):</p>
+
+<pre><code class="groovy">def countdown = 5..1
+assert countdown.step(1) == [5, 4, 3, 2, 1]
+assert countdown.step(2) == [5, 3, 1]
+</code></pre>
+
+<p>As <code>step</code> returns a list I can use it to populate a list variable that has too many numbers for me to be bothered typing out:</p>
+
+<pre><code class="groovy">def dalmations = (1..101).step(1)
+println dalmations
+</code></pre>
+
+<p>As we&#8217;re about to see the <code>step</code> method is very effective when used with closures.</p>
+
+<h2>Ranges and Closures</h2>
+
+<p>Closures are a method (function) that can be handled in a manner similar to variables. A closure is described within curly brackets <code>{..}</code> and can be passed as method parameters. Closure have a default variable named <code>it</code> and this holds a value passed to the closure by its caller.</p>
+
+<p>We&#8217;ll look into closures much more thoroughly in a later tutorial but, for now, take in the following examples and refer back to them when you get to know closures a little better.</p>
+
+<p>The <code>step</code> method will call a closure for each item in a range. In the example below I step through <code>countdown</code> one number at a time and, for each number, I display a message:</p>
+
+<pre><code class="groovy">def countdown = 10..1
+countdown.step(1) {
+    println &quot;T minus $it and counting&quot;
+}
+</code></pre>
+
+<blockquote>
+<p>The syntax <code>countdown.step(1) {..}</code> probably looks a bit odd at this point - essentially, the closure is being passed as a parameter to <code>step</code>. There&#8217;s a tutorial covering closures coming up so don&#8217;t feel too annoyed if these examples don&#8217;t look right to you.</p>
+</blockquote>
+
+<p>I can use the range literal but need to place it within <code>(..)</code>:</p>
+
+<pre><code class="groovy">(10..1).step(1) {
+    println &quot;T minus $it and counting&quot;
+}
+</code></pre>
+
+<p>You can change the size of each step - in the case below I step down by 2 each time. Run the code and notice that launch never happens!</p>
+
+<pre><code class="groovy">(10..1).step(2) {
+    println &quot;T minus $it and counting&quot;
+}
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/Arrays.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/RegularExpressions.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Variables</a>
+    <ul>
+    
+      <li><a href='Variables.html'>Declaring Variables</a></li>
+    
+      <li><a href='Objects.html'>Objects</a></li>
+    
+      <li><a href='Booleans.html'>Booleans</a></li>
+    
+      <li><a href='Numbers.html'>Numbers</a></li>
+    
+      <li><a href='Strings.html'>Strings</a></li>
+    
+      <li><a href='Collections.html'>Collections</a></li>
+    
+      <li><a href='Arrays.html'>Arrays</a></li>
+    
+      <li><a href='Ranges.html'>Ranges</a></li>
+    
+      <li><a href='RegularExpressions.html'>Regular Expressions</a></li>
+    
+      <li><a href='DataTypes.html'>Data types</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

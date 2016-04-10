@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Packages</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Groovy lets you take advantage of the core Java packages (the JDK) so let's take a quick look at how this works." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Packages</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/ReservedWords.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Groovy lets you take advantage of the core Java packages (the JDK) so let's take a quick look at how this works.</aside>
+  <p>Except for very small programs, most Groovy and Java-based programs are made up of packages of code:</p>
+
+<ul>
+<li>The <code>package</code> keyword is used to designate that a class is part of a package and we&#8217;ll cover this more fully in the tutorial on object-oriented Groovy.</li>
+<li>The <code>import</code> keyword is used to import classes from other packages into a program.</li>
+</ul>
+
+<p>Consider the sample code below:</p>
+
+<pre><code class="groovy">package test
+
+import java.time.Year
+
+println Year.now()
+</code></pre>
+
+<p>I&#8217;ve indicated that this code:</p>
+
+<ul>
+<li>Is part of a <code>package</code> named <code>test</code></li>
+<li>Needs to use the <code>Year</code> class defined in the <code>java.time</code> package</li>
+</ul>
+
+<p>This notion of packaging allows for thousands of developers to create classes and packages without clashing. If another developer creates a <code>Year</code> class but put it into a package with a name other than <code>java.time</code> then all will be well. Oh, and you&#8217;d never start your own package name with <code>java.</code> - that really won&#8217;t work out well for you<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>.</p>
+
+<p>Before you write any new code you should always check out these resources in the order I&#8217;ve given below:</p>
+
+<ol>
+<li>The <a href="http://docs.groovy-lang.org/docs/groovy-2.4.0/html/gapi/">Groovy API (GAPI)</a></li>
+<li>The <a href="http://docs.groovy-lang.org/docs/groovy-2.4.0/html/groovy-jdk/">Groovy extensions to the JDK (GDK)</a></li>
+<li>The <a href="http://docs.oracle.com/javase/8/docs/api/index.html">standard Java classes (JDK)</a></li>
+</ol>
+
+<p>Using the order I&#8217;ve provided above lets you look at the libraries providing the Groovy approach first (the GAPI and GDK) then looking at the Java standard library (JDK).</p>
+
+<p>For the rest of this chapter I&#8217;ll focus on <code>import</code> as that will help us in the early set of tutorials.</p>
+
+<h1>Using <code>import</code></h1>
+
+<p>You can <code>import</code> other classes in a variety of manners - let&#8217;s take a look.</p>
+
+<h2>Basic Imports</h2>
+
+<p>The basic form of imports are the most commonly seen and you should get accustomed to them pretty quickly.</p>
+
+<dl>
+<dt><code>import java.time.Year</code></dt>
+<dd>This will import the <code>Year</code> class from the <code>java.time</code> package</dd>
+
+<dt><code>import java.time.*</code></dt>
+<dd>This is a star (wildcard) import</dd>
+
+<dd>This will import all classes in the <code>java.time</code> package</dd>
+</dl>
+
+<h2>Static imports</h2>
+
+<p>Static imports can help your code look a little cleaner as they give you an easy way to refer to useful constants and functions (methods) declared in other code packages.</p>
+
+<dl>
+<dt><code>import static java.lang.Math.PI</code></dt>
+<dd>This is a <em>static</em> import</dd>
+
+<dd>This lets you import static items from another class</dd>
+
+<dd>In this example I&#8217;ve imported the <code>PI</code> constant from the <code>java.lang.Math</code> class and can now use it as if it was just part of my code: <code>println PI</code></dd>
+
+<dt><code>import static java.lang.Math.PI as pi</code></dt>
+<dd>This is a <em>static</em> import with <em>aliasing</em></dd>
+
+<dd>This is the same as the previous <code>import</code> but I can use the <code>as</code> keyword to rename the item being imported - I&#8217;ve decided to use <code>PI</code> but using the lowercase <code>pi</code></dd>
+
+<dt><code>import static java.util.UUID.randomUUID as generateId</code></dt>
+<dd>This is also a <em>static</em> import with <em>aliasing</em> but I&#8217;ve imported the <code>randomUUID</code> static method and given in the alias <code>generateId</code></dd>
+
+<dd>I can now call <code>println generateId()</code> in my program</dd>
+
+<dt><code>import static java.lang.Math.*</code></dt>
+<dd>This is a <em>static star</em> import and will import all static elements described in <code>Math</code> and let me refer to them directly in my program.</dd>
+</dl>
+
+<p>I&#8217;ve thrown the term <code>static</code> around a lot here - don&#8217;t worry too much about this for now as we&#8217;ll really only need basic imports for now. The notion of <code>static</code> will be covered when we get to object-oriented Groovy.</p>
+
+<h1>Built in Libraries</h1>
+
+<p>The following libraries are imported into Groovy by default - you don&#8217;t need to do anything to start using them:</p>
+
+<ul>
+<li><code>java.io.*</code></li>
+<li><code>java.lang.*</code></li>
+<li><code>java.math.BigDecimal</code></li>
+<li><code>java.math.BigInteger</code></li>
+<li><code>java.net.*</code></li>
+<li><code>java.util.*</code></li>
+<li><code>groovy.lang.*</code></li>
+<li><code>groovy.util.*</code></li>
+</ul>
+
+<p>Groovy is able to make use of classes within these packages without explicitly <code>import</code>ing them. You can still declare them with <code>import</code> and you&#8217;ll notice various development environments (IDEs) will do this regardless of Groovy&#8217;s default - either way it&#8217;ll be groovy.</p>
+
+<h1>Useful third-party libraries</h1>
+
+<p>There is an extensive body of existing Java libraries available to the Groovy developer and it&#8217;s best to do some investigating before you write your own code - re-using well-supported libraries is a real time saver - here&#8217;s a couple to take a look at:</p>
+
+<ol>
+<li><a href="http://commons.apache.org/">Apache Commons</a></li>
+<li><a href="https://code.google.com/p/guava-libraries/">Google Guava</a></li>
+</ol>
+
+<p>In the olden days (in Java-time) you&#8217;d often have to download the third-party library you wanted, download any other libraries it depended on, store them in the correct place (called a Classpath) and then you could start using it. Time went by and systems such as <a href="http://maven.apache.org">Apache Maven</a> came along to make it easier to grab a copy of your dependencies. This then lead to <a href="http://search.maven.org">The (Maven) Central Repository</a> and made it even easier to grab the libraries you needed. </p>
+
+<blockquote>
+<p>There are other repositories you can use too - you&#8217;ll likely come across these as you write more code and seek out new dependencies.</p>
+</blockquote>
+
+<h2>Grape</h2>
+
+<p>Whilst you can use Maven or (even better) <a href="http://gradle.org">Gradle</a> to grab these dependencies, Groovy includes a dependency manager called <a href="http://groovy-lang.org/grape.html">Grape</a> that you can start using straight away.</p>
+
+<p>Say I wanted to grab a copy of my favourite web page and had worked out that <a href="https://hc.apache.org/index.html">Apache&#8217;s HTTP Components</a> would really help me. I can search the Maven Central Repository and <a href="http://search.maven.org/#artifactdetails%7Corg.apache.httpcomponents%7Chttpclient%7C4.3.6%7Cjar">find what I need</a>. In fact, that web page even tells me how to use the library with Grape:</p>
+
+<pre><code class="groovy">@Grapes( 
+@Grab(group='org.apache.httpcomponents', module='httpcomponents-client', version='4.4') 
+)
+</code></pre>
+
+<blockquote>
+<p>Searching the repository can be a little frustrating at first but you&#8217;ll get the hang of it over time.</p>
+</blockquote>
+
+<p>Grape uses annotations - essentially the &#8220;at&#8221; (<code>@</code>) sign followed by a name - to do its thing. In the example above:</p>
+
+<ul>
+<li><code>@Grapes</code> starts of the grape listing
+
+<ul>
+<li>You need this if you&#8217;re grabbing several libraries in the same segment (node) of your code - we can actually ignore this in smaller examples.</li>
+</ul></li>
+<li>Each grape is declared using <code>@Grab</code> and providing the following:
+
+<ul>
+<li>The <code>group</code> that holds the module</li>
+<li>The name of the <code>module</code></li>
+<li>The required version of the <code>module</code></li>
+</ul></li>
+</ul>
+
+<p>In the code below I use the Apache HTTP Components library to report on the HTTP status line from my request to &#8220;http://www.example.org&#8221;. I&#8217;ve trimmed off the <code>@Grapes</code> as I just need to <code>Grab</code> one module:</p>
+
+<pre><code class="groovy">@Grab(group='org.apache.httpcomponents', module='httpclient', version='4.3.6')  
+import org.apache.http.impl.client.HttpClients
+import org.apache.http.client.methods.HttpGet
+
+def httpclient = HttpClients.createDefault()
+def httpGet = new HttpGet('http://www.example.org')
+def response = httpclient.execute(httpGet)
+
+println response.getStatusLine()
+</code></pre>
+
+<blockquote>
+<p>I like to put my <code>@Grabs</code> on the line above the <code>import</code> that include the dependency - it helps other see where my libraries are coming from.</p>
+</blockquote>
+
+<p>You can use a short-form version of <code>@Grab</code> using the format <code>&lt;group&gt;:&lt;module&gt;:&lt;version&gt;</code> - this would let us use the following:</p>
+
+<pre><code class="groovy">@Grab('org.apache.httpcomponents:httpclient:4.3.6')
+</code></pre>
+
+<p>Once you start building more complex programs you will probably turn to Gradle but Grape works just fine for these tutorials.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>There&#8217;s actually a <a href="http://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html">package naming convention</a> that is very easy to follow. <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/ReservedWords.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/index.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Getting started</a>
+    <ul>
+    
+      <li><a href='Installing.html'>Installing Groovy</a></li>
+    
+      <li><a href='HelloWorld.html'>Your first lines of Groovy</a></li>
+    
+      <li><a href='Comments.html'>Comments</a></li>
+    
+      <li><a href='Statements.html'>Statements</a></li>
+    
+      <li><a href='Assert.html'>The `assert` statement</a></li>
+    
+      <li><a href='ReservedWords.html'>Reserved Words</a></li>
+    
+      <li><a href='PackagesLibraries.html'>Packages</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

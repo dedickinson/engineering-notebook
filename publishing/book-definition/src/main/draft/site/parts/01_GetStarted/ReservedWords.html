@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Reserved Words</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Groovy reserves a set of keywords that cannot be used as identifiers." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Reserved Words</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/Assert.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/PackagesLibraries.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Groovy reserves a set of keywords that cannot be used as identifiers.</aside>
+  <p>Groovy relies of a number of key words that it reserves for its own use. This means that you shouldn&#8217;t use these words for the names of variables and other items you declare. For example, the code below won&#8217;t run as <code>package</code> is a reserved word:</p>
+
+<pre><code class="groovy">def package = 'my package'
+</code></pre>
+
+<table>
+<caption id="groovysreservedwords">Groovy&#8217;s reserved words</caption>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">abstract</td>
+	<td style="text-align:left;">as</td>
+	<td style="text-align:left;">assert</td>
+	<td style="text-align:left;">boolean</td>
+	<td style="text-align:left;">break</td>
+</tr>
+<tr>
+	<td style="text-align:left;">byte 
+</td>
+	<td style="text-align:left;">case 
+</td>
+	<td style="text-align:left;">catch 
+</td>
+	<td style="text-align:left;">char 
+</td>
+	<td style="text-align:left;">class</td>
+</tr>
+<tr>
+	<td style="text-align:left;">const 
+</td>
+	<td style="text-align:left;">continue 
+</td>
+	<td style="text-align:left;">def 
+</td>
+	<td style="text-align:left;">default 
+</td>
+	<td style="text-align:left;">do</td>
+</tr>
+<tr>
+	<td style="text-align:left;">double 
+</td>
+	<td style="text-align:left;">else 
+</td>
+	<td style="text-align:left;">enum 
+</td>
+	<td style="text-align:left;">extends 
+</td>
+	<td style="text-align:left;">false</td>
+</tr>
+<tr>
+	<td style="text-align:left;">final 
+</td>
+	<td style="text-align:left;">finally 
+</td>
+	<td style="text-align:left;">float 
+</td>
+	<td style="text-align:left;">for 
+</td>
+	<td style="text-align:left;">goto</td>
+</tr>
+<tr>
+	<td style="text-align:left;">if 
+</td>
+	<td style="text-align:left;">implements 
+</td>
+	<td style="text-align:left;">import 
+</td>
+	<td style="text-align:left;">in 
+</td>
+	<td style="text-align:left;">instanceof</td>
+</tr>
+<tr>
+	<td style="text-align:left;">int 
+</td>
+	<td style="text-align:left;">interface 
+</td>
+	<td style="text-align:left;">long 
+</td>
+	<td style="text-align:left;">native 
+</td>
+	<td style="text-align:left;">new</td>
+</tr>
+<tr>
+	<td style="text-align:left;">null 
+</td>
+	<td style="text-align:left;">package 
+</td>
+	<td style="text-align:left;">private 
+</td>
+	<td style="text-align:left;">protected 
+</td>
+	<td style="text-align:left;">public</td>
+</tr>
+<tr>
+	<td style="text-align:left;">return 
+</td>
+	<td style="text-align:left;">short 
+</td>
+	<td style="text-align:left;">static 
+</td>
+	<td style="text-align:left;">strictfp 
+</td>
+	<td style="text-align:left;">super</td>
+</tr>
+<tr>
+	<td style="text-align:left;">switch 
+</td>
+	<td style="text-align:left;">synchronized 
+</td>
+	<td style="text-align:left;">this 
+</td>
+	<td style="text-align:left;">threadsafe 
+</td>
+	<td style="text-align:left;">throw</td>
+</tr>
+<tr>
+	<td style="text-align:left;">throws 
+</td>
+	<td style="text-align:left;">transient 
+</td>
+	<td style="text-align:left;">true 
+</td>
+	<td style="text-align:left;">try 
+</td>
+	<td style="text-align:left;">void</td>
+</tr>
+<tr>
+	<td style="text-align:left;">volatile 
+</td>
+	<td style="text-align:left;">while</td>
+</tr>
+</tbody>
+</table>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/Assert.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/PackagesLibraries.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Getting started</a>
+    <ul>
+    
+      <li><a href='Installing.html'>Installing Groovy</a></li>
+    
+      <li><a href='HelloWorld.html'>Your first lines of Groovy</a></li>
+    
+      <li><a href='Comments.html'>Comments</a></li>
+    
+      <li><a href='Statements.html'>Statements</a></li>
+    
+      <li><a href='Assert.html'>The `assert` statement</a></li>
+    
+      <li><a href='ReservedWords.html'>Reserved Words</a></li>
+    
+      <li><a href='PackagesLibraries.html'>Packages</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

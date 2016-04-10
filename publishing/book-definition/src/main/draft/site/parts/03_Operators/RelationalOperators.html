@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Relational Operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Less than, greater than and so on - it's all about how the operands relate." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Relational Operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/ArithmeticOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/IncrementDecrementOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Less than, greater than and so on - it's all about how the operands relate.</aside>
+  <p>Similar to the Equality Operators, the expressions involving Relational Operators return a boolean result (<code>true</code> or <code>false</code>). </p>
+
+<table>
+<caption id="table:therelationaloperators">Table: The relational operators</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">&gt;</td>
+	<td style="text-align:left;">Greater than</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&gt;=</td>
+	<td style="text-align:left;">Greater than or equal to</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&lt;</td>
+	<td style="text-align:left;">Less than</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&lt;=</td>
+	<td style="text-align:left;">Less than or equal to</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&lt;=&gt;</td>
+	<td style="text-align:left;">Spaceship</td>
+</tr>
+</tbody>
+</table>
+
+<p>All of the following operations resolve to <code>true</code>:</p>
+
+<pre><code class="groovy">assert 5 &gt; 2
+assert 4 &gt;= 3
+assert 4 &gt;= 4
+assert 8 &lt; 9
+assert 6 &lt;= 7
+assert 7 &lt;= 7
+</code></pre>
+
+<p>Ordinarily, the operands used in a relational comparison can be compared in a meaningful manner. If they are different data types then the operands need to be able to find a common type for comparison (such as both being numbers) - the following code will cause and exception because Groovy can&#8217;t be expected compare a string with a number in this way:</p>
+
+<pre><code class="groovy">if ('easy' &lt; 123) println &quot;It's easier than 123&quot;
+</code></pre>
+
+<h1>Spaceship</h1>
+
+<p>The spaceship operator comes from the Perl programming language. The Spaceship operator is most often seen where sorting is done. </p>
+
+<table>
+<caption id="table:thespaceshipoperator">Table: The spaceship operator</caption>
+<colgroup>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">&lt;=&gt;</td>
+</tr>
+</tbody>
+</table>
+
+<p>In the example below the <code>sort</code> function uses the closure to define the sort algorithm and this is where the spaceship lands:</p>
+
+<pre><code class="groovy">def nums = [42, -99, 6.3, 1, 612, 1, -128, 28, 0]
+
+//Descending
+println nums.sort{n1, n2 -&gt; n2&lt;=&gt;n1 }
+
+//Ascending
+println nums.sort{n1, n2 -&gt; n1&lt;=&gt;n2 }
+</code></pre>
+
+<p>The following table indicates the result for spaceship expressions (LHS = left-hand side, RHS = right-hand side):</p>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Expression</th>
+	<th style="text-align:center;">Result</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">LHS less than RHS</td>
+	<td style="text-align:center;">&#8211;1</td>
+</tr>
+<tr>
+	<td style="text-align:left;">LHS equals RHS</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:left;">LHS greater than RHS</td>
+	<td style="text-align:center;">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>The following assertions all resolve as true:</p>
+
+<pre><code class="groovy">assert 2 &lt;=&gt; 2 == 0
+assert 1 &lt;=&gt; 2 == -1
+assert 2 &lt;=&gt; 1 == 1
+</code></pre>
+
+<h1>Overloading the relational operators</h1>
+
+<p>The <code>compareTo</code> method is used by Groovy to assess the result of relational operations:</p>
+
+<pre><code class="groovy">assert 1.compareTo(2) == -1
+</code></pre>
+
+<blockquote>
+<p>There is a reasonable assumption that the two operands can be coerced (cast) into a similar type. This is why <code>1.compareTo('cat')</code> just won&#8217;t work.</p>
+</blockquote>
+
+<p>Java&#8217;s <a href="http://docs.oracle.com/javase/8/docs/api/index.html"><code>Comparable</code></a> interface is implemented by classes that allow instances to be compared. Custom classes can determine their own appropriate algorithm for the <code>Comparable</code>&#8217;s <code>compareTo</code> method and this will be available when you use the relational operators.</p>
+
+<pre><code class="groovy">class Num implements Comparable {
+    def val
+    
+    @Override
+    int compareTo(obj) {
+         if (val &lt; obj.val) {
+             return -1
+         } else if (val &gt; obj.val) {
+             return 1
+         } else {
+             return 0
+         } 
+    }
+}
+
+def a = new Num(val: 2)
+def b = new Num(val: 5)
+def c = new Num(val: 2)
+
+assert a &lt; b
+assert b &gt; a
+assert a != b
+assert a == c
+</code></pre>
+
+<p>You&#8217;ll notice that I&#8217;ve tested <code>a != b</code> and <code>a == c</code> - these equality operators actually calls the <code>compareTo</code> method. There&#8217;s been a bit of discussion about how Groovy handles <code>==</code> and the underlying <code>equals</code> and <code>compareTo</code> methods so if you&#8217;re looking to overload these operators it&#8217;d be worth your time checking up on <a href="http://blackdragsview.blogspot.fr/2015/02/getting-rid-of-compareto-for.html">what the Groovy developers are planning</a>.</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/ArithmeticOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/IncrementDecrementOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

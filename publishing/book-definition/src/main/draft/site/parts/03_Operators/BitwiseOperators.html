@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Bitwise Operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="They're bit-oriented and not so much "wise"" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Bitwise Operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/ConditionalOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/AssignmentOperatorsCompound.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>They're bit-oriented and not so much "wise"</aside>
+  <p>I have to admit that I haven&#8217;t seen many instances of bitwise manipulation since my university assignments. That&#8217;s not to say they&#8217;re not used or not important - I&#8217;ve just not done a lot of programming that&#8217;s called on bitwise operators.</p>
+
+<table>
+<caption id="table:thebitwiseoperators">Table: The bitwise operators</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">&amp;</td>
+	<td style="text-align:left;">Bitwise AND</td>
+</tr>
+<tr>
+	<td style="text-align:center;">|</td>
+	<td style="text-align:left;">Bitwise OR</td>
+</tr>
+<tr>
+	<td style="text-align:center;">^</td>
+	<td style="text-align:left;">Bitwise XOR<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a></td>
+</tr>
+<tr>
+	<td style="text-align:center;">~</td>
+	<td style="text-align:left;">Bitwise negation (Not)</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&gt;&gt;</td>
+	<td style="text-align:left;">Right shift</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&gt;&gt;&gt;</td>
+	<td style="text-align:left;">Right shift unsigned</td>
+</tr>
+<tr>
+	<td style="text-align:center;">&lt;&lt;</td>
+	<td style="text-align:left;">Left shift</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Truth Tables</h1>
+
+<p>Truth tables describe the results of various logical operations. The truth tables below illustrate the NOT, AND, OR and XOR logic.</p>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Not (<code>~</code>)</th>
+	<th style="text-align:center;">Result</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">Not 0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:left;">Not 1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">And (<code>&amp;</code>)</th>
+	<th style="text-align:center;">Result</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">0 AND 0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:left;">0 AND 1</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:left;">1 AND 0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:left;">1 AND 1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Or (<code>|</code>)</th>
+	<th style="text-align:center;">Result</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">0 OR 0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:left;">0 OR 1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+<tr>
+	<td style="text-align:left;">1 OR 0</td>
+	<td style="text-align:center;">1</td>
+</tr>
+<tr>
+	<td style="text-align:left;">1 OR 1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Xor (<code>^</code>)</th>
+	<th style="text-align:center;">Result</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">0 XOR 0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:left;">0 XOR 1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+<tr>
+	<td style="text-align:left;">1 XOR 0</td>
+	<td style="text-align:center;">1</td>
+</tr>
+<tr>
+	<td style="text-align:left;">1 XOR 1</td>
+	<td style="text-align:center;">0</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Flag example</h1>
+
+<p>The unix file permission scheme uses binary flags for read, write and execute permissions on files. You see them when you run <code>ls -l</code> as something like <code>-rwxr-xr-x</code>. Essentially, this is a set of flags where binary <code>1</code> turns on that permission and binary <code>0</code> turns it off. The three elements I&#8217;ll look at here are read (r), write (w) and execute (x):</p>
+
+<ul>
+<li>READ has the binary value 001 (decimal 1)</li>
+<li>WRITE has the binary value 010 (decimal 2)</li>
+<li>EXECUTE has the binary value 100 (decimal 4)</li>
+</ul>
+
+<p>Let&#8217;s look at the example code first and then I&#8217;ll discuss it:</p>
+
+<pre><code class="groovy">//Create global variables for the permissions
+READ = 0b100      
+WRITE = 0b010     
+EXECUTE = 0b001  
+
+println 'Checking for READ:'
+checkFile(READ)
+
+println 'Checking for WRITE:'
+checkFile(WRITE)
+
+println 'Checking for READ or EXECUTE:'
+checkFile(READ | EXECUTE)
+
+def checkFile (check) {
+    def fileList = [:]
+    for (i in 0..7) {
+        fileList[&quot;File $i&quot;] = i
+    }
+    
+    for (file in fileList) {
+        if (file.value &amp; check) {
+            println &quot;$file.key (${displayFilePermission(file.value)}) meets criteria&quot;
+        }
+    }
+}
+
+def displayFilePermission(val) {
+    def retval = &quot;&quot;
+    retval &lt;&lt;= (READ &amp; val)? 'r': '-'
+    retval &lt;&lt;= (WRITE &amp; val)? 'w': '-'
+    retval &lt;&lt;= (EXECUTE &amp; val)? 'x': '-'
+    return retval
+}
+</code></pre>
+
+<blockquote>
+<p>Please note that I&#8217;m not really happy with my example (above) but it&#8217;s the best I could come up with.</p>
+</blockquote>
+
+<p>First up I set the flags for each of the three elements using the <code>0b</code> prefix to indicate binary numbers:</p>
+
+<pre><code class="groovy">READ = 0b100      
+WRITE = 0b010     
+EXECUTE = 0b001
+</code></pre>
+
+<p>I then call my <code>checkFile</code> method to see which permissions match what I&#8217;m seeking. The third call to <code>checkFile</code> is the more interesting as I OR two flags: <code>READ | EXECUTE</code>. If I OR the READ flag (<code>100</code>) with the EXECUTE flag (<code>001</code>) I get <code>101</code> (decimal 5):</p>
+
+<table>
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Value</th>
+	<th style="text-align:center;" colspan="3">Binary</th>
+	<th style="text-align:center;">Operator</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">READ</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">OR</td>
+</tr>
+<tr>
+	<td style="text-align:left;">EXECUTE</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;"><strong>Result</strong></td>
+	<td style="text-align:center;"><strong>1</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>1</strong></td>
+	<td style="text-align:center;"><strong>=</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>The <code>checkFile</code> method does the checking for me. The first part of the method just creates a set of possible files - enough to cover the various variations of the <code>rwx</code> elements:</p>
+
+<pre><code class="groovy">    def fileList = [:]
+    for (i in 0..7) {
+        fileList[&quot;File $i&quot;] = i
+    }
+</code></pre>
+
+<blockquote>
+<p>Creating <code>fileList</code> each time the method is called is inefficient - that&#8217;s why copying tutorial code into your production system is a bad idea :)</p>
+</blockquote>
+
+<p>It&#8217;s the second half of <code>checkFile</code> that does the important stuff:</p>
+
+<pre><code class="groovy">    for (file in fileList) {
+        if (file.value &amp; check) {
+            println &quot;$file.key (${displayFilePermission(file.value)}) meets criteria&quot;
+        }
+    }
+</code></pre>
+
+<p>The <code>if (file.value &amp; check)</code> performs an AND on the check requested (e.g. <code>READ</code>) and the file&#8217;s permissions. If the AND returns a result greater than <code>0</code> then the file&#8217;s permission match the <code>check</code>. For example, a file with execute permission (<code>--x</code>) meets the <code>READ | EXECUTE</code> criteria:</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Item</th>
+	<th style="text-align:left;">Value</th>
+	<th style="text-align:center;" colspan="3">Binary</th>
+	<th style="text-align:center;">Operator</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>check</code></td>
+	<td style="text-align:left;">READ | EXECUTE</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">AND</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>file</code></td>
+	<td style="text-align:left;"><code>--x</code></td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;"></td>
+</tr>
+<tr>
+	<td style="text-align:center;"></td>
+	<td style="text-align:left;"><strong>Result</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>1</strong></td>
+	<td style="text-align:center;"><strong>=</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>A file with read and write permission (<code>rw-</code>) also matches:</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Item</th>
+	<th style="text-align:left;">Value</th>
+	<th style="text-align:center;" colspan="3">Binary</th>
+	<th style="text-align:center;">Operator</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>check</code></td>
+	<td style="text-align:left;">READ | EXECUTE</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">AND</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>file</code></td>
+	<td style="text-align:left;"><code>rw-</code></td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;"></td>
+</tr>
+<tr>
+	<td style="text-align:center;"></td>
+	<td style="text-align:left;"><strong>Result</strong></td>
+	<td style="text-align:center;"><strong>1</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>=</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>However, a file with only the write permission (<code>-w-</code>) will not successfully match:</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Item</th>
+	<th style="text-align:left;">Value</th>
+	<th style="text-align:center;" colspan="3">Binary</th>
+	<th style="text-align:center;">Operator</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>check</code></td>
+	<td style="text-align:left;">READ | EXECUTE</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">AND</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>file</code></td>
+	<td style="text-align:left;"><code>-w-</code></td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;"></td>
+</tr>
+<tr>
+	<td style="text-align:center;"></td>
+	<td style="text-align:left;"><strong>Result</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>0</strong></td>
+	<td style="text-align:center;"><strong>=</strong></td>
+</tr>
+</tbody>
+</table>
+
+<p>Lastly, the <code>displayFilePermission</code> method just helps me display the permissions in the <code>rwx</code> format.</p>
+
+<p>Some other quick points follow:</p>
+
+<dl>
+<dt>I can negate (<code>~</code>) a value to indicate that I want the inverse of a value, rather than ORing the other options individually:</dt>
+<dd>
+<pre><code class="groovy">println 'Checking for WRITE or EXECUTE:'
+checkFile(~READ)
+</code></pre></dd>
+
+<dt>I can XOR (<code>^</code>) to aggregate the permissions but ignore intersections (where both variables contain the same flag):</dt>
+<dd>
+<pre><code class="groovy">def file1 = READ | EXECUTE
+def file2 = WRITE | EXECUTE
+println 'File 1: ' &lt;&lt; displayFilePermission(file1)
+println 'File 2: ' &lt;&lt; displayFilePermission(file2)
+println 'Result: ' &lt;&lt; displayFilePermission(file1 ^ file2)
+</code></pre></dd>
+</dl>
+
+<h1>Shift Example</h1>
+
+<p>Shifting just moves the bits in a binary to the left (<code>&lt;&lt;</code>) or to the right (<code>&gt;&gt;</code>), depending on the left-hand operand. If we take the following list as a starting point we can see how progressive shifts left change a value:</p>
+
+<ul>
+<li>0001 (binary) = 1 (decimal)</li>
+<li>0010 (binary) = 2 (decimal)</li>
+<li>0100 (binary) = 4 (decimal)</li>
+<li>1000 (binary) = 8 (decimal)</li>
+</ul>
+
+<p>With this is mind the following code demonstrates the left- and right-shift operators:</p>
+
+<pre><code class="groovy">assert 2 &lt;&lt; 1 == 4  //Left-shift once
+assert 2 &lt;&lt; 2 == 8  //Left-shift twice
+assert 2 &gt;&gt; 1 == 1  //Right-shift once
+</code></pre>
+
+<p>The code below displays a table in which each row represents a value that&#8217;s be left-shifted by one position more than the prior row:</p>
+
+<pre><code class="groovy">def value = 0b0000_0000_0000_0000_1111_1111
+
+println '| Shift   | Hex      | Decimal  | Octal    | Binary                   |'
+println '|---------|----------|----------|----------|--------------------------|'
+(0..16).each {
+    def shifted = value &lt;&lt; it
+    def hexDisplay = '0x' &lt;&lt; Integer.toHexString(shifted).padLeft(6, '0')
+    def binDisplay = Integer.toBinaryString(shifted).padLeft(24, '0')
+    def decDisplay = &quot;$shifted&quot;.padLeft(8, ' ')
+    def octDisplay = Integer.toOctalString(shifted).padLeft(8, ' ')
+    def shiftDisplay = &quot;$it&quot;.padLeft(7, ' ')
+    println &quot;| $shiftDisplay | $hexDisplay | $decDisplay | $octDisplay | $binDisplay |&quot;
+}
+println '|---------|----------|----------|----------|--------------------------|'
+</code></pre>
+
+<blockquote>
+<p>Whilst it may not be an overly useful example you can also see the methods for displaying numbers using different number systems (hexadecimal, octal, decimal and binary)</p>
+</blockquote>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>Known as an Exclusive OR <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/ConditionalOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/AssignmentOperatorsCompound.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - The Basics</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="A basic overview of methods" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">The Basics</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/index.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/06_Methods/Parameters.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>A basic overview of methods</aside>
+  <p>Groovy, like Java, is object-oriented and works around classes. C and Pascal are procedural and work around functions. Whilst the methods described here may look a bit like C-style programming that lets you build libraries of functions, what is really happening is Groovy wraps your code in a <code>class</code> definition behind the scenes. You&#8217;re only likely to create &#8220;raw&#8221; methods, like the ones below, as a means to break up your scripts. More usually you&#8217;ll create methods within your classes.</p>
+
+<p>Methods have a number of features:</p>
+
+<ol>
+<li>Methods have names
+
+<ul>
+<li>this allows you to call your method in a meaningful way</li>
+</ul></li>
+<li>Methods can accept parameters
+
+<ul>
+<li>these are inputs into your method that can affect how your method operates</li>
+</ul></li>
+<li>Methods can return a result value
+
+<ul>
+<li>this can be captured by a variable from the code calling the method</li>
+</ul></li>
+<li>Methods have their own scope
+
+<ul>
+<li>they can have their own variables and not inadvertently affect the rest of your program</li>
+</ul></li>
+</ol>
+
+<p>We&#8217;ve already looked at various methods for use with variables such as lists and maps so you&#8217;ve seen methods being called throughout the previous chapters.</p>
+
+<p>Let&#8217;s start by examining a new method we&#8217;ll write to calculate the average of the numbers in a list:</p>
+
+<pre><code class="groovy">def determineAverage(list) {
+    return list.sum() / list.size()
+}
+</code></pre>
+
+<p>Breaking that code up we can see:</p>
+
+<ol>
+<li>The <code>def</code> reserved word is used to commence the method declaration
+
+<ul>
+<li>Much like we use when defining a variable</li>
+</ul></li>
+<li><code>determineAverage</code> is the name of the method</li>
+<li>The method accepts a single parameter, <code>list</code></li>
+<li>A single value is returned using the <code>return</code> reserved word
+
+<ul>
+<li>In this case it&#8217;s the result of <code>list.sum() / list.size()</code></li>
+</ul></li>
+</ol>
+
+<p>The method name (<code>determineAverage</code>) may look a bit odd but it uses a naming strategy called <a href="https://en.wikipedia.org/wiki/CamelCase">&#8220;lower Camel Case&#8221;</a>. The camel aspect is the use of upper-case letters to indicate individual words in the name (hence <code>Average</code>). The first word in the method name is a verb (<code>determine</code>) to indicate that a method &#8220;does&#8221; something.</p>
+
+<p>Let&#8217;s return to that <code>determineAverage</code> method and get a complete script together - you can copy and paste this into <code>groovyConsole</code> and run it to experience the method first-hand:</p>
+
+<pre><code class="groovy">def scores = [2, 7, 4, 3]
+def result = determineAverage(scores)
+println result
+
+def determineAverage(list) {
+    return list.sum() / list.size()
+}
+</code></pre>
+
+<p>Let&#8217;s look at the main components of that script:</p>
+
+<ol>
+<li>The <code>determineAverage</code> method is defined as before
+
+<ul>
+<li>This can appear above or below the other code - Groovy doesn&#8217;t care but I like to put them at the bottom of scripts so the reader is presented with the main script first</li>
+</ul></li>
+<li>A new list of numbers is created: <code>def scores = [2, 7, 4, 3]</code></li>
+<li>The method is called with the <code>scores</code> variable passed as a parameter</li>
+<li>The return value (result) of <code>determineAverage</code> is stored in the <code>result</code> variable.</li>
+</ol>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/index.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/06_Methods/Parameters.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Methods</a>
+    <ul>
+    
+      <li><a href='Methods.html'>The Basics</a></li>
+    
+      <li><a href='Parameters.html'>Parameters</a></li>
+    
+      <li><a href='DefaultValues.html'>Default Values for Parameters</a></li>
+    
+      <li><a href='NamedArguments.html'>Named Arguments</a></li>
+    
+      <li><a href='VarArgs.html'>Variable Arguments (Varargs)</a></li>
+    
+      <li><a href='Return.html'>Return value</a></li>
+    
+      <li><a href='MethodThrows.html'>Throwing an exception</a></li>
+    
+      <li><a href='MethodDoc.html'>Documenting a method</a></li>
+    
+      <li><a href='Techniques.html'>Techniques</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

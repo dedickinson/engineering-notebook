@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - String Operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Groovy provides a very handy set of operators for working with Strings." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">String Operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/AssignmentOperatorsCompound.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/RegExOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Groovy provides a very handy set of operators for working with Strings.</aside>
+  <p>You&#8217;ll spend a lot of your career manipulating strings so anything that makes them less of a hassle is nice. Groovy helps you with the following operators overloaded for your string work.</p>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator(s)</th>
+	<th style="text-align:left;">Type</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>+</code>, <code>&lt;&lt;</code></td>
+	<td style="text-align:left;">Concatenate Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>&lt;&lt;=</code> <code>+=</code></td>
+	<td style="text-align:left;">Append Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>-</code></td>
+	<td style="text-align:left;">Remove Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>-=</code></td>
+	<td style="text-align:left;">Remove In-place Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>*</code></td>
+	<td style="text-align:left;">Repeat Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>*=</code></td>
+	<td style="text-align:left;">Repeat In-place Operator</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>++</code> <code>--</code></td>
+	<td style="text-align:left;">Increment and Decrement Operators</td>
+</tr>
+</tbody>
+</table>
+
+<h1>Concatenate Operator</h1>
+
+<p>The concatenate operator joins two strings together:</p>
+
+<pre><code class="groovy">println  'It was the best of times.' &lt;&lt; 'It was the worst of times.'
+</code></pre>
+
+<p>The above example is rather daft as we could have just put both strings together in the same set of quotes. You&#8217;re more likely to see strings added to over the course of a program:</p>
+
+<pre><code class="groovy">def quote = 'It was the best of times.'
+quote = quote &lt;&lt; 'It was the worst of times.'
+println quote
+</code></pre>
+
+<p>Instead of using the concatenate you could have just used string interpolation:</p>
+
+<pre><code class="groovy">def quote = 'It was the best of times.'
+quote = &quot;$quote It was the worst of times.&quot;
+println quote
+</code></pre>
+
+<p>The <code>+</code> operator is used in the same manner as <code>&lt;&lt;</code>:</p>
+
+<pre><code class="groovy">def quote = 'It was the best of times.'
+quote = quote + 'It was the worst of times.'
+println quote
+</code></pre>
+
+<p>As you&#8217;ll see in later in this chapter it&#8217;s best to use <code>&lt;&lt;</code> over <code>+</code></p>
+
+<h2>Concatenation and Types</h2>
+
+<p>When you concatenate a string with a number Groovy will cast the number into a string. That means you can end up with 1 + 1 = 11 as the code below demonstrates:</p>
+
+<pre><code class="groovy">assert '1' + 1 == '11'
+assert 1 + '1' == '11'
+</code></pre>
+
+<p>If you&#8217;re really wanting to add a string to a number you need to make sure you explicitly turn the string into a number:</p>
+
+<pre><code class="groovy">assert '1'.toInteger() + 1 == 2
+</code></pre>
+
+<p>This may all sound a bit odd now but if you&#8217;re trying to work out why your program&#8217;s maths seems all wrong it&#8217;s worth looking into where strings and numbers are being mashed together.</p>
+
+<h1>Append Operator</h1>
+
+<p>The append operator (<code>&lt;&lt;=</code>) conflates the assignment (<code>=</code>) and concatenate operators:</p>
+
+<pre><code class="groovy">def quote = 'It was the best of times.'
+quote &lt;&lt;= 'It was the worst of times.'
+println quote
+</code></pre>
+
+<p>This saves you from having to use <code>quote = quote &lt;&lt; 'It was the worst of times.'</code></p>
+
+<blockquote>
+<p><code>+=</code> also appends but don&#8217;t use it - you&#8217;ll see why in a moment.</p>
+</blockquote>
+
+<h1>Remove Operator</h1>
+
+<p>The remove operator (<code>-</code>) removes the first instance of a string or regular expression from another string. The easiest form just removes the first instance of a specific string - in the case of the example below, &#8216;of &#8217; is removed:</p>
+
+<pre><code class="groovy">quote = 'It was the worst of times.' - 'of '
+println quote
+</code></pre>
+
+<p>The example above will display <code>It was the worst times.</code></p>
+
+<p>A regular expression pattern can also be used if you want to use a pattern. In the example below, the first occurrence of &#8220;bat&#8221; or &#8220;rat&#8221; is removed, resulting in <code>cat  rat monkey</code> (<em>note the double space</em>)</p>
+
+<pre><code class="groovy">println 'cat bat rat monkey' - ~/[br]at/
+</code></pre>
+
+<h1>Remove In-Place Operator</h1>
+
+<p>Works just like the remove operator (<code>-</code>) but does the match to the variable as well as modifying it. As for the first remove example, a string can be provided for removal:</p>
+
+<pre><code class="groovy">quote = 'It was the worst of times.'
+quote -= 'of '
+println quote
+</code></pre>
+
+<p>&#8230;and it can also use patterns: </p>
+
+<pre><code class="groovy">def str = 'cat bat rat monkey'
+str -= ~/[br]at/
+println str
+</code></pre>
+
+<h1>Repeat Operator</h1>
+
+<p>This is a great operator for those that love repetition! Let&#8217;s print out <code>hello</code> ten-times, each time one a new line:</p>
+
+<pre><code class="groovy">print 'hello\n' * 10
+</code></pre>
+
+<h1>Repeat In-PlaceOperator</h1>
+
+<p>This one applies the mutliplier against the variable and stores the result back in the variable:</p>
+
+<pre><code class="groovy">def complaint = 'ow'
+complaint *= 10
+println complaint
+</code></pre>
+
+<p>I&#8217;ll leave it to you to see what happens :)</p>
+
+<h1>Increment and Decrement Operators</h1>
+
+<p>The increment operator will move the last character of the string to its next value:</p>
+
+<pre><code class="groovy">def str = 'hello'
+str++
+assert str == 'hellp'
+</code></pre>
+
+<p>The increment/decrement actually works across the Unicode character codes<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a> so don&#8217;t expect code to just use &#8216;a&#8217; to &#8216;z&#8217;:</p>
+
+<pre><code class="groovy">def str = 'fo%'
+str--
+assert str == 'fo$'
+</code></pre>
+
+<p>For a small experiment, try the following code - it will display a subset of the Unicode characters:</p>
+
+<pre><code class="groovy">//\u00A1 is the Unicode character for an inverted exclamation mark
+def chr = '\u00A1'
+for (i in 161..191) {
+    println chr
+    chr++
+}
+</code></pre>
+
+<p>I&#8217;m sure that this is useful somewhere&#8230;..</p>
+
+<h1>Warning: Strings Are Expensive!</h1>
+
+<p>Many programs build strings up over the course of their operation. This can start becoming very expensive in terms of program resources such as memory because, without the correct approach, the JVM has to copy strings to new memory locations each time you use concatenation.</p>
+
+<p>Java developers turn to the <code>StringBuilder</code> and <code>StringBuffer</code> classes to make their string building more efficient. Groovy developers using dynamic types can use a few tricks to stay dynamic and ensure efficiency.</p>
+
+<p>Let&#8217;s take a look at two approaches to building a string. In the first example I&#8217;ll use the <code>+=</code> operator and perform 1000 concatenations:</p>
+
+<pre><code class="groovy">import java.text.DecimalFormat
+
+def quote = 'It was the best of times. It was the worst of times.\n'
+
+def str = &quot;&quot;
+
+def startTime = System.nanoTime()
+1000.times {
+    str += quote
+}
+def endTime = System.nanoTime()
+
+DecimalFormat formatter = new DecimalFormat(&quot;#,###&quot;)
+def duration = formatter.format(endTime - startTime)
+
+println &quot;That took $duration nano seconds&quot;
+</code></pre>
+
+<blockquote>
+<p>Timing in this manner isn&#8217;t perfect as you won&#8217;t get the same answer each time you run the script. However, you should notice a significant different between the two examples - enough to indicate that the second version is much more efficient.</p>
+</blockquote>
+
+<p>In the next example I&#8217;ll change just 1 thing: I&#8217;ll use the <code>&lt;&lt;=</code> operator rather than <code>+=</code>:</p>
+
+<pre><code class="groovy">import java.text.DecimalFormat
+
+def quote = 'It was the best of times. It was the worst of times.\n'
+
+def str = &quot;&quot;
+
+def startTime = System.nanoTime()
+1000.times {
+    str &lt;&lt;= quote
+}
+def endTime = System.nanoTime()
+
+DecimalFormat formatter = new DecimalFormat(&quot;#,###&quot;)
+def duration = formatter.format(endTime - startTime)
+
+println &quot;That took $duration nano seconds&quot;
+</code></pre>
+
+<p>When I run these scripts in groovyConsole I can see that the results are very different. When I ran each test 100 times and averaged the result I got:</p>
+
+<ul>
+<li>Example 1 (using <code>+=</code>): 24,215,520 ns</li>
+<li>Example 2 (using <code>&lt;&lt;=</code>): 191,490 ns</li>
+</ul>
+
+<p>To me this is evidence enough for me to use &#8216;&lt;&lt;=&#8217; over <code>+=</code>!</p>
+
+<h1>Templates</h1>
+
+<p>If you find yourself building strings around boilerplate text - such as a form letter - consider using Groovy&#8217;s templating system. We&#8217;ll look at templates in their own tutorial.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>See the <a href="http://www.unicode.org/charts/">Unicode Character Code Charts</a> <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/AssignmentOperatorsCompound.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/RegExOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

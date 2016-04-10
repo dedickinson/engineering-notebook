@@ -1,0 +1,36 @@
+apply plugin: 'groovy'
+apply plugin: 'application'
+apply plugin: 'eclipse'
+
+mainClassName = 'name.dickinson.duncan.book.util.Loader'
+version = '0.1.0'
+
+repositories { mavenCentral()  }
+
+dependencies {
+	compile 'org.yaml:snakeyaml:1.14'
+	compile 'org.slf4j:slf4j-api:1.7.7'
+	compile 'org.slf4j:slf4j-simple:1.7.7'
+	compile 'commons-io:commons-io:2.4'
+	compile 'org.apache.commons:commons-collections4:4.0'
+	compile 'org.apache.commons:commons-lang3:3.3.2'
+	compile 'org.codehaus.groovy:groovy-all:2.3.7'
+	compile 'commons-cli:commons-cli:1.2'
+}
+
+jar {
+	manifest {
+		attributes("Implementation-Title": "BookBuilder",
+		"Implementation-Version": version,
+		'Built-By': 'Duncan Dickinson',
+		'Built-Date': new Date(),
+		'Built-JDK': System.getProperty('java.version'),
+		'Built-Gradle': gradle.gradleVersion,
+		'Main-Class': mainClassName
+		)
+	}
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.2.1'
+}

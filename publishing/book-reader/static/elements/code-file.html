@@ -1,0 +1,26 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/core-ajax/core-ajax.html">
+<!-- You can't use 'lang' as an attribute name-->
+<polymer-element name="code-file" attributes="language file">
+    <template>
+        <core-ajax
+            auto="true"
+            url="{{file}}"
+            method="GET"
+            params=''
+            handleAs="text"
+            response="{{response}}"></core-ajax>
+        <figure class="code-snippet">
+            <content select="figcaption"></content>
+            <pre><code style="{{language}}">{{response}}</code></pre>
+        </figure>
+        <a href="{{file}}">download</a>
+    </template>
+    <script>
+        Polymer({
+            language: 'java',
+            file: '',
+            response: '',
+        });
+    </script>
+</polymer-element>

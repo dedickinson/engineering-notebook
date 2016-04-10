@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Causing an Exception</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="The `throw` keyword is used to intentionally cause an exception" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Causing an Exception</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/HowMuch.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/CatchingErrors.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>The `throw` keyword is used to intentionally cause an exception</aside>
+  <p>The <code>throw</code> statement will cause an exception to be thrown. You&#8217;ll use this inside your own code to either throw an exception type already provided by Java or Groovy or to throw an exception type that you have developed. Remembering that exceptions are classes, you can create your own subclass of <code>Exception</code> for your own project. Let&#8217;s take a small step back for now and see how we throw an exception. </p>
+
+<p>Often, <code>new</code> is used within a <code>throw</code> statement to initialise a new exception instance. The example below will <code>throw</code> a <code>new</code> instance of the <code>IllegalStateException</code>. As part of creating the new exception instance I pass it a message to help inform the user as to why they&#8217;re getting an exception:</p>
+
+<pre><code class="groovy">def numerator = 10
+def denominator = -1
+
+try {
+    if (denominator &lt; 0) {
+        throw new IllegalStateException('I haven\'t learnt how to divide negative numbers')
+    } else {
+        return numerator / denominator
+    }
+} catch (any) {
+    println &quot;${any.message} (${any.class.name})&quot;
+}
+</code></pre>
+
+<p>You can use <code>new</code> to create a new instance of an exception but this won&#8217;t cause the exception to be thrown - you&#8217;ll need to <code>throw</code> it. The long-form version of the previous example would appear as:</p>
+
+<pre><code class="groovy">def ise = new IllegalStateException('I haven\'t learnt how to divide negative numbers')
+throw ise
+</code></pre>
+
+<blockquote>
+<p>Use the short-form - it&#8217;s more concise and it&#8217;s what other developers expect to see.</p>
+</blockquote>
+
+<p>In the code above I <code>throw</code> an exception (<code>IllegalStateException</code>) to indicate a limitation in my program. As before, the <code>catch</code> will receive the thrown exception but this time it could be either the <code>IllegalStateException</code> or the <code>ArithmeticException</code>:</p>
+
+<pre><code class="groovy">def numerator = 10
+def denominator = -1
+
+try {
+    if (denominator &lt; 0) {
+        throw new IllegalStateException('I haven\'t learnt how to divide negative numbers')
+    } else {
+        return numerator / denominator
+    }
+} catch (IllegalStateException e) {
+    println 'I just caught an IllegalStateException'
+} catch (ArithmeticException e) {
+    println 'I just caught an ArithmeticException'
+} catch (any) {
+    println 'What just happened?'
+}
+</code></pre>
+
+<p>The code above makes a little more sense than my earlier example as <code>denominator</code> may be <code>0</code> or a negative number and we are concerned with both possibilities. As mentioned earlier, we can use <code>|</code> to handle more than one exception type within the same <code>catch</code> block: </p>
+
+<pre><code class="groovy">def numerator = 10
+def denominator = -1
+
+try {
+    if (denominator &lt; 0) {
+        throw new IllegalStateException('I haven\'t learnt how to divide negative numbers')
+    } else {
+        return numerator / denominator
+    }
+} catch (IllegalStateException | ArithmeticException e) {
+    println 'Stand back, I know how to handle this'
+} catch (any) {
+    println 'What just happened?'
+}
+</code></pre>
+
+<h1>Constructing an Exception</h1>
+
+<p>There are a few approaches to constructing an exception, the main ones being:</p>
+
+<dl>
+<dt><code>new IllegalStateException()</code></dt>
+<dd>Creates a new instance without a message</dd>
+
+<dt><code>new IllegalStateException('Sorry, Dave, I cannot allow this')</code></dt>
+<dd>Creates a new instance with a message</dd>
+
+<dt><code>new IllegalStateException('Sorry, Dave, I cannot allow this', e)</code></dt>
+<dd>Creates a new instance with a message and provides the exception (<code>e</code>) that caused the exception you&#8217;re now throwing.</dd>
+</dl>
+
+<p>Let&#8217;s look at an example usage of the last variation. In the following code snippet I <code>catch</code> two possible exceptions and bundle <code>e</code> into a new exception instance but pass <code>e</code> to the new instance so that the caller could determine the cause:</p>
+
+<pre><code class="groovy">catch (IllegalStateException | ArithmeticException e) {
+    throw new IllegalStateException('Unable to perform operation', e)
+} 
+</code></pre>
+
+<p>Upon having the exception thrown at me I could use the <code>getCause()</code> method to determine if there was an underlying cause.</p>
+
+<h1>Creating Your Own Exception</h1>
+
+<p>Whilst you can write your own Exceptions (they&#8217;re just objects after all), you should look to the pre-packaged ones and see if they meet your needs. Alternatively, consider if you can write a subclass that provides refinement to an existing exception rather than just extending <code>Exception</code>.</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/HowMuch.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/CatchingErrors.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Exceptions</a>
+    <ul>
+    
+      <li><a href='ThrowableFamily.html'>The Throwable Family</a></li>
+    
+      <li><a href='CommonExceptions.html'>Common Exceptions</a></li>
+    
+      <li><a href='Anatomy.html'>Anatomy of an Exception</a></li>
+    
+      <li><a href='TryCatch.html'>Try-Catch-Finally</a></li>
+    
+      <li><a href='HowMuch.html'>How Much Should We try?</a></li>
+    
+      <li><a href='Throw.html'>Causing an Exception</a></li>
+    
+      <li><a href='CatchingErrors.html'>Catching Errors</a></li>
+    
+      <li><a href='MethodsExceptions.html'>Methods and Exceptions</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

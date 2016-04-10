@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Catching Errors</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="You can catch an error but you probably shouldn't." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Catching Errors</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/Throw.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/MethodsExceptions.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>You can catch an error but you probably shouldn't.</aside>
+  <p>Before we go too far on this one please note that <strong>errors indicate serious/abnormal problems and shouldn&#8217;t be caught</strong>. </p>
+
+<p>Errors are different to exceptions as they indicate a fundamental issue rather than a recoverable problem. It&#8217;s highly unlikely you&#8217;ll ever need to handle an error so treat it like a cold and don&#8217;t try to catch one. They may &#8220;crash&#8221; your program but it&#8217;s likely any treatment that you try to apply will make things worse. For example, if somehow you managed to catch a <code>java.lang.OutOfMemoryError</code>, how would you respond?</p>
+
+<blockquote>
+<p>I was unsure if I should even include this section but feel it more useful to flag that, whilst you can handle errors, you probably shouldn&#8217;t.</p>
+</blockquote>
+
+<p>One more time: <strong>don&#8217;t catch errors</strong>.</p>
+
+<p>Errors are objects and can be caught much like exceptions but the following won&#8217;t work:</p>
+
+<pre><code class="groovy">try {
+    assert true == false
+} catch (err) {
+    println 'I caught the error!'
+    println err.message
+}
+</code></pre>
+
+<p>The code above doesn&#8217;t do what we hoped as, by default, the <code>catch</code> is looking for <code>Exception</code> or one of its subclasses<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a> - probably because we <strong>shouldn&#8217;t catch errors</strong>.</p>
+
+<p>In order to catch an error we must provide <code>Error</code> (or a subclass of <code>Error</code>) as the data type in the <code>catch</code>:</p>
+
+<pre><code class="groovy">try {
+    assert true == false
+} catch (Error err) {
+    println 'I caught the error!'
+    println err.message
+}
+</code></pre>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>This is why, when we write our own exception we extend <code>Exception</code> rather than implement <code>Throwable</code>. <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/Throw.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/MethodsExceptions.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Exceptions</a>
+    <ul>
+    
+      <li><a href='ThrowableFamily.html'>The Throwable Family</a></li>
+    
+      <li><a href='CommonExceptions.html'>Common Exceptions</a></li>
+    
+      <li><a href='Anatomy.html'>Anatomy of an Exception</a></li>
+    
+      <li><a href='TryCatch.html'>Try-Catch-Finally</a></li>
+    
+      <li><a href='HowMuch.html'>How Much Should We try?</a></li>
+    
+      <li><a href='Throw.html'>Causing an Exception</a></li>
+    
+      <li><a href='CatchingErrors.html'>Catching Errors</a></li>
+    
+      <li><a href='MethodsExceptions.html'>Methods and Exceptions</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

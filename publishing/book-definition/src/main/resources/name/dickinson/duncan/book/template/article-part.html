@@ -1,0 +1,40 @@
+<%
+def next = ''
+def previous = ''
+if (nextLink) {
+  next = "<a href='${nextLink}'>Next &raquo;</a>"
+}
+if (previousLink) {
+  previous = "<a href='${previousLink}'>&laquo; Previous</a>"
+}
+%>
+<article>
+  <header>
+    <h1 itemprop="headline">${section.title}</h1>
+    <nav class='part-nav'>
+      ${previous}&nbsp;&bull;&nbsp;${next}
+    </nav>
+  </header>
+  <div class='article-content'>
+    <aside>${section?.description}</aside>
+    <% print body.getText() %>
+    <nav class='part-nav-toc'>
+      <header>
+        <h1>In this tutorial:</h1>
+      </header>
+      <dl>
+        <% for (chapter in section.chapters) { %>
+        <dt>
+          <a href='${chapter.htmlFile}'>${chapter.title}</a>
+        </dt>
+        <dd>${chapter.description}</dd>
+        <% } %>
+      </dl>
+    </nav>
+  </div>
+  <footer>
+    <nav class='part-nav'>
+      ${previous}&nbsp;&bull;&nbsp;${next}
+    </nav>
+  </footer>
+</article>

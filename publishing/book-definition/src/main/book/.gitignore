@@ -1,0 +1,13 @@
+out/
+node_modules/
+.idea
+.project
+.settings
+.gradle
+.classpath
+bak/
+/build/
+/bin/
+/.nb-gradle/private/
+.nb-gradle
+output

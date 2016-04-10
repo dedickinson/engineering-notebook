@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Objects</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Groovy is an object-oriented programming language and it's essential to understand what this means if you're to really get to grips with coding in Groovy." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Objects</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/Variables.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/Booleans.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Groovy is an object-oriented programming language and it's essential to understand what this means if you're to really get to grips with coding in Groovy.</aside>
+  <p>But what is an object? Well, an object is an encapsulation of properties and methods:</p>
+
+<ul>
+<li><strong>Properties</strong> are variables that hold data about the object
+
+<ul>
+<li>For example, a person object may have properties such as:
+
+<ul>
+<li><code>name</code></li>
+<li><code>email</code></li>
+</ul></li>
+<li>Properties are sometimes referred to as <em>fields</em>.</li>
+</ul></li>
+<li><strong>Methods</strong> are a means for accessing and manipulating the object&#8217;s properties
+
+<ul>
+<li>For example a person object may have methods such as:
+
+<ul>
+<li><code>getName()</code></li>
+<li><code>setName(name)</code></li>
+</ul></li>
+<li>Methods can take parameters and/or return values. For example:
+
+<ul>
+<li><code>getName()</code> would return the person&#8217;s name</li>
+<li><code>setName(name)</code> takes 1 parameter (<code>name</code>) and sets the person&#8217;s name to that value</li>
+</ul></li>
+<li>Methods are sometimes called <em>functions</em></li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>We&#8217;ll cover a lot more on Objects in a later tutorial as they&#8217;re so central to Groovy. For now, this overview should help you get an understanding of how objects are used.</p>
+</blockquote>
+
+<h1>Declaring and using an object</h1>
+
+<p>Let&#8217;s look at a Groovy script that declares a new object:</p>
+
+<pre><code class="groovy">class Person {
+    def name
+    def email
+    
+    def getName() {
+        return this.name
+    }
+    
+    def setName(name) {
+        this.name = name
+    }
+    
+    def getEmail() {
+        return this.email
+    }
+    
+    def setEmail(email) {
+        this.email = email
+    }
+}
+
+// Create a new variable to hold an instance of the Person class
+def david = new Person(name: 'David', email: 'david@example.com')
+
+// Change David's email address:
+david.setEmail('dave@example.com')
+
+// Print out David's information
+println david.getName()
+println david.getEmail()
+</code></pre>
+
+<p>An object is defined using the <code>class</code> keyword and it&#8217;s best practice to using an uppercase letter for the first character:</p>
+
+<pre><code class="groovy">class Person {
+</code></pre>
+
+<blockquote>
+<p>You&#8217;ll note the <code>{</code> in the code. This is called a curly bracket (or brace) and is used to denote a block of code. Each <code>{</code> has a partner <code>}</code> and are called the opening and closing brackets respectively. The opening bracket after <code>class Person</code> tells Groovy that all of the code up to the closing bracket relates to our definition of the Person class. </p>
+</blockquote>
+
+<p>We declare the two properties in much the same way as we do for any variable:</p>
+
+<pre><code class="groovy">def name
+def email
+</code></pre>
+
+<p>A number of methods are declared to let us set and retrieve (get) the values of the object&#8217;s properties:</p>
+
+<pre><code class="groovy">def getName() {
+    return this.name
+}
+
+def setName(name) {
+    this.name = name
+}
+
+def getEmail() {
+    return this.email
+}
+
+def setEmail(email) {
+    this.email = email
+}
+</code></pre>
+
+<blockquote>
+<p>Again you&#8217;ll note the opening and closing brackets for each method, telling Groovy where the method definition opens and closes. As these are <em>nested</em> within the brackets for the <code>class</code> we know the methods belong to the <code>class</code></p>
+</blockquote>
+
+<p>After we&#8217;ve declared the <code>Person</code> class we can now create instances of the class and assign values to the properties:</p>
+
+<pre><code class="groovy">def david = new Person(name: 'David', email: 'david@example.com')
+</code></pre>
+
+<p>We use <code>def david</code> as we would for other variables and then use <code>new Person</code> to indicated that <code>david</code> will hold an instance of the <code>Person</code> class. Lastly we call a special method called a <em>constructor</em> that Groovy provides us for our objects: <code>(name: 'David', email: 'david@example.com')</code>. This sets up <code>david</code> with starting values for the properties.</p>
+
+<blockquote>
+<p>Constructors are basically methods but use the class name for the method name. They&#8217;re also only called when you create a new instance.</p>
+</blockquote>
+
+<p>At some point David changes his email address so we call the <code>setEmail</code> method: <code>david.setEmail('dave@example.com')</code>. You can see that the method call uses dot-point notation of <code>&lt;variable name&gt;.&lt;method name&gt;</code> - the dot (<code>.</code>) separates the variable name (<code>david</code>) from the method (<code>setEmail</code>).</p>
+
+<p>Lastly, we use the two <code>get</code> methods to display <code>david</code>&#8217;s information: </p>
+
+<pre><code class="groovy">println david.getName()
+println david.getEmail()
+</code></pre>
+
+<p>The example <code>Person</code> class has demonstrated a number of Groovy&#8217;s object-oriented programming syntax:</p>
+
+<ol>
+<li>Creating a new class with properties and methods</li>
+<li>Creating a new instance of the class and calling its constructor</li>
+<li>Changing (setting) and retrieving (getting) the instance&#8217;s properties</li>
+</ol>
+
+<p>You can create lots of <code>Person</code> instances and each will exist in their own context. This means that <code>david</code> and <code>sarah</code> don&#8217;t get mixed up:</p>
+
+<pre><code class="groovy">def david = new Person(name: 'David', email: 'david@example.com')
+def sarah = new Person(name: 'Sarah', email: 'sarah@example.com')
+</code></pre>
+
+<h1>Useful Methods</h1>
+
+<p>In the Groovy/Java family tree, <code>java.lang.Object</code> is the grand-daddy of all classes. Using a system called &#8220;inheritance&#8221;, each new class inherits attributes such as methods and properties from their forebears. Even the <code>Person</code> class I described above inherits from <code>java.lang.Object</code> and the Groovy developers been enhanced that class further! This means that all classes have built-in features that we can access. Let&#8217;s look at a few of them.</p>
+
+<h2><code>class</code></h2>
+
+<p>The <code>class</code> property is used to access the Class that defines the object. This can be really useful when we want to check what sort of object we&#8217;re dealing with.</p>
+
+<pre><code class="groovy">class Person {
+    def name
+    def email
+}
+
+def david = new Person(name: 'David', email: 'david@example.com')
+
+println david.class.name
+</code></pre>
+
+<h2><code>dump()</code></h2>
+
+<p>This will return a String that describes the object instance&#8217;s internals. Try out the following code to see what gets dumped:</p>
+
+<pre><code class="groovy">class Person {
+    def name
+    def email
+}
+
+def david = new Person(name: 'David', email: 'david@example.com')
+
+println david.dump()
+</code></pre>
+
+<h2><code>with()</code></h2>
+
+<p>This method works with closures (we&#8217;ll cover them later) to give us an easy format for accessing a object&#8217;s properties in methods. In the example below I wrap some code using <code>with</code> and don&#8217;t have to use <code>david.name</code> and <code>david.email</code> to access those properties:</p>
+
+<pre><code class="groovy">david.with {
+    println name
+    println email 
+}
+</code></pre>
+
+<h1>Existing classes</h1>
+
+<p>The great strength/benefit/bonus of object-oriented programming is the vast array of existing libraries of objects that you can reuse in your code. In Groovy and Java the listing of these available objects are referred to as the Application Programming Interface (API). </p>
+
+<p>If we were going to create a variable to hold a string (a piece of text) we would do something like:</p>
+
+<pre><code class="groovy">def quote = 'Well may we say &quot;God save the Queen&quot;, because nothing will save the Governor-General!'
+</code></pre>
+
+<p>We could also use the following code to do exactly the same thing as the code above:</p>
+
+<pre><code class="groovy">def quote = new String('Well may we say &quot;God save the Queen&quot;, because nothing will save the Governor-General!')
+</code></pre>
+
+<p>This looks similar to the way we created an instance of the <code>Person</code> class - we create a new instance of <code>String</code> and pass the text into the constructor.</p>
+
+<blockquote>
+<p>I prefer the first version as it&#8217;s a lot easier to read but the example provided here lets you see that under Groovy&#8217;s hood there&#8217;s some helpful stuff going on to make your life easier.</p>
+</blockquote>
+
+<p>Now that we have our <code>quote</code> string we actually also get a number of methods that help us handle our variable:</p>
+
+<pre><code class="groovy">//Display the quote in upper case letters
+println quote.toUpperCase()
+
+//Display the quote backwards
+println quote.reverse()
+
+//Display the number of characters in the quote
+println quote.size()
+</code></pre>
+
+<p>The example above demonstrates how we can call methods on an object instance and you&#8217;ll see this used in the rest of the tutorials. Be sure to try out the code above to see what it does!</p>
+
+<h1>Classes and literal values</h1>
+
+<p>Literal values are best thought of the value you would write down:</p>
+
+<ul>
+<li>Boolean:
+
+<ul>
+<li>true</li>
+<li>false</li>
+</ul></li>
+<li>Numbers:
+
+<ul>
+<li>42</li>
+<li>3.14</li>
+</ul></li>
+<li>Strings (text):
+
+<ul>
+<li>&#8216;hi there&#8217;</li>
+</ul></li>
+</ul>
+
+<blockquote>
+<p>We use single- or double-quotes for string literals otherwise Groovy thinks the text is actually code and tries to interpret it.</p>
+</blockquote>
+
+<p>We can call methods directly on literal values as Groovy will create an appropriate object instance for us:</p>
+
+<pre><code class="groovy">assert 1.plus(1) == 2
+</code></pre>
+
+<p>This definitely looks a bit odd but think of it this way:</p>
+
+<ol>
+<li>Groovy sees the literal value <code>1</code> followed by a method call</li>
+<li>Groovy creates a number object instance for <code>1</code></li>
+<li>Groovy then calls the <code>plus</code> method against the new number instance</li>
+</ol>
+
+<blockquote>
+<p><code>1.plus(1)</code> also looks odd because we&#8217;re used to seeing <code>1 + 1</code>. Both formats are supported but the latter is easier to read.</p>
+</blockquote>
+
+<p>This can start to be very useful when you look at lists and ranges - something we&#8217;ll get to soon. </p>
+
+<p>Lastly, as the literal is put into an object we can access methods and properties for the object. In the example below I can see what data type Groovy is actually using when I use 3.14:</p>
+
+<pre><code class="groovy">println 3.14.class.name
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/02_VariablesDataTypes/Variables.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/02_VariablesDataTypes/Booleans.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Variables</a>
+    <ul>
+    
+      <li><a href='Variables.html'>Declaring Variables</a></li>
+    
+      <li><a href='Objects.html'>Objects</a></li>
+    
+      <li><a href='Booleans.html'>Booleans</a></li>
+    
+      <li><a href='Numbers.html'>Numbers</a></li>
+    
+      <li><a href='Strings.html'>Strings</a></li>
+    
+      <li><a href='Collections.html'>Collections</a></li>
+    
+      <li><a href='Arrays.html'>Arrays</a></li>
+    
+      <li><a href='Ranges.html'>Ranges</a></li>
+    
+      <li><a href='RegularExpressions.html'>Regular Expressions</a></li>
+    
+      <li><a href='DataTypes.html'>Data types</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

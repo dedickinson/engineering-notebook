@@ -1,0 +1,13 @@
+<nav class='article-nav'>
+  <header>
+  <% if (title) { %>
+  <h1>$title</h1>
+  <% } %>
+  </header>
+  <ul>
+    <li><a href='index.html'>Home</a></li>
+    <% for (item in toc) { %>
+      <li><a href='${item.href}'>${item.title}</a></li>
+    <% } %>
+  </ul>
+</nav>

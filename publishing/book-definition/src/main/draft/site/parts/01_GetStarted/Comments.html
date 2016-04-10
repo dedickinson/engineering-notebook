@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Comments</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Comments are used to clarify sections of Groovy code. Groovy supports two types of comments - single line and multi-line." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Comments</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/HelloWorld.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/Statements.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Comments are used to clarify sections of Groovy code. Groovy supports two types of comments - single line and multi-line.</aside>
+  <p>Comments are read by the Groovy compiler - they&#8217;re purely used to help humans follow your code. They&#8217;re really important once your code becomes more complex and your programs larger. Key places you&#8217;ll see/use comments are:</p>
+
+<ol>
+<li>When a complex algorithm is being used</li>
+<li>When specific business logic is being implemented</li>
+<li>For documenting interfaces that other coders will use</li>
+<li>To remind you why you chose one approach over another - really handy when you revisit the code in 6-weeks and say &#8220;why did I do it that way?&#8221;.</li>
+</ol>
+
+<h1>Single-line comments</h1>
+
+<p>A single-line comment is introduced with two forward slash characters <code>//</code>:</p>
+
+<pre><code class="groovy">//This is a single-line comment
+println &quot;hello, world&quot;
+</code></pre>
+
+<p>Single-line comments can be appended to a Groovy statement:</p>
+
+<pre><code>def radius = 10
+def pi = 3.14 //This is not very precise
+def area = pi * (radius * radius)
+</code></pre>
+
+<h1>Multi-line comments</h1>
+
+<p>A multi-line comment is introduced by the characters <code>/*</code> and terminated with the characters <code>*/</code>. Generally, the <code>/*</code> and <code>*/</code> appear on their own line:</p>
+
+<pre><code class="groovy">/*
+This is a multiline comment
+and here is the second line
+*/
+</code></pre>
+
+<p>Multi-line comments are most commonly formatted with an asterisk (<code>*</code>) on each line, aligned with the introductory asterisk as follows:</p>
+
+<pre><code class="groovy">/*
+ * This is a multiline comment
+ * and here is the second line
+ */
+</code></pre>
+
+<p>Multi-line comments can be introduced and terminated on a single line:</p>
+
+<pre><code class="groovy">/* This is a multiline comment on a single line */
+</code></pre>
+
+<p>Nesting within a multi-line comment is not possible, rendering the following code invalid:</p>
+
+<pre><code class="groovy">/*
+ * Multi-line comments cannot 
+ * /* be nested */
+ */
+</code></pre>
+
+<h1>Usage to avoid</h1>
+
+<p>In a similar vein to single-line comments, multi-line comments can be appended to a statement. However, the single-line comment is generally more readable than the following example:</p>
+
+<pre><code class="groovy">def radius = 10
+def pi = 3.14 /* This is not very precise */
+def area = pi * (radius * radius)
+</code></pre>
+
+<p>Even less expected is a multi-line comment appended to a statement in the following manner:</p>
+
+<pre><code class="groovy">def radius = 10
+def pi = 3.14 /* This is not very precise
+                and should really use java.lang.Math.PI */
+def area = pi * (radius * radius)
+</code></pre>
+
+<p>In such a case the multi-line comment should appear above the statement being discussed:</p>
+
+<pre><code class="groovy">def radius = 10
+/*
+ * This is not very precise
+ * and should really use java.lang.Math.PI
+*/
+def pi = 3.14 
+def area = pi * (radius * radius)    
+</code></pre>
+
+<p>Use of a comment within a statement should never be contemplated as it results in code that is hard to read:</p>
+
+<pre><code class="groovy">    def radius = 10
+    def pi = 3.14
+    def area = pi * /* I should find out how to square */ (radius * radius)
+</code></pre>
+
+<h1>Groovydoc</h1>
+
+<p>Java provides a very handy tool for documenting the outward-facing aspects of your code - i.e. those items that others may reuse - it&#8217;s called javadoc<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a>. Groovy has its own version called <code>groovydoc</code>. Essentially this is the same tool as <code>javadoc</code> but is run over groovy code. I won&#8217;t go into <code>groovydoc</code> now - it&#8217;ll come up when we explore object-oriented programming.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>See the <a href="http://docs.oracle.com/javase/1.5.0/docs/tooldocs/windows/javadoc.html">Javadoc guide</a> <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/01_GetStarted/HelloWorld.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/01_GetStarted/Statements.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Getting started</a>
+    <ul>
+    
+      <li><a href='Installing.html'>Installing Groovy</a></li>
+    
+      <li><a href='HelloWorld.html'>Your first lines of Groovy</a></li>
+    
+      <li><a href='Comments.html'>Comments</a></li>
+    
+      <li><a href='Statements.html'>Statements</a></li>
+    
+      <li><a href='Assert.html'>The `assert` statement</a></li>
+    
+      <li><a href='ReservedWords.html'>Reserved Words</a></li>
+    
+      <li><a href='PackagesLibraries.html'>Packages</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

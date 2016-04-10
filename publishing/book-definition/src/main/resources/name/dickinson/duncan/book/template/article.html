@@ -1,0 +1,29 @@
+<%
+def next = ''
+def previous = ''
+if (nextLink) {
+  next = "<a href='${nextLink}' rel=next>Next &raquo;</a>"
+}
+if (previousLink) {
+  previous = "<a href='${previousLink}' rel=prev>&laquo; Previous</a>"
+}
+%>
+<article>
+  <header>
+    <h1 itemprop="headline">${section.title}</h1>
+    <nav class='part-nav'>
+        ${previous}&nbsp;&bull;&nbsp;${next}
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>${section?.description}</aside>
+  <% 
+    print body.getText()
+  %>
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        ${previous}&nbsp;&bull;&nbsp;${next}
+    </nav>
+  </footer>
+</article>

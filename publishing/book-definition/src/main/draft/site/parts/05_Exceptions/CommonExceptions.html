@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Common Exceptions</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Take a look at some exceptions you're likely to see through the day." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Common Exceptions</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/ThrowableFamily.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/Anatomy.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Take a look at some exceptions you're likely to see through the day.</aside>
+  <p>In the following sections we&#8217;ll thrown some errors and exceptions (on purpose) so that we can check out some of the most common children of <code>java.lang.Throwable</code> you&#8217;re likely to see. As a bonus we&#8217;ll also discover a few approaches to avoiding them.</p>
+
+<h1>java.lang.NullPointerException</h1>
+
+<p>The good old <code>NullPointerException</code> (NPE) will haunt your debugging sessions for years to come. Basically it means that you&#8217;ve tried to call a method or access a property on an object that isn&#8217;t there (i.e. the variable is <code>null</code>). Let&#8217;s cause an NPE - it&#8217;s easy:</p>
+
+<pre><code class="groovy">def tmp = null
+tmp.class
+</code></pre>
+
+<p>To avoid these, check for <code>null</code> by:</p>
+
+<ul>
+<li>Using the Safe Navigation operator (<code>tmp?.class</code>)</li>
+<li>Checking the variable with an <code>if</code> statement before trying to access it</li>
+</ul>
+
+<h1>java.lang.AssertionError</h1>
+
+<p>This is an <code>Error</code>, not an <code>Exception</code> and occurs when your <code>assert</code> expression evaluates to <code>false</code>:</p>
+
+<pre><code class="groovy">assert true == false : 'This cannot be'
+</code></pre>
+
+<blockquote>
+<p><code>: 'This cannot be'</code> sets the error message for a failed assertion</p>
+</blockquote>
+
+<p>When your Groovy assertions fail you actually seem to receive a <code>org.codehaus.groovy.runtime.powerassert.PowerAssertionError</code> - a subclass of <code>java.lang.AssertionError</code>.</p>
+
+<p>The <code>assert</code> statement is usually seen in tests and small scripts. It&#8217;s usually better to signal an incorrect state/situation using <code>throws</code> - more about them in a later chapter.</p>
+
+<h1>java.lang.NumberFormatException</h1>
+
+<p>Groovy can be used as a dynamic language so there are times where you may try to do something to a value that just can&#8217;t be done. Trying to convince something that it can be a number when it really can&#8217;t be will give you a <code>NumberFormatException</code>:</p>
+
+<pre><code class="groovy">'Kitten' as Integer
+</code></pre>
+
+<p>If you really need a variable to be a specific type you could use the class check feature of the <code>switch</code> statement. In the code below I check if <code>value</code> is of a type within the <code>Number</code> family tree before I try to convert it to an <code>Integer</code>. If it isn&#8217;t, I could <code>throw</code> and exception or handle it in some other way:</p>
+
+<pre><code class="groovy">def value = 'kitten'
+
+switch (value) {
+    case Number:
+        value = value as Integer
+        break;
+    default:
+        println 'I should throw an exception'
+}
+</code></pre>
+
+<h1>groovy.lang.MissingPropertyException</h1>
+
+<p>This exception happens when you try to access an object&#8217;s property but it doesn&#8217;t have that property. In the example below, my <code>Person</code> class doesn&#8217;t have a <code>name</code> property:</p>
+
+<pre><code class="groovy">class Person {}
+def jim = new Person()
+jim.name
+</code></pre>
+
+<p>Using <code>try-catch</code> around this sort of exception can let you <a href="https://en.wikipedia.org/wiki/Duck_typing">duck type</a> - an approach that uses an object&#8217;s properties and methods to determine if something is possible. </p>
+
+<p>I reckon that the <code>hasProperty()</code> method available on all Groovy objects is a cleaner approach than the <code>try-catch</code> option. We can check the object has the property before trying to use it and without causing an exception:</p>
+
+<pre><code class="groovy">class Person {}
+def jim = new Person()
+
+if (jim.hasProperty('name')) {
+    jim.name
+}
+</code></pre>
+
+<h1>groovy.lang.MissingMethodException</h1>
+
+<p>This exception appears when you call a method on an object that doesn&#8217;t support the method. The lack of a <code>getName()</code> method on the <code>Person</code> class will cause an exception for poor old <code>jim</code>:</p>
+
+<pre><code class="groovy">class Person {}
+def jim = new Person()
+jim.getName()
+</code></pre>
+
+<p>There&#8217;s no <code>hasMethod()</code> method - it&#8217;s called <code>respondsTo()</code>:</p>
+
+<pre><code>class Person {}
+def jim = new Person()
+
+if (jim.respondsTo('getName')) {
+    jim.getName()
+}
+</code></pre>
+
+<p>The <code>respondsTo()</code> method just checks if the method exists but we may want to be certain that the methods exists <em>and</em> has the parameter list we&#8217;re after. To achieve this we need to call <code>respondsTo()</code> with a second parameter, a list of the method argument types we expect - <code>respondsTo(String name, Object[] argTypes)</code>.</p>
+
+<h1>java.lang.IndexOutOfBoundsException</h1>
+
+<p>These appear when you attempt to <code>get()</code> an index from a list that isn&#8217;t there. The code below attempts to get the 5th element from a 3-element list:</p>
+
+<pre><code class="groovy">def list = [0, 1, 2]
+println list.get(5)
+</code></pre>
+
+<p>Note that if we&#8217;d written that code in a slightly different way, we&#8217;d get <code>null</code> returned rather than an exception raised:</p>
+
+<pre><code class="groovy">def list = [0, 1, 2]
+println list[5]
+</code></pre>
+
+<p>Checking <code>list.size()</code> (or the <code>length</code> property) before trying to access is another option:</p>
+
+<pre><code class="groovy">def list = [0, 1, 2]
+
+if (list.size() &gt;= 5) {
+    println list.get(5)
+}
+</code></pre>
+
+<p>Of course the <code>for-in</code> loop will iterate through the list and not try to give you an element that isn&#8217;t there. </p>
+
+<blockquote>
+<p>The same can&#8217;t be said for the C-style <code>for</code> loop or <code>while</code></p>
+</blockquote>
+
+<pre><code class="groovy">def list = [0, 1, 2]
+
+for (item in list) {
+    println item
+}
+</code></pre>
+
+<h2>java.lang.ArrayIndexOutOfBoundsException</h2>
+
+<p>If you just had to use an array (instead of a list) then you&#8217;ll get an <code>ArrayIndexOutOfBoundsException</code> if you attempt to use an array index that isn&#8217;t there:</p>
+
+<pre><code class="groovy">Integer[] nums = [0, 1, 2]
+nums[5]
+</code></pre>
+
+<p>We can use the <code>length</code> property to make sure we don&#8217;t try to access an element that isn&#8217;t there:</p>
+
+<pre><code class="groovy">Integer[] nums = [0, 1, 2]
+
+if (nums.length &gt;= 5) {
+    nums[5]
+}
+</code></pre>
+
+<p>The <code>for-in</code> loop is also handy for staying within the bounds:</p>
+
+<pre><code class="groovy">Integer[] nums = [0, 1, 2]
+
+for (item in nums) {
+    println item
+}
+</code></pre>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/05_Exceptions/ThrowableFamily.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/05_Exceptions/Anatomy.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Exceptions</a>
+    <ul>
+    
+      <li><a href='ThrowableFamily.html'>The Throwable Family</a></li>
+    
+      <li><a href='CommonExceptions.html'>Common Exceptions</a></li>
+    
+      <li><a href='Anatomy.html'>Anatomy of an Exception</a></li>
+    
+      <li><a href='TryCatch.html'>Try-Catch-Finally</a></li>
+    
+      <li><a href='HowMuch.html'>How Much Should We try?</a></li>
+    
+      <li><a href='Throw.html'>Causing an Exception</a></li>
+    
+      <li><a href='CatchingErrors.html'>Catching Errors</a></li>
+    
+      <li><a href='MethodsExceptions.html'>Methods and Exceptions</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

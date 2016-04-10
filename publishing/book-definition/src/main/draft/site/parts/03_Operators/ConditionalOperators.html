@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Conditional Operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="These help you lay out your logic." />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Conditional Operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/IncrementDecrementOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/BitwiseOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>These help you lay out your logic.</aside>
+  <p>You&#8217;ll most often see Conditional-and (<code>&amp;&amp;</code>) and Conditional-or (<code>||</code>) used in conditional statements such as <code>if</code>. We also use them in expressions such as <code>assert</code> to determine if a statement is <code>true</code> or <code>false</code>.</p>
+
+<p>The Conditional Operator (<code>?:</code>) is a short-form variant of the <code>if-else</code> statement that really helps with code readability. It&#8217;s also referred to as the &#8220;elvis&#8221; operator and the &#8220;ternary&#8221; operator.</p>
+
+<table>
+<caption id="table:theconditionaloperators">Table: The conditional operators</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;"><code>&amp;&amp;</code></td>
+	<td style="text-align:left;">Conditional-and</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>||</code></td>
+	<td style="text-align:left;">Conditional-or</td>
+</tr>
+<tr>
+	<td style="text-align:center;"><code>?:</code></td>
+	<td style="text-align:left;">Conditional operator</td>
+</tr>
+</tbody>
+</table>
+
+<h1>What Is Truth?</h1>
+
+<p>All of the following statements resolve as <code>true</code> and the assertions all pass:</p>
+
+<pre><code class="groovy">assert 1
+assert true
+assert 'Hello'
+</code></pre>
+
+<p>Obviously <code>false</code> is false but so is <code>0</code>, <code>''</code> (empty string) and <code>null</code>. </p>
+
+<p>The complement operator (<code>!</code>) can be used to negate an expression, allowing the following assertions to pass:</p>
+
+<pre><code class="groovy">assert !false
+assert !0
+assert !''
+assert !null
+</code></pre>
+
+<h1>Evaluation</h1>
+
+<p>Conditional operators are evaluated left-to-right. The assertion in the following code passes as the result of <code>true &amp;&amp; false</code> is <code>false</code> but is then or&#8217;d with <code>true</code>, resulting in <code>true</code>:</p>
+
+<pre><code class="groovy">assert true &amp;&amp; false || true
+</code></pre>
+
+<h1>Conditional-And</h1>
+
+<p>Conditional-and uses the boolean AND to determine if a statement is <code>true</code> or <code>false</code>. In order to be <code>true</code>, both the left-hand and right-hand operands must evaluate to true, as described in the truth table below:</p>
+
+<table>
+<caption id="table:andtruthtable">Table: AND Truth Table</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">LHS</th>
+	<th style="text-align:center;">RHS</th>
+	<th style="text-align:center;">Result</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>In a conditional-and statement, both expressions are always evaluated. In the example below, <code>++counter</code> is evaluated (giving counter now equal to 1) before the conditional is assessed:</p>
+
+<pre><code class="groovy">def counter = 0
+def result = true &amp;&amp; ++counter
+
+assert result == true
+assert counter == 1
+</code></pre>
+
+<h1>Conditional-Or</h1>
+
+<p>Conditional-or uses the boolean OR to determine if a statement is <code>true</code> or <code>false</code>. In order to be <code>true</code>, either the left-hand or right-hand operands must evaluate to true, as described in the truth table below:</p>
+
+<table>
+<caption id="table:ortruthtable">Table: OR Truth Table</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">LHS</th>
+	<th style="text-align:center;">RHS</th>
+	<th style="text-align:center;">Result</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">0</td>
+</tr>
+<tr>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+</tr>
+<tr>
+	<td style="text-align:center;">0</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+<tr>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">1</td>
+	<td style="text-align:center;">1</td>
+</tr>
+</tbody>
+</table>
+
+<p>In a conditional-or statement, each expression is evaluated in left-to-right order until either an expression resolves to <code>true</code> or no expressions are left (resulting in <code>false</code> overall). Once an expression is evaluated to <code>true</code> no further evaluation of the conditional is performed. This is important to keep in mind if you have an expression performing an operation that you later rely on as it may never be evaluated. In the example below I demonstrate a similar block of code used in the conditional-and section but I&#8217;ll use a conditional-or. The final assertion (<code>assert counter == 1</code>) will fail as <code>++counter</code> is never evaluated:</p>
+
+<pre><code class="groovy">def counter = 0
+def result = true || ++counter
+
+assert result == true
+assert counter == 1
+</code></pre>
+
+<h1>Conditional Operator</h1>
+
+<p>The conditional operator (<code>?:</code>) is most commonly used when assigning a value to a variable. A conditional expression is used for the first operand and placed to the left of the question-mark. If this resolves to <code>true</code> then the second operand is evaluated, otherwise the third operator is evaluated. This sounds a little confusing so let&#8217;s look at an example:</p>
+
+<pre><code class="groovy">def salary = 100000
+
+def taxBracket = salary &lt; 75000 ? 'Bracket 1': 'Bracket 2'
+
+assert taxBracket == 'Bracket 2'
+</code></pre>
+
+<p>In the code above the relational expression (<code>salary &lt; 75000</code>) is evaluated and, in this case, resolves to <code>false</code> and the third operand (<code>Bracket 2</code>) is evaluated and assigned to <code>taxBracket</code>. As the operand is just a string there&#8217;s no real evaluation but we can use any expression that will return a result. </p>
+
+<p>The code below will calculate income tax based on the person&#8217;s income:</p>
+
+<pre><code class="groovy">def salary = 100000
+
+def tax = salary &lt; 75000 ? salary * 0.1: salary * 0.2
+
+assert tax == 20000
+</code></pre>
+
+<blockquote>
+<p>Note that only one of the second <em>or</em> third operands are evaluated. For example, if the conditional resolves to <code>true</code> the third operand will not be evaluated.</p>
+</blockquote>
+
+<p>A major benefit of the conditional operator is readability. Consider the previous code being re-written using an <code>if</code> statement and I trust you&#8217;ll see that <code>?:</code> makes for more compact and readable code:</p>
+
+<pre><code class="groovy">def salary = 100000
+def tax = 0
+
+if (salary &lt; 75000) { 
+    tax = salary * 0.1
+} else {
+    tax = salary * 0.2
+}
+
+assert tax == 20000
+</code></pre>
+
+<h2>Default values</h2>
+
+<p>The conditional operator is also really useful for default values - these are used when you want to make sure a variable always has a value. In the code below the <code>Person</code> class has been prepared to ensure that any instance that has not been explicitly given a value for the <code>name</code> property is assigned <code>Anonymous</code> as the name:</p>
+
+<pre><code class="groovy">class Person {
+    def name
+    
+    def Person(name = '') {
+        setName(name)
+    }
+    
+    def setName(name) {
+        this.name = name ?: 'Anonymous'
+    }
+}
+
+def jim = new Person()
+println jim.name
+</code></pre>
+
+<p>Instead of writing <code>this.name = name ? name: 'Anonymous'</code> you&#8217;ll notice that I didn&#8217;t provide a second operand. This is another bonus for the ternary operator - if the conditional resolves to <code>true</code> and no second operand is provided, the result of the conditional is returned. This is a boring way to say that in <code>this.name = name ?: 'Anonymous'</code> if <code>name</code> is not false then it is assigned to <code>this.name</code>.</p>
+
+<blockquote>
+<p>It&#8217;s usually best to use constants for default values - that way you can easily test a value in other sections of your code.</p>
+</blockquote>
+
+<h2>Avoiding NPEs</h2>
+
+<p>NPEs (Null-Pointer Expressions) are the bane of Java and Groovy programmers. You&#8217;ll see a lot of code checking for <code>null</code> and this reduces readability. This is usually in the form <code>if (myObj != null) {...}</code> or using the conditional operator <code>(myObj != null) ? ... : ...</code>.</p>
+
+<p>As <code>null</code> evaluates to <code>false</code> in Groovy, the conditional operator provides a compact means by which to check if an object is <code>null</code> before trying to access the object:</p>
+
+<pre><code class="groovy">def myObj = null
+def dump =  myObj ? myObj.dump() : ''
+</code></pre>
+
+<p>In the example above I test <code>myObj</code> and, if it isn&#8217;t <code>null</code> then <code>dump</code> is given the value returned by <code>myObj.dump()</code>. Otherwise an empty string (<code>''</code>) is returned.</p>
+
+<p>As an alternative, the safe-navigation operator (<code>?.</code>) can be used to test for <code>null</code> prior to attempting access on the object:</p>
+
+<pre><code class="groovy">def myObj = null
+def dump = myObj?.dump()
+</code></pre>
+
+<p>The safe navigation operator is discussed further under Object Operators.</p>
+
+<h3>In Java</h3>
+
+<p>In the code below I&#8217;ve provided a small example of checking for <code>null</code> in Java. You&#8217;ll note that we need to be explicit on our conditional (<code>(t == null)</code>):</p>
+
+<pre><code class="java">public class NullTest {
+    public static void main(String[] args) {
+        NullTest t = null;
+
+        String output = (t == null) ? &quot;Null&quot; : &quot;Not null&quot;;
+        
+        System.out.println(output);
+    }
+}
+</code></pre>
+
+<p>To prove that I&#8217;m not just bloating my code to prove a point, here&#8217;s a slightly more compact version of the example:</p>
+
+<pre><code class="java">public class NullTest {
+    public static void main(String[] args) {
+        NullTest t = null;
+        System.out.println(t==null ? &quot;Null&quot; : &quot;Not null&quot;);
+    }
+}
+</code></pre>
+
+<p>You&#8217;ll note that I didn&#8217;t bother with the <code>output</code> variable and dropped the parentheses (they&#8217;re not required). The code is reasonably compact but rewritten in Groovy it gets even tidier:</p>
+
+<pre><code class="groovy">class NullTest {
+    static main(args) {
+        def t = null
+        println(t ? 'Null' : 'Not null')
+    }
+}
+</code></pre>
+
+<p>You still need to check for <code>null</code> in Groovy but the shortened conditional operator and the safe navigation operator really do help cut down on the boiler-plate stuff.</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/IncrementDecrementOperators.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/BitwiseOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

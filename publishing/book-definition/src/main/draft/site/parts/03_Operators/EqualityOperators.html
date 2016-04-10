@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Equality Operators</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="Used to determine if two things match" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Equality Operators</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/ComplementOperator.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/ArithmeticOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>Used to determine if two things match</aside>
+  <p>The equality operators return a boolean (<code>true</code> or <code>false</code>) result from a comparison. </p>
+
+<table>
+<caption id="table:theequalityoperators">Table: The equality operators</caption>
+<colgroup>
+<col style="text-align:center;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:center;">Operator</th>
+	<th style="text-align:left;">Name</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:center;">==</td>
+	<td style="text-align:left;">Equal to</td>
+</tr>
+<tr>
+	<td style="text-align:center;">!=</td>
+	<td style="text-align:left;">Not equal to</td>
+</tr>
+</tbody>
+</table>
+
+<p>All of the following comparisons evaluate as being <code>true</code>:</p>
+
+<pre><code class="groovy">assert -99 == -99
+assert 'koala' == 'koala'
+assert 'cat' != 'dog'
+assert 6 != 7
+
+def domesticAnimal = 'dog'
+def wildAnimal = 'lion'
+assert domesticAnimal != wildAnimal
+
+def str1 = 'Hello'
+def str2 = 'Hello'
+assert str1 == str2
+</code></pre>
+
+<h1>What Is Equality?</h1>
+
+<p>Equality can be a little tricky - both for Groovy and humanity. Think about the statement &#8220;Hey cool, we have the same car!&#8221;. This could mean that we have the same make and model but different instances of a car <em>or</em> it could mean that we share a car. </p>
+
+<p>For those coming from a Java background, <code>==</code> is used to determine if the two variables reference the same instance and the <code>equals</code> method is used to determine if two variables are equivalent. Groovy conflates <code>==</code> and <code>equals</code> to perform the same comparison.</p>
+
+<p>The <code>is</code> method performs the Groovy equivalent of Java&#8217;s <code>==</code> and returns <code>true</code> if two variables refer to the same instance of an object</p>
+
+<pre><code class="groovy">def obj1 = new Object()
+def obj2 = new Object()
+def obj3 = obj1
+
+assert obj1.is(obj3)
+assert ! obj1.is(obj2)
+
+assert obj1 != obj2
+assert obj1 == obj3
+
+assert ! obj1.equals(obj2)
+assert obj1.equals(obj3)
+</code></pre>
+
+<h1>Precedence</h1>
+
+<p>In the following example, the equality operator (<code>!=</code>) is evaluated before the assignment operator (<code>=</code>), resulting in the value of <code>truth</code> being the boolean value <code>true</code>:</p>
+
+<pre><code class="groovy">def truth = 'cats' != 'dogs'
+assert truth == true
+</code></pre>
+
+<h1>Overloading Equality</h1>
+
+<p>It is possible to define a custom implementation of <code>==</code> by overriding the <code>equals(Object obj)</code> method. This can be handy if your object has a simple method for determining equality, such as comparing staff members by their ID:</p>
+
+<pre><code class="groovy">class StaffMember {
+    def id
+    
+    @Override
+    boolean equals(obj) {
+        if (this.id == obj.id) {
+            return true
+        } else {
+            return false 
+        }
+    }
+}
+
+def fred = new StaffMember(id: 12)
+def jan = new StaffMember(id: 47)
+def janet = new StaffMember(id: 47)
+
+assert fred != jan
+assert jan == janet
+</code></pre>
+
+<p>The Groovy package <code>groovy.transform</code> provides a handy annotation that generates an <code>equals</code> implementation which compares the object&#8217;s properties. This reduces the previous <code>StaffMember</code> class to even fewer lines of code:</p>
+
+<pre><code class="groovy">@groovy.transform.EqualsAndHashCode
+class StaffMember {
+    def id
+}
+
+def fred = new StaffMember(id: 12)
+def jan = new StaffMember(id: 47)
+def janet = new StaffMember(id: 47)
+
+assert fred != jan
+assert jan == janet
+</code></pre>
+
+<blockquote>
+<p>The <code>HashCode</code> aspect to the annotation indicates that the <code>hashCode</code> method is overridden. This method generates a hash code<a href="#fn:1" id="fnref:1" title="see footnote" class="footnote">[1]</a> that aids in identifying an instance of the class.</p>
+</blockquote>
+
+<p>Check out the chapter on Relational Operators as the <code>compareTo</code> mo</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>See <a href="http://en.wikipedia.org/wiki/Java_hashCode()">http://en.wikipedia.org/wiki/Java_hashCode()</a> <a href="#fnref:1" title="return to article" class="reversefootnote">&#160;&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/03_Operators/ComplementOperator.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/03_Operators/ArithmeticOperators.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Operators</a>
+    <ul>
+    
+      <li><a href='OperatorOverloading.html'>Operator Overloading</a></li>
+    
+      <li><a href='NumericOperators.html'>Numeric Operators</a></li>
+    
+      <li><a href='AssignmentOperatorSimple.html'>The Simple Assignment Operator</a></li>
+    
+      <li><a href='ComplementOperator.html'>The Complement Operator</a></li>
+    
+      <li><a href='EqualityOperators.html'>Equality Operators</a></li>
+    
+      <li><a href='ArithmeticOperators.html'>Arithmetic operators</a></li>
+    
+      <li><a href='RelationalOperators.html'>Relational Operators</a></li>
+    
+      <li><a href='IncrementDecrementOperators.html'>Increment and Decrement Operators</a></li>
+    
+      <li><a href='ConditionalOperators.html'>Conditional Operators</a></li>
+    
+      <li><a href='BitwiseOperators.html'>Bitwise Operators</a></li>
+    
+      <li><a href='AssignmentOperatorsCompound.html'>Compound Assignment Operators</a></li>
+    
+      <li><a href='StringOperators.html'>String Operators</a></li>
+    
+      <li><a href='RegExOperators.html'>Regular Expression Operators</a></li>
+    
+      <li><a href='CollectionOperators.html'>Collection operators</a></li>
+    
+      <li><a href='ObjectOperators.html'>Object Operators</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>The Groovy 2 Tutorial - Documenting a method</title> 
+<meta name="The Groovy 2 Tutorial" content="text/html; charset=utf-8" />
+<meta name="description" content="GroovDoc helps us document our methods" />
+
+<meta name="author" content="Duncan Dickinson" />
+
+<link rel="icon" href="../../resources/images/gico.png">
+<link rel="license" href="../../Licence.html">
+
+<script type="text/javascript" src="../../resources/js/analytics.js">
+<link href='http://fonts.googleapis.com/css?family=Oxygen+Mono|Oxygen' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+<script>
+	hljs.initHighlightingOnLoad();
+</script>
+<link rel='stylesheet' type='text/css' href='../../resources/styles/site.css'>
+</head>
+<body>
+  <header>
+    <h1>The Groovy 2 Tutorial</h1>
+  </header>
+  <div class="content leftmenu">
+    <div class="colright">
+      <div class="col-article-wrap">
+        <div class="col-article">
+<article>
+  <header>
+    <h1 itemprop="headline">Documenting a method</h1>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/MethodThrows.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/06_Methods/Techniques.html' rel=next>Next &raquo;</a>
+    </nav>
+  </header>
+  <div class='article-content'>
+  <aside>GroovDoc helps us document our methods</aside>
+  <p>The <code>groovydoc</code> command that comes with the Groovy installation can be used to generate HTML documentation from comments within your code. GroovyDoc is based on <a href="http://docs.oracle.com/javase/1.5.0/docs/tooldocs/windows/javadoc.html#documentationcomments">JavaDoc</a> and uses much the same syntax.</p>
+
+<p>Let&#8217;s look at a Groovy method that features GroovyDoc comments:</p>
+
+<pre><code class="groovy">/**
+ * Returns the average of the parameters
+ *
+ * @param values  a series of numerical values
+ * @throws IllegalArgumentException if a values parameter is a String
+ * @returns The average of the values
+ */
+def determineAverage(...values) 
+  throws IllegalArgumentException {
+    for (item in values) {
+        if (item instanceof String) {
+            throw new IllegalArgumentException()
+        }
+    }
+    return values.sum() / values.size()
+}
+</code></pre>
+
+<p>Taking a look at the commenting:</p>
+
+<ul>
+<li>The multi-line comment block starts with <code>/**</code> to indicate that this is a GroovyDoc</li>
+<li>The first piece of text provides the summary of the method. It&#8217;s one line and meant to be terse.</li>
+<li>A set of <code>@param</code> tags can be provided to describe each parameter.
+
+<ul>
+<li>The format is <code>@param &lt;parameter name&gt; &lt;summary&gt;</code></li>
+<li>You don&#8217;t provide the parameter type even if you declare one</li>
+</ul></li>
+<li>Each exception that can be thrown by the method is listed against a <code>@throws</code> tag and provides a summary as to when the exception may be thrown.
+
+<ul>
+<li>The format is <code>@throws &lt;exception class&gt; &lt;summary&gt;</code></li>
+</ul></li>
+<li>The <code>@returns</code> tag describes what the method will <code>return</code>
+
+<ul>
+<li>The format is <code>@returns &lt;summary&gt;</code></li>
+</ul></li>
+</ul>
+
+<p>If you copy the sample code into a file named <code>Average.groovy</code> you can then run the following command in your command line/terminal:</p>
+
+<pre><code class="bash">groovydoc -d doc Average.groovy
+</code></pre>
+
+<p>This will produce a directory named <code>doc</code> that contains a set of documentation files. Inside the <code>doc</code> directory you&#8217;ll see <code>index.html</code> - open this in a browser to view your documentation.</p>
+
+<p>As you click through the various links you&#8217;ll find the documentation for the <code>determineAverage()</code> method. It&#8217;ll contain the following information (but look a lot prettier):</p>
+
+<hr />
+
+<ul>
+                            <li>
+                                <h4>java.lang.Object <strong>determineAverage</strong>(java.lang.Object... values)</h4>
+                                <p> Returns the average of the parameters</p><dl><dt><b>throws:</b></dt><dd>IllegalArgumentException if a parameter is a String</dd></dl><dl><dt><b>returns:</b></dt><dd>The average of the values</dd></dl>
+ <dl><dt><b>Parameters:</b></dt><dd><code>values</code> -   a series of numerical values</dd></dl><p></p>
+                            </li>
+                        </ul>
+
+<hr />
+
+<p>If you keep clicking links in the html files but can&#8217;t find it, look in the <code>DefaultPackage</code> directory for a file name <code>Average.html</code> - that&#8217;ll be what you&#8217;re after.</p>
+
+  </div>
+  <footer>
+    <nav class='part-nav'>
+        <a href='../../parts/06_Methods/MethodThrows.html' rel=prev>&laquo; Previous</a>&nbsp;&bull;&nbsp;<a href='../../parts/06_Methods/Techniques.html' rel=next>Next &raquo;</a>
+    </nav>
+  </footer>
+</article></div>
+      </div>
+      <div class="col-nav">
+        <nav class='article-nav'>
+  <header>
+  
+  <h1>Contents</h1>
+  
+  </header>
+  <ul class='toc-part'>
+    <li><a href='../../index.html'>Book home</a>
+    <li><a href='index.html'>Methods</a>
+    <ul>
+    
+      <li><a href='Methods.html'>The Basics</a></li>
+    
+      <li><a href='Parameters.html'>Parameters</a></li>
+    
+      <li><a href='DefaultValues.html'>Default Values for Parameters</a></li>
+    
+      <li><a href='NamedArguments.html'>Named Arguments</a></li>
+    
+      <li><a href='VarArgs.html'>Variable Arguments (Varargs)</a></li>
+    
+      <li><a href='Return.html'>Return value</a></li>
+    
+      <li><a href='MethodThrows.html'>Throwing an exception</a></li>
+    
+      <li><a href='MethodDoc.html'>Documenting a method</a></li>
+    
+      <li><a href='Techniques.html'>Techniques</a></li>
+    
+    </ul></li>
+  </ul>
+</nav>
+        <nav class='external-nav'>
+          <header>
+            <h1>Groovy links</h1>
+          </header>
+          <ul>
+            <li><a href='http://groovy-lang.org/index.html' target='_blank'>Groovy homepage</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/gapi/' target='_blank'>GAPI</a></li>
+            <li><a href='http://docs.groovy-lang.org/latest/html/api/' target='_blank'>GDK</a></li>
+            <li><a href='http://groovy-lang.org/documentation.html' target='_blank'>Groovy Documentation</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <p>
+      &copy; 2014-2015 <a href='http://www.duncan.dickinson.name' target='_blank'>Duncan Dickinson</a>. See the <a
+        href='../../Licence.html'>Licence page</a> for more information
+    </p>
+    <p>
+    Updates regarding this book are posted to <a href="http://news.groovy-tutorial.org">the news site</a>
+    </p>
+  </footer>
+</body>
+</html>
