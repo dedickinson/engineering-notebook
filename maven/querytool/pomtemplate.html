@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>${model.name} ${model.version}</title>
+</head>
+<body>
+<table>
+    <h1>Overview</h1>
+    <tr><th>Name</th><td>${model.name}</td></tr>
+    <tr><th>Description</th><td>${model.description}</td></tr>
+    <tr><th>Group ID</th><td>${model.groupId}</td></tr>
+    <tr><th>Artifact ID</th><td>${model.artifactId}</td></tr>
+    <tr><th>Version</th><td>${model.version}</td></tr>
+    <tr><th>ID</th><td>${model.id}</td></tr>
+    <tr><th>Organisation</th><td>
+        <ul>
+            <li>Name: ${model.organization? model.organization.name: 'none'}</li>
+            <li>URL: ${model.organization? model.organization.url: 'none'}</li>
+        </ul>
+    </td></tr>
+    <tr><th>Mailing lists</th><td>
+        <ul>
+            <% model.mailingLists?.each { %>
+            <li><a href="it.archive">${it.name}</a> - <a href="${it.subscribe}">subscribe</a></li>
+            <% } %>
+        </ul>
+    </td></tr>
+    <tr><th>Parent</th><td>${model.parent?.id}</td></tr>
+</table>
+
+<h1>Licence(s)</h1>
+<ul>
+    <% model.licenses?.each { %>
+    <li>${it.name}</li>
+    <% } %>
+</ul>
+
+<h1>Dependencies</h1>
+<%
+def dependencyWalker
+dependencyWalker = { children ->
+%>
+<ul>
+    <% children.each { child -> %>
+    <li>${child.artifact.groupId}:${child.artifact.artifactId}:${child.artifact.version}
+        <% dependencyWalker(child.children) %>
+    </li>
+    <% } %>
+</ul>
+<%
+}
+dependencyWalker = dependencyWalker.trampoline()
+%>
+
+${dependencyWalker(nodes.children)}
+</body>
+</html>
