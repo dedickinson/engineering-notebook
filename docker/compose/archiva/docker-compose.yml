@@ -1,0 +1,8 @@
+archiva:
+    container_name: archiva
+    restart: always
+    image: dedickinson/archiva
+    ports:
+        - 9090:8080
+    volumes:
+        - ~/var/archiva:/var/opt/app

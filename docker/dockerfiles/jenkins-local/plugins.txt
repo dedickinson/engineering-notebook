@@ -1,0 +1,5 @@
+scm-api:0.2
+git-client:1.18.0
+git:2.4.0
+job-dsl:1.39
+clone-workspace-scm:0.6

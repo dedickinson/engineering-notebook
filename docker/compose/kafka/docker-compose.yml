@@ -1,0 +1,28 @@
+zookeeper:
+    container_name: zookeeper
+    restart: always
+    image: dedickinson/zookeeper
+    ports:
+        - 2181:2181
+    volumes:
+        - ~/var/zookeeper:/var/opt/app
+
+kafka:
+    container_name: kafka
+    restart: always
+    image: dedickinson/kafka
+    ports:
+        - 9092:9092
+    volumes:
+        - ~/var/kafka/logs:/var/opt/app/logs
+    links:
+        - zookeeper
+
+kafka-manager:
+    container_name: kafka-manager
+    restart: always
+    image: dedickinson/kafka-manager
+    ports:
+        - 9000:9000
+    links:
+        - zookeeper
