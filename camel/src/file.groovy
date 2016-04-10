@@ -6,6 +6,10 @@ import org.apache.camel.main.Main
 
 @Grab(group = 'ch.qos.logback', module = 'logback-classic', version = '1.1.3')
 
+/*
+ * A basic Camel file copier
+ */
+
 @Slf4j
 class MainShell extends Main {
     {
