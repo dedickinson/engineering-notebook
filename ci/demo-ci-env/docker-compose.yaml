@@ -1,0 +1,14 @@
+version: '2'
+services:
+    docker-registry:
+        image: registry:2
+        ports:
+            5000:5000
+
+    jenkins-master:
+        context: dockerfiles/jenkins/jenkins_master
+        image: demo_ci:jenkins_master
+        volumes:
+            - ~/var/jenkins:/var/jenkins_home
+        ports:
+            - 8080:8080

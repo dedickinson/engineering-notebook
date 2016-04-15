@@ -1,0 +1,7 @@
+ci_data:
+    #A data container for persistence
+    container_name: ci-data
+    restart: always
+    image: centos7
+    volumes:
+        - /var/registry
