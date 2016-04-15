@@ -3,7 +3,7 @@
 # Exit the loops if any build command fails
 set -e
 
-for NAME in base base_epel pulp pulp_apache pulp_qpid pulp_crane pulp_mongodb
+for NAME in pulp pulp_apache pulp_qpid pulp_crane pulp_mongodb
 do
     pushd $NAME
     docker build -t demo_ci/$NAME:latest .

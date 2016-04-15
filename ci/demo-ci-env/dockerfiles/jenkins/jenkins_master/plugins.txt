@@ -54,3 +54,6 @@ workflow-scm-step:2.0
 workflow-step-api:2.0
 workflow-support:2.0
 ws-cleanup:0.28
+docker-custom-build-environment:1.6.5
+docker-build-publish:1.2.1
+

@@ -1,14 +1,18 @@
 version: '2'
 services:
     docker-registry:
+        container_name: docker-registry
         image: registry:2
+        volumes:
+            - ~/var/docker/registry/data:/var/lib/registry
         ports:
-            5000:5000
+            - "5000:5000"
 
     jenkins-master:
-        context: dockerfiles/jenkins/jenkins_master
+        container_name: jenkins_master
         image: demo_ci:jenkins_master
+        build: dockerfiles/jenkins/jenkins_master
         volumes:
             - ~/var/jenkins:/var/jenkins_home
         ports:
-            - 8080:8080
+            - "8080:8080"

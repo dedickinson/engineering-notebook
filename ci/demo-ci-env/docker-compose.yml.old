@@ -1,0 +1,36 @@
+ci_data:
+    #A data container for persistence
+    container_name: ci-data
+    restart: always
+    image: centos7
+    volumes:
+        - /var/registry
+
+#registry:
+#      container_name: registry
+#      restart: always
+#      image: registry:2
+#      ports:
+#        - 5000:5000
+#      environment:
+#        REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/registry
+#      volumes-from:
+#        - ci_data:rw
+
+#jenkins:
+#    container_name: jenkins
+#    restart: always
+#    image: jenkins:2.0-beta-1
+#    ports:
+#        - 8080:8080
+#        - 8000:5000
+#    volumes:
+#        - ~/var/jenkins:/var/jenkins_home
+
+pulp_repo:
+    #A data container for persistence
+    container_name: ci-data
+    restart: always
+    image: centos7
+    volumes:
+        - /var/registry
