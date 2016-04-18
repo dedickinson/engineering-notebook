@@ -1,5 +1,6 @@
 # Basic swarm w/docker-machine
 
+## Creating
     docker-machine start default
     eval $(docker-machine env default)
     docker run --rm swarm create
@@ -36,6 +37,19 @@
 - List the swarm nodes: `docker run swarm list token://$DOCKER_DISCOVERY_TOKEN`
 - Manage the swarm: `docker run swarm manage token://$DOCKER_DISCOVERY_TOKEN`
 - Determine the discovery token: `docker inspect swarm-agent-master|grep token`
+
+## Setting up Consul
+
+[IN PROGRESS]
+
+See:
+
+- <https://docs.docker.com/swarm/install-manual/>
+- <https://www.consul.io/intro/index.html>
+- <https://docs.docker.com/swarm/scheduler/filter/>
+
+
+    docker run -d -p 8500:8500 --name=consul progrium/consul -server -bootstrap
 
 ## References
 
