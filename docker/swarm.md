@@ -3,7 +3,6 @@
 ## Creating
     docker-machine start default
     eval $(docker-machine env default)
-    docker run --rm swarm create
     DOCKER_DISCOVERY_TOKEN=$(docker run --rm swarm create)
     echo $DOCKER_DISCOVERY_TOKEN
 
