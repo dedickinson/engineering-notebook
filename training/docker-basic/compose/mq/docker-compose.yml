@@ -1,0 +1,13 @@
+version: '2'
+services:
+    mq:
+        image: activemq
+        build: ./activemq
+        ports:
+            - 8161:8161
+        restart: always
+    producer:
+        image: mq_producer
+        build: ./mq_producer
+        depends_on:
+            - mq
