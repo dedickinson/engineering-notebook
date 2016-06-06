@@ -1,4 +1,12 @@
-apply plugin: 'groovy'
+plugins {
+    id 'groovy'
+}
+
+description 'A sample plugin'
+
+repositories {
+    jcenter()
+}
 
 dependencies {
     compile gradleApi()
