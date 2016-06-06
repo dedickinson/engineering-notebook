@@ -1,9 +1,11 @@
 package com.example.plugin
 
+import groovy.util.logging.Slf4j
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 
+@Slf4j
 class ExamplePlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
@@ -20,6 +22,7 @@ class ExamplePlugin implements Plugin<Project> {
             group 'dinner party'
             doLast {
                 println "Let's eat some ${extension.cheeseName}"
+                log.info 'Cheese eating in progress'
             }
         }
     }
@@ -31,6 +34,7 @@ class ExamplePlugin implements Plugin<Project> {
             group 'dinner party'
             doLast {
                 println "Let's drink some ${extension.wineName}"
+                log.info 'Wine drinking in progress'
             }
         }
         return task
