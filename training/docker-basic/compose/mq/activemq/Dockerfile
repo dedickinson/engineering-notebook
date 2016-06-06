@@ -25,6 +25,6 @@ WORKDIR /activemq/bin
 CMD ["./activemq", "console"]
 
 # To build: docker build --tag=activemq .
-# To run: docker run -ti --rm -p 8161 -p 61616 activemq
+# To run: docker run -ti --rm -p 8161:8161 activemq
 
 # Username/password: admin/admin
