@@ -1,0 +1,12 @@
+apply plugin: 'com.example.plugin'
+
+repositories {
+    jcenter()
+}
+
+dependencies {}
+
+github {
+    organization 'atom'
+    repository 'atom'
+}

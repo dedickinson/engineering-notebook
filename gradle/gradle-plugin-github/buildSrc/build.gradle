@@ -1,0 +1,15 @@
+plugins {
+    id 'groovy'
+}
+
+description 'A sample plugin'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile group: 'org.kohsuke', name: 'github-api', version: '1.76'
+}

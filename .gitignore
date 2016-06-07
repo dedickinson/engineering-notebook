@@ -23,3 +23,5 @@ maven/querytool/local-repo
 semantic-web/ontology-browse/owldoc
 testing/betamax/bintray/out
 lib
+gradle/gradle-plugin-github/buildSrc/.gradle
+gradle/gradle-plugin-github/buildSrc/build
