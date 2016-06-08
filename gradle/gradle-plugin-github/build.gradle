@@ -7,6 +7,6 @@ repositories {
 dependencies {}
 
 github {
-    organization 'atom'
-    repository 'atom'
+    organization 'pomes'
+    repository 'pomes'
 }

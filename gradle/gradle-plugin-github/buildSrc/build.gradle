@@ -11,5 +11,6 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile group: 'org.kohsuke', name: 'github-api', version: '1.76'
+    compile 'org.kohsuke:github-api:1.76'
+    compile 'org.yaml:snakeyaml:1.17'
 }
