@@ -7,6 +7,8 @@ import org.gradle.api.Task
 import org.kohsuke.github.GHOrganization
 import org.kohsuke.github.GHRepository
 import org.kohsuke.github.GitHub
+import org.kohsuke.github.GitHubBuilder
+import org.kohsuke.github.HttpConnector
 import org.yaml.snakeyaml.Yaml
 
 import java.nio.file.Files
@@ -14,10 +16,6 @@ import java.nio.file.Paths
 
 @Slf4j
 class GitHubPlugin implements Plugin<Project> {
-    GitHubPluginExtension extension
-    Map ciManagement
-    Map githubDetails
-
     @Override
     void apply(Project project) {
         GitHubPluginExtension extension = project.extensions.create('github', GitHubPluginExtension, project)
@@ -31,9 +29,18 @@ class GitHubPlugin implements Plugin<Project> {
             description 'Access project details from GitHub'
             group 'github'
             doLast {
-                GitHub gh = GitHub.connectAnonymously()
+                //GitHub gh = GitHub.connectAnonymously()
+
+                GitHub gh = new GitHubBuilder().withConnector { url ->
+                    //Small change to allow for access to the preview api
+                    HttpURLConnection conn = url.openConnection() as HttpURLConnection
+                    conn.addRequestProperty('Accept', 'application/vnd.github.drax-preview+json')
+                    conn
+                }.build()
+
                 GHOrganization org = gh.getOrganization(extension.organization)
                 GHRepository repo = gh.getRepository("$extension.organization/$extension.repository")
+
                 //GHPersonSet<GHUser> collaborators = repo.getCollaborators()
 
                 Map projectDetails = [name           : repo.name,
@@ -52,7 +59,7 @@ class GitHubPlugin implements Plugin<Project> {
 
                 if (Files.isRegularFile(Paths.get(project.rootDir.toString(), '.travis.yml'))) {
                     projectDetails << [ciManagement: [system: 'travis',
-                                       url   : "https://travis-ci.org/$extension.organization/$extension.repository".toString()]]
+                                                      url   : "https://travis-ci.org/$extension.organization/$extension.repository".toString()]]
                 }
 
                 print new Yaml().dump(projectDetails)
