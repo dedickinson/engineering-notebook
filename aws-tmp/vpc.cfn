@@ -1,0 +1,138 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+
+    "Description": "This template defines a standard VPC configuration.",
+
+    "Metadata": {
+
+    },
+
+    "Parameters": {
+        "serviceName": {
+            "Type": "String",
+            "Description": "",
+            "MinLength": "1"
+        },
+        "VpcCidr": {
+            "Type": "String",
+            "Description": "IP Address range for the VPN connected VPC",
+            "MinLength": "9",
+            "MaxLength": "18",
+            "Default": "10.1.0.0/16",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+        },
+    },
+
+    "Mappings": {
+        "Region2AZ" : {
+            "ap-southeast-2" : { "AZ" : ["", "", ""] }
+    }
+    },
+
+    "Conditions": {
+
+    },
+
+    "Resources": {
+        "vpc": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16",
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true,
+                "InstanceTenancy": "default",
+                "Tags": [{
+                    "Key": "service_name",
+                    "Value": {
+                        "Ref": "serviceName"
+                    }
+                }]
+            }
+        },
+        "cloudTrailS3Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+                "AccessControl": String,
+                "BucketName": String,
+                "CorsConfiguration": CORS Configuration,
+                "LifecycleConfiguration": Lifecycle Configuration,
+                "LoggingConfiguration": Logging Configuration,
+                "NotificationConfiguration": Notification Configuration,
+                "ReplicationConfiguration": Replication Configuration,
+                "Tags": [{
+                    "Key": "service_name",
+                    "Value": {
+                        "Ref": "serviceName"
+                    }
+                }],
+                "VersioningConfiguration": Versioning Configuration,
+                "WebsiteConfiguration": Website Configuration Type
+            }
+        },
+        "cloudTrailS3BucketVpcEndpoint": {
+            "Type": "AWS::EC2::VPCEndpoint",
+            "Properties": {
+                "PolicyDocument": JSON object,
+                "RouteTableIds": [String, ...],
+                "ServiceName": String,
+                "VpcId": {
+                    "Ref": "vpc"
+                }
+            }
+        },
+        "vpcCloudTrail": {
+            "Type": "AWS::CloudTrail::Trail",
+            "Properties": {
+                "CloudWatchLogsLogGroupArn": String,
+                "CloudWatchLogsRoleArn": String,
+                "EnableLogFileValidation": Boolean,
+                "IncludeGlobalServiceEvents": Boolean,
+                "IsLogging": Boolean,
+                "IsMultiRegionTrail": Boolean,
+                "KMSKeyId": String,
+                "S3BucketName": String,
+                "S3KeyPrefix": String,
+                "SnsTopicName": String,
+                "Tags": [{
+                    "Key": "service_name",
+                    "Value": {
+                        "Ref": "serviceName"
+                    }
+                }]
+
+            }
+        },
+        "": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": String,
+                "CidrBlock": String,
+                "MapPublicIpOnLaunch": Boolean,
+                "Tags": [Resource Tag, ...],
+                "VpcId": {
+                    "Ref": String
+                }
+            },
+
+        },
+        "": {
+            "Type": "AWS::RDS::DBSubnetGroup",
+            "Properties": {
+                "DBSubnetGroupDescription": String,
+                "SubnetIds": [String, ...],
+                "Tags": [Resource Tag, ...]
+            }
+        }
+
+    },
+
+    "Outputs": {
+        "vpcId": {
+            "Description": "ID of the newly created VPC",
+            "Value": {
+                "Ref": "vpc"
+            }
+        },
+    }
+}

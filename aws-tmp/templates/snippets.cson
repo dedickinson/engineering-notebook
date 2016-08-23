@@ -1,0 +1,15 @@
+'.source.json':
+    'AWS Subnet':
+        'prefix': 'subnet.aws'
+        'body': """
+            "$1": {
+                "Type" : "AWS::EC2::Subnet",
+               "Properties" : {
+                  "AvailabilityZone" : $2,
+                  "CidrBlock" : $3,
+                  "MapPublicIpOnLaunch" : ${4:false},
+                  "Tags" : [ $5 ],
+                  "VpcId" : { "Ref" : $6 }
+               }
+           }
+        """
