@@ -1,0 +1,337 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Establishes a basic test environment for testing systems/deployment.",
+  "Parameters": {
+    "serviceTag": {
+      "Type": "String",
+      "Default": "sandbox",
+      "Description": "The service creating the VPC"
+    },
+    "logRetention": {
+      "Type": "Number",
+      "Default": 7,
+      "Description": "The duration set for the S3 bucket holding logs"
+    },
+    "vpnCidr": {
+      "Type": "String",
+      "Default": "10.0.0.0/24",
+      "Description": "Defines the CIDR for the VPC"
+    },
+    "privateSubnet1Cidr": {
+      "Type": "String",
+      "Default": "10.0.0.0/26",
+      "Description": "Defines the CIDR for Private Subnet 1"
+    },
+    "privateSubnet2Cidr": {
+      "Type": "String",
+      "Default": "10.0.0.64/26",
+      "Description": "Defines the CIDR for Private Subnet 2"
+    },
+    "publicSubnet1Cidr": {
+      "Type": "String",
+      "Default": "10.0.0.128/26",
+      "Description": "Defines the CIDR for Public Subnet 1"
+    },
+    "publicSubnet2Cidr": {
+      "Type": "String",
+      "Default": "10.0.0.192/26",
+      "Description": "Defines the CIDR for Public Subnet 2"
+    }
+  },
+  "Resources": {
+    "testVpc": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": {"Ref": "vpnCidr"},
+        "EnableDnsSupport": true,
+        "EnableDnsHostnames": false,
+        "InstanceTenancy": "default",
+        "Tags": [{"service": {"Ref": "serviceTag"}}]
+      }
+    },
+    "testVpcLogBucket": {
+      "Type": "AWS::S3::Bucket",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "Status": "Enabled",
+              "ExpirationInDays": {"Ref": "logRetention"}
+            }
+          ]
+        },
+        "Tags": [{"service": {"Ref": "serviceTag"}}]
+      }
+    },
+    "testVpcLogBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": {"Ref": "testVpcLogBucket"},
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AWSCloudTrailAclCheck",
+              "Effect": "Allow",
+              "Principal": {"Service": "cloudtrail.amazonaws.com"},
+              "Action": "s3:GetBucketAcl",
+              "Resource": {"Fn::Join": ["", ["arn:aws:s3:::", {"Ref": "testVpcLogBucket"}]]}
+            },
+            {
+              "Sid": "AWSCloudTrailWrite",
+              "Effect": "Allow",
+              "Principal": {"Service": "cloudtrail.amazonaws.com"},
+              "Action": "s3:PutObject",
+              "Resource": {
+                "Fn::Join": [
+                  "", ["arn:aws:s3:::", {"Ref": "testVpcLogBucket"}, "/AWSLogs/", {"Ref": "AWS::AccountId"}, "/*"]
+                ]
+              },
+              "Condition": {
+                "StringEquals": {
+                  "s3:x-amz-acl": "bucket-owner-full-control"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "testVpcS3Endpoint": {
+      "Type": "AWS::EC2::VPCEndpoint",
+      "Properties": {
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": "*",
+              "Action": ["s3:GetObject", "s3:PutObject"],
+              "Resource": {"Fn::Join": ["", ["arn:aws:s3:::", {"Ref": "testVpcLogBucket"}, "/*"]]}
+            }
+          ]
+        },
+        "RouteTableIds": [{"Ref": "testPrivateRouteTable"}, {"Ref": "testPublicRouteTable"}],
+        "ServiceName": {"Fn::Join": ["", ["com.amazonaws.", {"Ref": "AWS::Region"}, ".s3"]]},
+        "VpcId": {"Ref": "testVpc"}
+      }
+    },
+    "testVpcTrail": {
+      "DependsOn": ["testVpcLogBucketPolicy"],
+      "Type": "AWS::CloudTrail::Trail",
+      "Properties": {
+        "S3BucketName": {"Ref": "testVpcLogBucket"},
+        "Tags": [{"service": {"Ref": "serviceTag"}}],
+        "IsLogging": true
+      }
+    },
+    "publishFlowLogRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Path": {"Fn::Join": ["", ["/", {"Ref": "serviceTag"}, "/"]]},
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ]
+        }
+      }
+    },
+    "testVpcFlowLog": {
+      "Type": "AWS::EC2::FlowLog",
+      "Properties": {
+        "DeliverLogsPermissionArn": {"Fn::GetAtt": ["publishFlowLogRole", "Arn"]},
+        "LogGroupName": {"Ref": "serviceTag"},
+        "ResourceId": {"Ref": "testVpc"},
+        "ResourceType": "VPC",
+        "TrafficType": "ALL"
+      }
+    },
+    "testVpcAdministratorRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Path": {"Fn::Join": ["", ["/", {"Ref": "serviceTag"}, "/"]]},
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": []
+        },
+        "ManagedPolicyArns": [],
+        "Policies": []
+      }
+    },
+    "testVpcAuditRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "Path": {"Fn::Join": ["", ["/", {"Ref": "serviceTag"}, "/"]]},
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": []
+        },
+        "ManagedPolicyArns": [],
+        "Policies": []
+      }
+    },
+    "testVpcInternetGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [{"service": {"Ref": "serviceTag"}}]
+      }
+    },
+    "AttachGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {"Ref": "testVpc"},
+        "InternetGatewayId": {"Ref": "testVpcInternetGateway"}
+      }
+    },
+    "privateSubnetNACL": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {"Ref": "testVpc"},
+        "Tags": [{"service": {"Ref": "serviceTag"}}]
+      }
+    },
+    "publicSubnetNACL": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {"Ref": "testVpc"},
+        "Tags": [{"service": {"Ref": "serviceTag"}}]
+      }
+    },
+    "testVpcPrivateSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {"Fn::Join": ["", [{"Ref": "testVpc"}, "a"]]},
+        "CidrBlock": {"Ref": "privateSubnet1Cidr"},
+        "MapPublicIpOnLaunch": false,
+        "Tags": [{"service": {"Ref": "serviceTag"}}],
+        "VpcId": {"Ref": "testVpc"}
+      }
+    },
+    "testVpcPrivateSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {"Fn::Join": ["", [{"Ref": "testVpc"}, "a"]]},
+        "CidrBlock": {"Ref": "privateSubnet2Cidr"},
+        "MapPublicIpOnLaunch": false,
+        "Tags": [{"service": {"Ref": "serviceTag"}}],
+        "VpcId": {"Ref": "testVpc"}
+      }
+    },
+    "testVpcPublicSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {"Fn::Join": ["", [{"Ref": "testVpc"}, "a"]]},
+        "CidrBlock": {"Ref": "publicSubnet1Cidr"},
+        "MapPublicIpOnLaunch": false,
+        "Tags": [{"service": {"Ref": "serviceTag"}}],
+        "VpcId": {"Ref": "testVpc"}
+      }
+    },
+    "testVpcPublicSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {"Fn::Join": ["", [{"Ref": "testVpc"}, "a"]]},
+        "CidrBlock": {"Ref": "publicSubnet2Cidr"},
+        "MapPublicIpOnLaunch": false,
+        "Tags": [{"service": {"Ref": "serviceTag"}}],
+        "VpcId": {"Ref": "testVpc"}
+      }
+    },
+    "testPrivateSubnet1NACL": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {"Ref": "privateSubnetNACL"},
+        "SubnetId": {"Ref": "testVpcPrivateSubnet1"}
+      }
+    },
+    "testPrivateSubnet2NACL": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {"Ref": "privateSubnetNACL"},
+        "SubnetId": {"Ref": "testVpcPrivateSubnet2"}
+      }
+    },
+    "testPublicSubnet1NACL": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {"Ref": "publicSubnetNACL"},
+        "SubnetId": {"Ref": "testVpcPublicSubnet1"}
+      }
+    },
+    "testPublicSubnet2NACL": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "NetworkAclId": {"Ref": "publicSubnetNACL"},
+        "SubnetId": {"Ref": "testVpcPublicSubnet2"}
+      }
+    },
+    "testPrivateRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "testVpc"
+        }
+      }
+    },
+    "testPrivateSubnet1RouteTable": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "testPrivateRouteTable"
+        },
+        "SubnetId": {
+          "Ref": "testVpcPrivateSubnet1"
+        }
+      }
+    },
+    "testPrivateSubnet2RouteTable": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {"Ref": "testPrivateRouteTable"},
+        "SubnetId": {"Ref": "testVpcPrivateSubnet2"}
+      }
+    },
+    "testPublicRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {"Ref": "testVpc"}
+      }
+    },
+    "testPublicSubnet1RouteTable": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {"Ref": "testPublicRouteTable"},
+        "SubnetId": {"Ref": "testVpcPublicSubnet1"}
+      }
+    },
+    "testPublicSubnet2RouteTable": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {"Ref": "testPublicRouteTable"},
+        "SubnetId": {"Ref": "testVpcPublicSubnet2"}
+      }
+    }
+  },
+  "Outputs" : {
+    "vpcDetails" : {
+      "Description" : "Information about the VPC",
+      "Value" : {"Ref": "testVpc"}
+    },
+    "testVpcLogBucketDetails": {
+      "Description" : "Information about the VPC",
+      "Value" : {"Ref": "testVpcLogBucket"}
+    }
+  }
+}

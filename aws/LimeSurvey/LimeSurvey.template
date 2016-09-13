@@ -1,0 +1,423 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Deploys the Lime Survey system with an ELB front-end but no auto-scaling and a MySQL RDS DB.",
+  "Parameters": {
+    "serviceTag": {
+      "Type": "String",
+      "Default": "sandbox",
+      "Description": "The service name"
+    },
+    "vpcId": {
+      "Type": "String",
+      "Description": "The ID for the desired host VPC"
+    },
+    "production": {
+      "Type": "String",
+      "Default": "false",
+      "Description": "true if system is production, false otherwise",
+      "AllowedValues": ["true", "false"],
+      "ConstraintDescription": "must be either true or false."
+    },
+    "applicationName": {
+      "Type": "String",
+      "Default": "sampleApp",
+      "Description": "The name of the web application"
+    },
+    "applicationDescription": {
+      "Type": "String",
+      "Default": "No description provided",
+      "Description": "The description for the web application"
+    },
+    "applicationVersionNumber": {
+      "Type": "Number",
+      "Default": 1,
+      "Description": "The version to deploy"
+    },
+    "applicationVersionDescription": {
+      "Type": "String",
+      "Default": "No description provided",
+      "Description": "The description for the web application version"
+    },
+    "applicationInstanceSize": {
+      "Description": "The application instance size",
+      "Type": "String",
+      "Default": "small",
+      "AllowedValues": [
+        "small", "medium", "large"
+      ],
+      "ConstraintDescription": "must select a valid database instance type."
+    },
+    "dbName": {
+      "Default": "MyDatabase",
+      "Description": "MySQL database name",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "64",
+      "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+      "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+    },
+    "dbUser": {
+      "NoEcho": "true",
+      "Description": "Username for MySQL database access",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "16",
+      "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+      "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+    },
+    "dbPassword": {
+      "NoEcho": "true",
+      "Description": "Password for MySQL database access",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "41",
+      "AllowedPattern": "[a-zA-Z0-9]*",
+      "ConstraintDescription": "must contain only alphanumeric characters."
+    },
+    "dbMasterUser": {
+      "NoEcho": "true",
+      "Description": "Root username for MySQL database access",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "16",
+      "AllowedPattern": "[a-zA-Z][a-zA-Z0-9]*",
+      "ConstraintDescription": "must begin with a letter and contain only alphanumeric characters."
+    },
+    "dbMasterPassword": {
+      "NoEcho": "true",
+      "Description": "Root password for MySQL",
+      "Type": "String",
+      "MinLength": "1",
+      "MaxLength": "41",
+      "AllowedPattern": "[a-zA-Z0-9]*",
+      "ConstraintDescription": "must contain only alphanumeric characters."
+    },
+    "dbInstanceSize": {
+      "Description": "The database instance type",
+      "Type": "String",
+      "Default": "medium",
+      "AllowedValues": [
+          "small", "medium", "large"
+      ],
+      "ConstraintDescription": "must select a valid database instance type."
+    },
+    "dbAllocatedStorage": {
+      "Default": "5",
+      "Description": "The size of the database (Gb)",
+      "Type": "Number",
+      "MinValue": "5",
+      "MaxValue": "1024",
+      "ConstraintDescription": "must be between 5 and 1024Gb."
+    }
+  },
+  "Conditions": {
+    "Production": {"Fn::Equals": [{"Ref": "production"}, "true"]},
+    "NonProduction": {"Fn::Equals": [{"Ref": "production"}, "false"]}
+  },
+  "Mappings": {
+    "EC2InstanceClass" : {
+      "small": {"class": "t2.small"},
+      "medium": {"class": "t2.medium"},
+      "large": {"class": "m4.large"}
+    },
+    "DBInstanceClass" : {
+      "small": {"class": "db.t2.small"},
+      "medium": {"class": "db.t2.medium"},
+      "large": {"class": "db.m4.large"}
+    }
+  },
+  "Resources": {
+    "webApplication": {
+      "Type": "AWS::ElasticBeanstalk::Application",
+      "Properties": {
+        "ApplicationName": {"Ref": "applicationName"},
+        "Description": {"Ref": "applicationDescription"}
+      }
+    },
+    "webApplicationVersion": {
+      "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+      "Properties": {
+        "ApplicationName": {"Ref": "webApplication"},
+        "Description": {"Ref": "applicationVersionDescription"},
+        "SourceBundle": {
+          "S3Bucket": {
+            "Fn::Join": ["-", [{"Ref": "AWS::Region"}, {"Ref": "applicationName"}]]
+          },
+          "S3Key": {
+            "Fn::Join": ["", [{"Ref": "applicationName"}, "-", {"Ref": "applicationVersionNumber"}, ".zip"]]
+          }
+        }
+      }
+    },
+    "webApplicationConfigurationTemplate": {
+      "Type": "AWS::ElasticBeanstalk::ConfigurationTemplate",
+      "Properties": {
+        "ApplicationName": {"Ref": "webApplication"},
+        "Description": {"Fn::Join": [" - ", [{"Ref": "applicationDescription"}, "configuration template"]]},
+        "OptionSettings": [
+          {
+            "Namespace": "aws:elasticbeanstalk:environment",
+            "OptionName": "EnvironmentType",
+            "Value": "LoadBalanced"
+          },
+          {
+            "namespace": "aws:autoscaling:launchconfiguration",
+            "option_name": "RootVolumeType",
+            "value": "gp2"
+          },
+          {
+            "namespace": "aws:autoscaling:launchconfiguration",
+            "option_name": "InstanceType",
+            "value": { "Fn::FindInMap" : [ "EC2InstanceClass", { "Ref" : "applicationInstanceSize" }, "class"]}
+          },
+          {
+            "namespace": "aws:ec2:vpc",
+            "option_name": "VPCId",
+            "value": {"Ref": "vpcId"}
+          },
+          {
+            "namespace": "aws:ec2:vpc",
+            "option_name": "Subnets",
+            "value": ""
+          },
+          {
+            "namespace": "aws:ec2:vpc",
+            "option_name": "ELBSubnets",
+            "value": ""
+          },
+          {
+            "namespace": "aws:ec2:vpc",
+            "option_name": "ELBScheme",
+            "value": "internet-facing"
+          },
+          {
+            "namespace": "aws:ec2:vpc",
+            "option_name": "DBSubnets",
+            "value": ""
+          },
+          {
+            "namespace": "aws:ec2:vpc",
+            "option_name": "AssociatePublicIpAddress",
+            "value": "false"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:application",
+            "option_name": "Application Healthcheck URL",
+            "value": "/health"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:application:environment",
+            "option_name": "SERVICE_TAG",
+            "value": {"Ref": "serviceTag"}
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:hostmanager",
+            "option_name": "LogPublicationControl",
+            "value": "true"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:managedactions",
+            "option_name": "ManagedActionsEnabled",
+            "value": "true"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:managedactions",
+            "option_name": "PreferredStartTime",
+            "value": "Wed:04:00"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:managedactions:platformupdate",
+            "option_name": "UpdateLevel",
+            "value": "minor"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:managedactions:platformupdate",
+            "option_name": "InstanceRefreshEnabled",
+            "value": "true"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:monitoring",
+            "option_name": "Automatically Terminate Unhealthy Instances",
+            "value": "true"
+          },
+          {
+            "namespace": "aws:autoscaling:asg",
+            "option_name": "MinSize",
+            "value": 1
+          },
+          {
+            "namespace": "aws:autoscaling:asg",
+            "option_name": "MaxSize",
+            "value": 1
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:sns:topics",
+            "option_name": "Notification Endpoint",
+            "value": ""
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:sns:topics",
+            "option_name": "Notification Protocol",
+            "value": "sqs"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:sns:topics",
+            "option_name": "Notification Topic Name",
+            "value": ""
+          },
+          {
+            "namespace": "aws:elb:healthcheck",
+            "option_name": "HealthyThreshold",
+            "value": 3
+          },
+          {
+            "namespace": "aws:elb:healthcheck",
+            "option_name": "Interval",
+            "value": 10
+          },
+          {
+            "namespace": "aws:elb:healthcheck",
+            "option_name": "Timeout",
+            "value": 5
+          },
+          {
+            "namespace": "aws:elb:healthcheck",
+            "option_name": "UnhealthyThreshold",
+            "value": 5
+          },
+          {
+            "namespace": "aws:elb:listener:80",
+            "option_name": "ListenerProtocol",
+            "value": "HTTP"
+          },
+          {
+            "namespace": "aws:elb:listener:443",
+            "option_name": "ListenerProtocol",
+            "value": "HTTPS"
+          },
+          {
+            "namespace": "aws:elb:listener:443",
+            "option_name": "SSLCertificateId",
+            "value": "arn:aws:acm:us-east-1:1234567890123:certificate/####################################"
+          },
+          {
+            "namespace": "aws:elb:policies:SSLNegotiationPolicy",
+            "option_name": "LoadBalancerPorts",
+            "value": "443"
+          },
+          {
+            "namespace": "aws:elb:policies:SSLNegotiationPolicy",
+            "option_name": "SSLReferencePolicy",
+            "value": "SSLReferencePolicy"
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "DBAllocatedStorage",
+            "value": {"Ref": "dbAllocatedStorage"}
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "DBDeletionPolicy",
+            "value": "Delete"
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "DBEngine",
+            "value": "mysql"
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "DBEngineVersion",
+            "value": "5.6"
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "DBInstanceClass",
+            "value": { "Fn::FindInMap" : [ "DBInstanceClass", { "Ref" : "dbInstanceSize" }, "class"]}
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "DBPassword",
+            "value": {"Ref": "dbMasterPassword"}
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "DBUser",
+            "value": {"Ref": "dbMasterUser"}
+          },
+          {
+            "namespace": "aws:rds:dbinstance",
+            "option_name": "MultiAZDatabase",
+            "value": {"Ref": "production"}
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:container:php:phpini",
+            "option_name": "document_root",
+            "value": "/"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:container:php:phpini",
+            "option_name": "memory_limit",
+            "value": "256M"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:container:php:phpini",
+            "option_name": "zlib.output_compression",
+            "value": "Off"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:container:php:phpini",
+            "option_name": "allow_url_fopen",
+            "value": "Off"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:container:php:phpini",
+            "option_name": "display_errors",
+            "value": "Off"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:container:php:phpini",
+            "option_name": "max_execution_time",
+            "value": "60"
+          },
+          {
+            "namespace": "aws:elasticbeanstalk:container:php:phpini",
+            "option_name": "composer_options",
+            "value": ""
+          }
+        ],
+        "SolutionStackName": "64bit Amazon Linux running PHP 5.3"
+      }
+    },
+    "webApplicationEnvironmentDev": {
+      "Type": "AWS::ElasticBeanstalk::Environment",
+      "Condition": "NonProduction",
+      "Properties": {
+        "ApplicationName": {"Ref": "applicationName"},
+        "Description": {"Ref": "applicationVersionDescription"},
+        "EnvironmentName": "SamplePHPEnvironment",
+        "TemplateName": "DefaultConfiguration",
+        "VersionLabel": "Initial Version",
+        "Tags": [{"service": {"Ref": "serviceTag"}}]
+      }
+    },
+    "webApplicationEnvironmentProd": {
+      "Type": "AWS::ElasticBeanstalk::Environment",
+      "Condition": "Production",
+      "Properties": {
+        "ApplicationName": {"Ref": "applicationName"},
+        "Description": {"Fn::Join": [" - ", [{"Ref": "applicationDescription"}, "production environment"]]},
+        "EnvironmentName": {"Fn::Join": ["-", [{"Ref": "applicationDescription"}, "prod"]]},
+        "TemplateName": {"Ref": "webApplicationConfigurationTemplate"},
+        "VersionLabel": {"Ref": "applicationVersionNumber"},
+        "Tags": [{"service": {"Ref": "serviceTag"}}]
+      }
+    }
+  },
+  "Outputs": {
+    "webApplicationELBDetails": {
+      "Description": "Information about the Beanstalk application",
+      "Value": {"Ref": "webApplication"}
+    }
+  }
+}
