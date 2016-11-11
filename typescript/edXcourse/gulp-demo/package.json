@@ -1,0 +1,17 @@
+{
+    "name": "TSGulpDemo",
+    "version": "1.0.0",
+    "description": "Using Gulp to Compile to TS",
+    "author": "Duncan (via EdX course)",
+    "engines": {
+        "node": ">=0.10.35"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "gulp": "^3.8.10",
+        "gulp-concat": "^2.4.3",
+        "gulp-plumber": "^0.6.6",
+        "gulp-typescript": "^2.4.0",
+        "gulp-uglify": "^1.1.0"
+    }
+}
