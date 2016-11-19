@@ -1,0 +1,89 @@
+{
+  "TableName": "phonebook-contact",
+  "KeySchema": [
+    {
+      "AttributeName": "Id",
+      "KeyType": "HASH"
+    }
+  ],
+  "GlobalSecondaryIndexes": [
+    {
+      "IndexName": "family-name-index",
+      "KeySchema": [
+        {
+          "AttributeName": "FamilyName",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "FirstName",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "KEYS_ONLY"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
+    },
+    {
+      "IndexName": "first-name-index",
+      "KeySchema": [
+        {
+          "AttributeName": "FirstName",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "FamilyName",
+          "KeyType": "RANGE"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "KEYS_ONLY"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
+    },
+    {
+      "IndexName": "group-id-index",
+      "KeySchema": [
+        {
+          "AttributeName": "GroupId",
+          "KeyType": "HASH"
+        }
+      ],
+      "Projection": {
+        "ProjectionType": "KEYS_ONLY"
+      },
+      "ProvisionedThroughput": {
+        "ReadCapacityUnits": 1,
+        "WriteCapacityUnits": 1
+      }
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "Id",
+      "AttributeType": "N"
+    },
+    {
+      "AttributeName": "FamilyName",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "FirstName",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "GroupId",
+      "AttributeType": "S"
+    }
+  ],
+  "ProvisionedThroughput": {
+    "ReadCapacityUnits": 1,
+    "WriteCapacityUnits": 1
+  }
+}
