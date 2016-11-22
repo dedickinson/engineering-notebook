@@ -2,7 +2,7 @@
   "TableName": "phonebook-contact",
   "KeySchema": [
     {
-      "AttributeName": "Id",
+      "AttributeName": "ID",
       "KeyType": "HASH"
     }
   ],
@@ -20,43 +20,8 @@
         }
       ],
       "Projection": {
-        "ProjectionType": "KEYS_ONLY"
-      },
-      "ProvisionedThroughput": {
-        "ReadCapacityUnits": 1,
-        "WriteCapacityUnits": 1
-      }
-    },
-    {
-      "IndexName": "first-name-index",
-      "KeySchema": [
-        {
-          "AttributeName": "FirstName",
-          "KeyType": "HASH"
-        },
-        {
-          "AttributeName": "FamilyName",
-          "KeyType": "RANGE"
-        }
-      ],
-      "Projection": {
-        "ProjectionType": "KEYS_ONLY"
-      },
-      "ProvisionedThroughput": {
-        "ReadCapacityUnits": 1,
-        "WriteCapacityUnits": 1
-      }
-    },
-    {
-      "IndexName": "group-id-index",
-      "KeySchema": [
-        {
-          "AttributeName": "GroupId",
-          "KeyType": "HASH"
-        }
-      ],
-      "Projection": {
-        "ProjectionType": "KEYS_ONLY"
+        "ProjectionType": "INCLUDE",
+        "NonKeyAttributes": ["ID", "Phone"]
       },
       "ProvisionedThroughput": {
         "ReadCapacityUnits": 1,
@@ -66,7 +31,7 @@
   ],
   "AttributeDefinitions": [
     {
-      "AttributeName": "Id",
+      "AttributeName": "ID",
       "AttributeType": "N"
     },
     {

@@ -8,6 +8,8 @@ chalice local
 
 ## Working with DynamoDB
 
+Download the local version of DynamoDB
+
 To list the tables in the local system:
 
 ````
